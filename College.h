@@ -10,23 +10,53 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <map>
 
 using namespace std;
 
+//PROTOTYPES
+class Department;
+class Course;
+class Uc;
+
 
 class College{
-	//string name;
-	vector<Departments> Dep;
+	string colName;
+	vector<Department> vecDep;
 public:
-	College();
-	//int numVeiculos() const;
+	College(string name); //class constructor
+	//~College(); //class destructor
+	void showDepartments();
 };
 
-class Departments: public College {
-   string name;
+
+class Department {
+   string depName, depAddress, depDirector;
+   int depCode, depPhone;
+   vector<Course> vecCourse;
 public:
-   Department(string name);
+   Department(string name, int code, string address, int phone, string director); //class constructor
+   //~Department();
+   string getName();
 };
 
+
+class Course{
+	string csType, csPtName,csEngName;
+	int csCode;
+	vector<Uc> vecUc;
+public:
+	Course(string type, string engName,string ptName, int code);
+};
+
+
+class Uc{
+	string ucName;
+	vector<string> ucTeacher; //sendo que o que se encontra na posicao 0 é o regente
+	vector<string> ucStudent;
+	int ucYear, ucECTS, ucWorkload;
+public:
+	Uc(string name, vector<string> teacher, vector<string> student, int year, int ects, int workload);
+};
 
 #endif /*COLLEGE_H_*/
