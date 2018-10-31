@@ -22,50 +22,65 @@ class Uc;
 
 class College{
 	string colName;
-	vector<Department> vecDep;
+	vector<Department > vecDep;
 public:
 	College(string name); //class constructor
-	void showDepartments();
+	//~College(); //class destructor
+
 	string getName();
+	void setName(string name);
+
+	void showDepartments();
 	void addDepartment();
-	~College(); //class destructor
+	void removeDepartment();
 };
 
 
 class Department {
    string depName, depAddress, depDirector;
    int depCode, depPhone;
-   vector<Course> vecCourse;
+   vector<Course > vecCourse;
 public:
    Department(string name, int code, string address, int phone, string director); //class constructor
-   ~Department();
+   //~Department();
 
    string getName();
+   void setName(string name);
    string getAddress();
+   void setAddress(string address);
    string getDirector();
+   void setDirector(string director);
    int getCode();
+   void setCode(int code);
    int getPhone();
+   void setPhone(int phone);
    vector<Course> getCourses();
 
    void addCourse();
+   void removeCourse();
 };
 
 
 class Course{
 	string csType, csPtName, csEngName;
 	int csCode;
-	vector<Uc> vecUC;
+	vector<Uc > vecUC;
 public:
 	Course(string type, string engName, string ptName, int code);
-	~Course();
+	//~Course();
 
 	string getType();
+	void setType(string type);
 	string getPtName();
+	void setPtName(string ptName);
 	string getEngName();
+	void setEngName(string engName);
 	int getCode();
-	vector<Course> getUCs();
+	void setCode(int code);
+	vector<Uc> getUCs();
 
 	void addUC();
+	void removeUC();
 };
 
 
@@ -76,15 +91,23 @@ class Uc{
 	int ucYear, ucECTS, ucWorkload;
 public:
 	Uc(string name, vector<string> teacher, vector<string> student, int year, int ects, int workload);
-	~Uc();
+	//~Uc();
 
 	string getName();
-	int getYear();
-	int getECTS();
+	void setName(string name);
+    int getYear();
+    void setYear(int year);
+    int getECTS();
+    void setECTS(int ects);
 	int getWorkload();
-	vector<Uc> getTeachers();
-	vector<Uc> getStudents();
+	void setWorkload(int workload);
+	vector<string> getTeachers();
+	vector<string> getStudents();
 
+	void addTeacher();
+	void removeTeacher();
+	void addStudent();
+	void removeStudent();
 };
 
 #endif /*COLLEGE_H_*/
