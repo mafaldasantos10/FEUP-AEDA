@@ -9,7 +9,11 @@
 #define SRC_PEOPLE_H_
 
 #include <iostream>
-#include "College.h"
+#include <map>
+#include <vector>
+
+class Course;
+class Uc;
 
 using namespace std;
 
@@ -25,12 +29,14 @@ class People {
 public:
 	People(string name, string adress, date& birthday, unsigned int phone, unsigned int cod);
 	//virtual static void Build_Person(); //A ideia é usar isto como UI para pedir ao utilizador os parametros necessarios para construir um obj pessoa, ou seja pode ser feito sem objeto posterior
+    virtual void Show_Info();
+    string getName();
 	virtual ~People();
 };
 
 class Student : public People{
-	Course *course; //pointer to current course the student is enrolled in
-	map <Uc *, float> subjects; //In this map the Key is the subject and the float value corresponds to the grade of the student on that particular subject;
+	Course* course; //pointer to current course the student is enrolled in
+	map <Uc*, float> subjects; //In this map the Key is the subject and the float value corresponds to the grade of the student on that particular subject;
 public:
 	Student(string name, string adress, date birthday, unsigned int phone, unsigned int cod, Course *course);  //map is missing(will be resolved when deciding UI for constructors)
 };
@@ -44,7 +50,7 @@ public:
 
 class Teacher : public Employee{
 	string category;  //maybe the kind of degree the teacher has \(o.o)/
-	vector <Uc *> subjects;  //subjects taught by the teacher
+	vector <Uc*> subjects;  //subjects taught by the teacher
 public:
 	Teacher(string name, string adress, date birthday, unsigned int phone, unsigned int cod, float salary, unsigned int nif, string category, vector <Uc *> subjects);
 };

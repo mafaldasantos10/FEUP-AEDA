@@ -5,9 +5,6 @@
  */
 
 #include "College.h"
-#include <iostream>
-#include <string>
-#include <vector>
 
 using namespace std;
 
@@ -40,14 +37,13 @@ vector<Department> College::getDepartments(){
     return vecDep;
 }
 
-string College::getName()
-{
-	return colName;
+vector<vector<People*>> College::getPeople(){
+    return people;
 }
 
 void College::addDepartment()
 {
-	string name, address, director;
+	string name, address, director_name;
 	int code, phone;
 
 	cout << "Enter the name of the Department: "<< endl;
@@ -56,10 +52,15 @@ void College::addDepartment()
 	cout << "Enter the address of the Department: "<< endl;
 	cin >> address;
 
-	cout << "Enter the name of the director of the Department: "<< endl;
-	cin >> director;
+	cout << "Enter the name of the director of the Department: "<< endl;  //NEEDS TO TEST IF DIRECTOR_NAME BELONGS TO AN EXISTING TEACHER
+	cin >> director_name;
+    int i = 0;  //This is just so that the code can compile
+    Teacher* director;
+    if(people.at(0).at(i)->getName() == director_name){
+        director = dynamic_cast<Teacher*>(people.at(0).at(i)); //dynamic cast testa e transforma o apontador de people num apontador de teacher
+    }
 
-	cout << "Enter the code of the Department: "<< endl;
+	cout << "Enter the code of the Department: "<< endl;  //NEEDS TO TEST IF IT'S DIFFERENT FROM OTHER DEP CODES
 	cin >> code;
 
 	cout << "Enter the phone of the Department: "<< endl;
@@ -95,13 +96,21 @@ void College::removeDepartment()
 
 //DEPARTMENT//
 //////////////////////
-Department:: Department(string name, int code, string address, int phone, string director)
+Department:: Department(string name, int code, string address, int phone, Teacher* director)
 {
 	depName = name;
 	depCode = code;
 	depAddress = address;
 	depPhone = phone;
 	depDirector = director;
+}
+
+void Department::Show_Info() {
+    cout << "|      " << depName << "      |" << endl;
+    cout << "| Address: " << depAddress << endl;
+    cout << "| Code: " << depCode << " Phone: " << depPhone << endl;
+    cout << "| Dep. Director: " << depDirector->getName() << endl;
+    cout << "|-----------------------------------------" << endl;
 }
 
 string Department::getName()
@@ -124,12 +133,12 @@ void Department::setAddress(string address)
 	depAddress = address;
 }
 
-string Department::getDirector()
+Teacher* Department::getDirector()
 {
 	return depDirector;
 }
 
-void Department::setDirector(string director)
+void Department::setDirector(Teacher* director)
 {
 	depDirector = director;
 }

@@ -7,18 +7,32 @@
 
 #include "People.h"
 
+//////PEOPLE//////
+
 People::People(string name, string adress, date& birthday, unsigned int phone, unsigned int cod) {
-	this-> name = name;
+	this->name = name;
 	this->adress = adress;
 	this->birthday = &birthday;
 	this->phone = phone;
 	this->cod = cod;
 }
 
+string People::getName(){
+    return name;
+}
+
+void People::Show_Info(){
+
+}
+
+//////STUDENT//////
+
 Student::Student(string name, string adress, date birthday, unsigned int phone, unsigned int cod, Course *course)
 : People(name,adress,birthday,phone,cod){
 	this->course = course;
 }
+
+//////EMPLOYEE//////
 
 Employee::Employee(string name, string adress, date birthday, unsigned int phone, unsigned int cod, float salary, unsigned int nif)
 : People(name,adress,birthday,phone,cod){
@@ -26,11 +40,15 @@ Employee::Employee(string name, string adress, date birthday, unsigned int phone
 	this->nif = nif;
 }
 
+//////TEACHER//////
+
 Teacher::Teacher(string name, string adress, date birthday, unsigned int phone, unsigned int cod, float salary, unsigned int nif, string category, vector<Uc *> subjects)
 : Employee(name, adress, birthday, phone, cod, salary, nif){
 	this->category = category;
 	this->subjects = subjects;
 }
+
+//////STAFF//////
 
 Staff::Staff(string name, string adress, date birthday, unsigned int phone, unsigned int cod, float salary, unsigned int nif, string work_area)
 : Employee(name, adress, birthday, phone, cod, salary, nif){

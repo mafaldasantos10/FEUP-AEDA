@@ -24,35 +24,39 @@ class Uc;
 class College{
 	string colName;
 	vector<Department > vecDep;
+    vector<vector<People*>> people; //1º vec. for teachers, 2º for students, 3º for staff
 public:
 	College(string name); //class constructor
 	//~College(); //class destructor
+
+    vector<vector<People*>> getPeople();
 
 	string getName();
 	void setName(string name);
 
 	void showDepartments();
     vector<Department> getDepartments();
-	string getName();
 	void addDepartment();
 	void removeDepartment();
 };
 
 
 class Department {
-   string depName, depAddress, depDirector;
+   string depName, depAddress;
+   Teacher* depDirector;
    int depCode, depPhone;
    vector<Course > vecCourse;
 public:
-   Department(string name, int code, string address, int phone, string director); //class constructor
+   Department(string name, int code, string address, int phone, Teacher* director); //class constructor
    //~Department();
 
+   void Show_Info();
    string getName();
    void setName(string name);
    string getAddress();
    void setAddress(string address);
-   string getDirector();
-   void setDirector(string director);
+   Teacher* getDirector();
+   void setDirector(Teacher* director);
    int getCode();
    void setCode(int code);
    int getPhone();
