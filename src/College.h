@@ -11,6 +11,7 @@
 #include <string>
 #include <vector>
 #include <map>
+#include "People.h"
 
 using namespace std;
 
@@ -31,6 +32,8 @@ public:
 	void setName(string name);
 
 	void showDepartments();
+    vector<Department> getDepartments();
+	string getName();
 	void addDepartment();
 	void removeDepartment();
 };
@@ -85,10 +88,10 @@ public:
 
 
 class Uc{
-	string ucName;
-	vector<string> ucTeacher; //sendo que o que se encontra na posicao 0 é o regente
-	vector<string> ucStudent;
-	int ucYear, ucECTS, ucWorkload;
+    string ucName;
+    vector<string> ucTeacher; //sendo que o que se encontra na posicao 0 ï¿½ o regente
+    vector<string> ucStudent;
+    int ucYear, ucECTS, ucWorkload;
 public:
 	Uc(string name, vector<string> teacher, vector<string> student, int year, int ects, int workload);
 	//~Uc();

@@ -32,8 +32,17 @@ void College::showDepartments()
 {
 	for(unsigned int i = 0; i < vecDep.size(); i++)
 	{
-		cout << vecDep.at(i).getName() << endl;
+		cout << i << ": 	" <<vecDep.at(i).getName() << endl;
 	}
+}
+
+vector<Department> College::getDepartments(){
+    return vecDep;
+}
+
+string College::getName()
+{
+	return colName;
 }
 
 void College::addDepartment()

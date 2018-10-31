@@ -2,15 +2,15 @@
  * People.cpp
  *
  *  Created on: Oct 17, 2018
- *      Author: alexandrecarqueja
+ *
  */
 
 #include "People.h"
 
-People::People(string name, string adress, date birthday, unsigned int phone, unsigned int cod) {
+People::People(string name, string adress, date& birthday, unsigned int phone, unsigned int cod) {
 	this-> name = name;
 	this->adress = adress;
-	this->birthday = birthday;
+	this->birthday = &birthday;
 	this->phone = phone;
 	this->cod = cod;
 }

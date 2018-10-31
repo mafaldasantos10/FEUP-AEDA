@@ -2,14 +2,14 @@
  * People.h
  *
  *  Created on: Oct 17, 2018
- *      Author: alexandrecarqueja
+ *
  */
-
-#include <iostream>
-#include "college.h"
 
 #ifndef SRC_PEOPLE_H_
 #define SRC_PEOPLE_H_
+
+#include <iostream>
+#include "College.h"
 
 using namespace std;
 
@@ -21,10 +21,10 @@ struct date {  //formated date string for better use
 class People {
 	string name, adress;
 	unsigned int phone, cod;
-	date birthday;
+	date* birthday;
 public:
-	People(string name, string adress, date birthday, unsigned int phone, unsigned int cod);
-	virtual static void Build_Person(); //A ideia é usar isto como UI para pedir ao utilizador os parametros necessarios para construir um obj pessoa, ou seja pode ser feito sem objeto posterior
+	People(string name, string adress, date& birthday, unsigned int phone, unsigned int cod);
+	//virtual static void Build_Person(); //A ideia é usar isto como UI para pedir ao utilizador os parametros necessarios para construir um obj pessoa, ou seja pode ser feito sem objeto posterior
 	virtual ~People();
 };
 
