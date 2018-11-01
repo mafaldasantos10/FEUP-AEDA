@@ -115,6 +115,29 @@ public:
 	void removeTeacher();
 	void addStudent();
 	void removeStudent();
+
+	bool operator<(Uc uc2);
 };
+
+
+template <class T>
+bool remove(vector<T> &vector, string name)
+{
+	for(unsigned int i = 0; i <= vector.size(); i++)
+		{
+			if(vector.at(i) == name)
+			{
+				vector.erase(vector.begin() + i);
+				return true;
+
+
+			}
+		}
+	return false;
+
+}
+
+
+
 
 #endif /*COLLEGE_H_*/

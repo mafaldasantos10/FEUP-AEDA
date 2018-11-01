@@ -413,16 +413,13 @@ void Uc::removeTeacher()
 	cout << "Enter the name of the Teacher to remove: "<< endl;
 	cin >> name; //input validation
 
-	for(unsigned int i = 0; i <= ucTeacher.size(); i++)
-	{
-		if(ucTeacher.at(i) == name)
-		{
-			ucTeacher.erase(ucTeacher.begin() + i);
 
+		if(remove(ucTeacher,name))
+		{
 
 			cout << "Teacher " << name << " has been successfully removed. "<< endl;
 		}
-	}
+
 
 	//fazer throw exception ou input validation
 }
@@ -445,16 +442,28 @@ void Uc::removeStudent()
 	cout << "Enter the name of the Student to remove: "<< endl;
 	cin >> name; //input validation
 
-	for(unsigned int i = 0; i <= ucStudent.size(); i++)
+	if(remove(ucStudent,name))
 	{
-		if(ucStudent.at(i) == name)
-		{
-			ucStudent.erase(ucStudent.begin() + i);
+	//fazer throw exception ou input validation
+	cout <<"Student"<< name << " has been successfully removed. "<< endl;
+	}
+}
 
+//Compare Ucs
 
-			cout << "Student " << name << " has been successfully removed. "<< endl;
-		}
+bool Uc::operator<(Uc uc2)
+{
+	if(ucECTS < uc2.getECTS())
+	{
+		return true;
 	}
 
-	//fazer throw exception ou input validation
+	if(ucECTS == uc2.getECTS())
+	{
+		if(ucWorkload < uc2.getWorkload())
+		{
+			return true;
+		}
+	}
+	return false;
 }
