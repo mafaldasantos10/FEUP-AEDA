@@ -1,0 +1,35 @@
+STAFF:
+Maria Silva, rua da rasa, 07/08, 915886774, 579, 600, 789656632, caffeterea
+João Nunes, Rua Manuel Pinheiro, 05/11, 934567743, 897, 768, 789665980, inph department
+Joana Almeida, Rua das Matas, 27/08, 924564398, 796, 479, 897556400, secretaria
+
+STUDENT:
+Mariana Silveira, rua Antonio Figueiredo, 07/09, 918887674, 098, MIEIC
+Joaquim Nunes, Rua Manuel Alecrim, 09/12, 934560983, 876, MIEQ
+Filipa Almeida, Rua de cima, 29/08, 920864398, 796, LEC
+
+Teacher:
+
+
+UC:
+Mest, 1, 6, 3 
+Fis, 2, 6, 4
+Mdis, 4, 7.5, 3
+
+
+COURSE:
+MIEIC, MIEIC, Mestrado Integrado, 001
+LCI, LCI, Licenciatura, 032
+MIEEC, MIEEC, Mestrado Integrado, 002
+
+DEPARTMENT:
+Department of Informatics Engineering, 	Rua Dr. Roberto Frias, João Cardoso, 678, 912345567
+Department of Mechanical Engineering, 	Rua Dr. Alfredo Gondomar, Jorge Seabra, 688, 912995987
+
+COLLEGE:
+FEUP
+FEP
+FMUP
+
+
+
