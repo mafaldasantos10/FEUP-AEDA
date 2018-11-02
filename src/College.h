@@ -88,6 +88,7 @@ public:
 
 	void addUC();
 	void removeUC();
+	void sortUc();
 };
 
 
@@ -117,7 +118,18 @@ public:
 	void removeStudent();
 
 	bool operator<(Uc uc2);
+
 };
+
+//Exceptions
+
+class NoCodeFound{
+	int code;
+public:
+	NoCodeFound(int code){this->code=code;};
+	int getCode(){return code;};
+};
+
 
 
 template <class T>

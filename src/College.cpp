@@ -90,7 +90,8 @@ void College::removeDepartment()
 		}
 	}
 
-	//fazer throw exception ou input validation
+		throw NoCodeFound(code);
+
 }
 
 
@@ -208,7 +209,7 @@ void Department::removeCourse()
 		}
 	}
 
-	//fazer throw exception ou input validation
+	throw NoCodeFound(code);
 }
 
 //COURSE//
@@ -466,4 +467,32 @@ bool Uc::operator<(Uc uc2)
 		}
 	}
 	return false;
+}
+
+void Course::sortUc()
+{
+	for(unsigned int j= vecUC.size() -1; j>0; j--)
+	{
+		bool troca = false;
+		for(unsigned int i=0; i<j; i++)
+		{
+			if(vecUC.at(i+1).getYear() < vecUC.at(i).getYear())
+			{
+				swap(vecUC.at(i), vecUC.at(i+1));
+				troca = true;
+			}
+
+			if(vecUC.at(i+1).getYear() < vecUC.at(i).getYear())
+			{
+				if(vecUC.at(i+1).getName() < vecUC.at(i).getName())
+				{
+					swap(vecUC.at(i), vecUC.at(i+1));
+					troca = true;
+				}
+			}
+		}
+
+		if (!troca) return;
+	}
+
 }
