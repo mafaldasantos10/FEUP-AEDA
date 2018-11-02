@@ -132,8 +132,7 @@ public:
 	}
 	 //~NoCodeFound() {}
 	string errorMessage(){
-		string message = "The code you indicated -" + code + "- was not found!";
-		return message;
+		return "The code you indicated -" + to_string(code) + "- was not found!";
 	};
 };
 
@@ -145,8 +144,7 @@ public:
 	}
 	 //~NoNameFound() {}
 	string errorMessage(){
-		string message = "The name you indicated -" + name + "- was not found!";
-		return message;
+		return "The name you indicated -" + name + "- was not found!";
 	};
 };
 
