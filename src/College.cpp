@@ -43,25 +43,40 @@ vector<vector<People*>> College::getPeople(){
 
 void College::addDepartment()
 {
-	string name, address, director_name;
+	string name, address, directorName;
 	int code, phone;
+	bool differentCode = true;
 
 	cout << "Enter the name of the Department: "<< endl;
-	cin >> name;
+	getline(cin, name);
 
 	cout << "Enter the address of the Department: "<< endl;
-	cin >> address;
+	getline(cin, address);
 
 	cout << "Enter the name of the director of the Department: "<< endl;  //NEEDS TO TEST IF DIRECTOR_NAME BELONGS TO AN EXISTING TEACHER
-	cin >> director_name;
+	getline(cin, directorName);
     int i = 0;  //This is just so that the code can compile
     Teacher* director;
-    if(people.at(0).at(i)->getName() == director_name){
+    if(people.at(0).at(i)->getName() == directorName){
         director = dynamic_cast<Teacher*>(people.at(0).at(i)); //dynamic cast testa e transforma o apontador de people num apontador de teacher
     }
 
 	cout << "Enter the code of the Department: "<< endl;  //NEEDS TO TEST IF IT'S DIFFERENT FROM OTHER DEP CODES
-	cin >> code;
+	do{
+		cin >> code;
+
+		for(unsigned int i = 0; i < vecDep.size(); i++)
+		{
+			if(vecDep.at(i).getCode() == code)
+			{
+				cout << "The code you entered is already associated to Department" << "'" << vecDep.at(i).getName() << "'" << endl;
+				cout << "Enter a new one: " << endl;
+				differentCode = false;
+				break;
+			}
+		}
+
+	} while (!differentCode);
 
 	cout << "Enter the phone of the Department: "<< endl;
 	cin >> phone;
@@ -83,15 +98,14 @@ void College::removeDepartment()
 		if(vecDep.at(i).getCode() == code)
 		{
 			name = vecDep.at(i).getName();
+
 			vecDep.erase(vecDep.begin() + i);
-
-
 			cout << "Department " << code << "(" << name << ")" << " has been successfully removed. "<< endl;
+			return;
 		}
 	}
 
-		throw NoCodeFound(code);
-
+	throw NoCodeFound(code);
 }
 
 
@@ -202,10 +216,10 @@ void Department::removeCourse()
 		if(vecCourse.at(i).getCode() == code)
 		{
 			name = vecCourse.at(i).getEngName();
+
 			vecCourse.erase(vecCourse.begin() + i);
-
-
 			cout << "Course " << code << "(" << name << ")" << " has been successfully removed. "<< endl;
+			return;
 		}
 	}
 
@@ -325,13 +339,12 @@ void Course::removeUC()
 		if(vecUC.at(i).getName() == name)
 		{
 			vecUC.erase(vecUC.begin() + i);
-
-
 			cout << "Course " << name << " has been successfully removed. "<< endl;
+			return;
 		}
 	}
 
-	//fazer throw exception ou input validation
+	throw NoNameFound(name);
 }
 
 
@@ -414,15 +427,13 @@ void Uc::removeTeacher()
 	cout << "Enter the name of the Teacher to remove: "<< endl;
 	cin >> name; //input validation
 
+	if(remove(ucTeacher,name))
+	{
+		cout << "Teacher " << name << " has been successfully removed. "<< endl;
+		return;
+	}
 
-		if(remove(ucTeacher,name))
-		{
-
-			cout << "Teacher " << name << " has been successfully removed. "<< endl;
-		}
-
-
-	//fazer throw exception ou input validation
+	throw NoNameFound(name);
 }
 
 void Uc::addStudent()
@@ -443,15 +454,16 @@ void Uc::removeStudent()
 	cout << "Enter the name of the Student to remove: "<< endl;
 	cin >> name; //input validation
 
-	if(remove(ucStudent,name))
+	if(remove(ucStudent, name))
 	{
-	//fazer throw exception ou input validation
-	cout <<"Student"<< name << " has been successfully removed. "<< endl;
+		cout <<"Student"<< name << " has been successfully removed. "<< endl;
+		return;
 	}
+
+	throw NoNameFound(name);
 }
 
 //Compare Ucs
-
 bool Uc::operator<(Uc uc2)
 {
 	if(ucECTS < uc2.getECTS())
@@ -466,6 +478,7 @@ bool Uc::operator<(Uc uc2)
 			return true;
 		}
 	}
+
 	return false;
 }
 
@@ -494,5 +507,4 @@ void Course::sortUc()
 
 		if (!troca) return;
 	}
-
 }

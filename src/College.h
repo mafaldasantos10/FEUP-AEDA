@@ -121,17 +121,38 @@ public:
 
 };
 
-//Exceptions
 
+//EXCEPTIONS//
+//////////////////////
 class NoCodeFound{
 	int code;
 public:
-	NoCodeFound(int code){this->code=code;};
-	int getCode(){return code;};
+	NoCodeFound(int code){
+		this->code = code;
+	}
+	 //~NoCodeFound() {}
+	string errorMessage(){
+		string message = "The code you indicated -" + code + "- was not found!";
+		return message;
+	};
+};
+
+class NoNameFound{
+	string name;
+public:
+	NoNameFound(string name){
+		this->name = name;
+	}
+	 //~NoNameFound() {}
+	string errorMessage(){
+		string message = "The name you indicated -" + name + "- was not found!";
+		return message;
+	};
 };
 
 
-
+//TEMPLATES//
+//////////////////////
 template <class T>
 bool remove(vector<T> &vector, string name)
 {
@@ -141,15 +162,10 @@ bool remove(vector<T> &vector, string name)
 			{
 				vector.erase(vector.begin() + i);
 				return true;
-
-
 			}
 		}
+
 	return false;
-
 }
-
-
-
 
 #endif /*COLLEGE_H_*/
