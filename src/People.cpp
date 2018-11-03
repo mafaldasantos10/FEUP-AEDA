@@ -61,21 +61,125 @@ date* People::getDate()
 	return birthday;
 }
 
-void People::Show_Info(){
-
-}
 
 //////STUDENT//////
 
-Student::Student(string name, string address, date birthday, unsigned int phone, unsigned int cod, Course *course)
+Student::Student(string name, string address, date birthday, unsigned int phone, unsigned int cod, Course* course, map <Uc*, float> subjects)
 : People(name, address, birthday, phone, cod){
 	this->course = course;
+	grade = 0;
 }
 
 Course* Student::getCourse()
 {
 	return course;
 }
+
+string Student::getCourseName()
+{
+	return course->getEngName();
+}
+
+void Student::showInfo(){
+
+	cout << "|      " << getName() << "      |" << endl;
+	cout << "| Address: " << getAddress() << endl;
+	cout << "| Code: " << getCode() << " Phone: " << getPhone() << endl;
+	cout << "| Birthday: " << getDate() << endl;
+	cout << "| Course: " << getCourseName() << endl;
+	cout << "|-----------------------------------------" << endl;
+}
+
+void Student::addUCGrade(string name, float grade)
+{
+	Uc* uc;
+
+	for(unsigned int i = 0; i < course->getUCs().size(); i++)
+	{
+		if(course->getUCs().at(i).getName() == name)
+		{
+			uc = &course->getUCs().at(i);
+			break;
+		}
+	}
+
+	subjects.insert(pair <Uc*, float> (uc, grade));
+}
+
+void Student::removeFromMap(string name)
+{
+	Uc* uc;
+
+	for(unsigned int i = 0; i < course->getUCs().size(); i++)
+	{
+		if(course->getUCs().at(i).getName() == name)
+		{
+			uc = &course->getUCs().at(i);
+			break;
+		}
+	}
+
+	for (auto it = subjects.find(uc); it != subjects.end(); it++)
+	{
+		subjects.erase(uc);
+		break;
+	}
+}
+
+void Student::changeGrade(string name)
+{
+	Uc* uc;
+
+	for(unsigned int i = 0; i < course->getUCs().size(); i++)
+	{
+		if(course->getUCs().at(i).getName() == name)
+		{
+			uc = &course->getUCs().at(i);
+			break;
+		}
+	}
+
+	for (auto it = subjects.find(uc); it != subjects.end(); it++)
+	{
+		  it->second = grade;
+		  break;
+	}
+}
+
+void Student::showUCGrade(string name)
+{
+	Uc* uc;
+
+	for(unsigned int i = 0; i < course->getUCs().size(); i++)
+	{
+		if(course->getUCs().at(i).getName() == name)
+		{
+			uc = &course->getUCs().at(i);
+			break;
+		}
+	}
+
+	cout << "MODULE\tGRADE\n";
+
+	for (auto it = subjects.find(uc); it != subjects.end(); it++)
+	{
+		cout << it->first
+			 << '\t' << it->second << '\n';
+		break;
+	}
+}
+
+void Student::showAllMap()
+{
+	cout << "MODULE\tGRADE\n";
+
+	for (map<Uc*,float>::iterator it=subjects.begin(); it!=subjects.end(); ++it)
+	{
+		cout << it->first
+			 << '\t' << it->second << '\n';
+	}
+}
+
 
 //////EMPLOYEE//////
 
@@ -134,6 +238,18 @@ void Teacher::addSubject(Uc* uc)
 	subjects.push_back(uc);
 }
 
+void Teacher::showInfo()
+{
+	cout << "|      " << getName() << "      |" << endl;
+	cout << "| Address: " << getAddress() << endl;
+	cout << "| Code: " << getCode() << " Phone: " << getPhone() << endl;
+	cout << "| Birthday: " << getDate() << endl;
+	cout << "| Salary: "<< getSalary() << endl;
+	cout << "| NIF: "<< getNIF() << endl;
+	cout << "| Category: " << category << endl;
+	cout << "|-----------------------------------------" << endl;
+}
+
 //////STAFF//////
 
 Staff::Staff(string name, string address, date birthday, unsigned int phone, unsigned int cod, float salary, unsigned int nif, string work_area)
@@ -149,6 +265,18 @@ string Staff::getWorkArea()
 void Staff::setWorkArea(string work_area)
 {
 	this->work_area = work_area;
+}
+
+void Staff::showInfo()
+{
+	cout << "|      " << getName() << "      |" << endl;
+	cout << "| Address: " << getAddress() << endl;
+	cout << "| Code: " << getCode() << " Phone: " << getPhone() << endl;
+	cout << "| Birthday: " << getDate() << endl;
+	cout << "| Salary: "<< getSalary() << endl;
+	cout << "| NIF: "<< getNIF() << endl;
+	cout << "| Work Area: " << getWorkArea() << endl;
+	cout << "|-----------------------------------------" << endl;
 }
 
 People::~People() {

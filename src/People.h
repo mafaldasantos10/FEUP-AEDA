@@ -5,15 +5,18 @@
  *
  */
 
-#ifndef SRC_PEOPLE_H_
-#define SRC_PEOPLE_H_
+#ifndef PEOPLE_H_
+#define PEOPLE_H_
 
 #include <iostream>
 #include <map>
+#include <string>
 #include <vector>
+#include "College.h"
 
 //PROTOTYPES//
 //////////////////////
+class Department;
 class Course;
 class Uc;
 
@@ -30,8 +33,8 @@ class People {
 	date* birthday;
 public:
 	People(string name, string address, date& birthday, unsigned int phone, unsigned int cod);
-	//virtual static void Add_Person(College& college); //A ideia é usar isto como UI para pedir ao utilizador os parametros necessarios para construir um obj pessoa, ou seja pode ser feito sem objeto posterior
-    virtual void Show_Info();
+	//virtual static void Build_Person(); //A ideia é usar isto como UI para pedir ao utilizador os parametros necessarios para construir um obj pessoa, ou seja pode ser feito sem objeto posterior
+    virtual void showInfo() = 0;
     void setName(string newName);
     string getName();
     string getAddress();
@@ -46,10 +49,20 @@ public:
 
 class Student : public People{
 	Course* course; //pointer to current course the student is enrolled in
+	float grade;
 	map <Uc*, float> subjects; //In this map the Key is the subject and the float value corresponds to the grade of the student on that particular subject;
+
 public:
-	Student(string name, string address, date birthday, unsigned int phone, unsigned int cod, Course *course);  //map is missing(will be resolved when deciding UI for constructors)
+	Student(string name, string address, date birthday, unsigned int phone, unsigned int cod, Course *course, map <Uc*, float> subjects);
+	Student(string name, string address, unsigned int phone, unsigned int cod); // falta date
 	Course* getCourse();
+	string getCourseName();
+	void showInfo();
+	void addUCGrade(string name, float grade);
+	void removeFromMap(string name);
+	void changeGrade(string name);
+	void showUCGrade(string name);
+	void showAllMap();
 };
 
 class Employee : public People{
@@ -71,7 +84,7 @@ public:
 	string getCategory();
 	void setCategory(string category);
 	vector<Uc*> getSubjects();
-
+	void showInfo();
 	void addSubject(Uc* uc); //for now it just adds a given UC
 };
 
@@ -81,6 +94,7 @@ public:
 	Staff(string name, string adress, date birthday, unsigned int phone, unsigned int cod, float salary, unsigned int nif, string work_area);
 	string getWorkArea();
 	void setWorkArea(string work_area);
+	void showInfo();
 };
 
-#endif /* SRC_PEOPLE_H_ */
+#endif /* PEOPLE_H_ */
