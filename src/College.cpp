@@ -25,6 +25,10 @@ void College::setName(string name)
 	colName = name;
 }
 
+void College::setAdmin(string admin) {
+    this->admin = admin;
+}
+
 void College::showDepartments()
 {
 	for(unsigned int i = 0; i < vecDep.size(); i++)
@@ -39,6 +43,21 @@ vector<Department> College::getDepartments(){
 
 vector<vector<People*>> College::getPeople(){
     return people;
+}
+
+void College::Show_Info(){
+    cout << "|       " << colName <<"        |" << endl;
+    cout << "----------------------" << endl;
+}
+
+void College::Show_Courses(){
+    int n = 0;
+    for(int i = 0; i < vecDep.size() ; i++){
+        for(int j = 0; j < vecDep.at(i).getCourses().size(); j++){
+            cout << n << ":    " << vecDep.at(i).getCourses().at(j).getPtName() << endl;
+            n++;
+        }
+    }
 }
 
 void College::addDepartment()
@@ -126,6 +145,57 @@ void Department::Show_Info() {
     cout << "| Code: " << depCode << " Phone: " << depPhone << endl;
     cout << "| Dep. Director: " << depDirector->getName() << endl;
     cout << "|-----------------------------------------" << endl;
+}
+
+int Department::Edit_Info(){
+    Show_Info();
+    cout << "Which parameter do you want to edit?" << endl;
+    cout << "0:   NAME" << endl;
+    cout << "1:   ADDRESS" << endl;
+    cout << "2:   CODE" << endl;
+    cout << "3:   PHONE" <<   endl;
+    cout << "4:   DIRECTOR" << endl;
+    cout << "5:   PREVIOUS" << endl;
+    return 5;
+}
+
+void Department::Set(int n){
+    string s;
+    int i;
+    switch(n){
+        case 0:
+            cout << "Insert new name: " << flush;
+            cin >> s;
+            setName(s);
+            break;
+        case 1:
+            cout << "Insert new address: " << flush;
+            cin >> s;
+            setAddress(s);
+            break;
+        case 2:
+            cout << "Insert new code: " << flush;
+            cin >> i;
+            setCode(i);
+            break;
+        case 3:
+            cout << "Insert new phone number: " << flush;
+            cin >> i;
+            setPhone(i);
+            break;
+        case 4: //NEEDS TO TEST IF NEW TEACHER EXISTS!!
+            cout << "Insert new Director name: " << flush;
+            cin >> s;
+            Teacher* Dir;
+            setDirector(Dir);
+            break;
+    }
+}
+
+void Department::Show_Courses(){
+    for(int i = 0; i < getCourses().size(); i++){
+        cout << i << ":    " << getCourses().at(i).getPtName() << endl;
+    }
 }
 
 string Department::getName()

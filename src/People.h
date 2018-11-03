@@ -30,7 +30,7 @@ class People {
 	date* birthday;
 public:
 	People(string name, string address, date& birthday, unsigned int phone, unsigned int cod);
-	//virtual static void Build_Person(); //A ideia é usar isto como UI para pedir ao utilizador os parametros necessarios para construir um obj pessoa, ou seja pode ser feito sem objeto posterior
+	//virtual static void Add_Person(College& college); //A ideia é usar isto como UI para pedir ao utilizador os parametros necessarios para construir um obj pessoa, ou seja pode ser feito sem objeto posterior
     virtual void Show_Info();
     void setName(string newName);
     string getName();

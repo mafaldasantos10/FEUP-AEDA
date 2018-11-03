@@ -25,6 +25,7 @@ class Uc;
  */
 class College{
 	string colName;
+    string admin; //For logging in as admin
 	vector<Department > vecDep;
     vector<vector<People*>> people; //1º vec. for teachers, 2º for students, 3º for staff
 public:
@@ -33,6 +34,7 @@ public:
      * @param name Name of the College
      */
     College(string name);
+    College(){}
 	//~College(); //class destructor
 
     vector<vector<People*>> getPeople();
@@ -43,6 +45,10 @@ public:
      */
 	string getName();
 	void setName(string name);
+    void setAdmin(string admin);
+
+    void Show_Info();
+    void Show_Courses();
 
 	void showDepartments();
     vector<Department> getDepartments();
@@ -60,7 +66,10 @@ public:
    Department(string name, int code, string address, int phone, Teacher* director); //class constructor
    //~Department();
 
+   void Show_Courses();
    void Show_Info();
+   int Edit_Info();
+   void Set(int n);
    string getName();
    void setName(string name);
    string getAddress();
