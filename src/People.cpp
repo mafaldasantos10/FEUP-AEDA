@@ -129,9 +129,9 @@ vector<Uc*> Teacher::getSubjects()
 	return subjects;
 }
 
-void Teacher::addSubject(Uc uc)
+void Teacher::addSubject(Uc* uc)
 {
-	subjects.push_back(&uc);
+	subjects.push_back(uc);
 }
 
 //////STAFF//////

@@ -72,7 +72,7 @@ public:
 	void setCategory(string category);
 	vector<Uc*> getSubjects();
 
-	void addSubject(Uc uc); //for now it just adds a given UC
+	void addSubject(Uc* uc); //for now it just adds a given UC
 };
 
 class Staff : public Employee{

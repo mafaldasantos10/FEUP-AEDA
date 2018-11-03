@@ -88,6 +88,7 @@ public:
 
 	void addUC();
 	void removeUC();
+	void showSyllabus();
 	void sortUc();
 };
 

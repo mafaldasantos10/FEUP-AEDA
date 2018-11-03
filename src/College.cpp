@@ -347,6 +347,72 @@ void Course::removeUC()
 	throw NoNameFound(name);
 }
 
+void Course::showSyllabus()
+{
+	sortUc();
+
+		for(unsigned int i=0; i<vecUC.size();i++)
+		{
+			if(i==0)
+			{
+				cout<<"First year Modules: "<<endl<<endl;
+			}
+
+			if(vecUC.at(i).getYear() == 1)
+			{
+				cout<<vecUC.at(i).getName()<<endl;
+			}
+
+			if(vecUC.at(i-1).getYear() == 1 && vecUC.at(i).getYear()==2)
+			{
+				cout<<"Second year Modules"<<endl<<endl;
+			}
+
+			if(vecUC.at(i).getYear()== 2)
+			{
+				cout<<vecUC.at(i).getName()<<endl;
+			}
+
+			if(vecUC.at(i-1).getYear()== 2 && vecUC.at(i).getYear() == 3)
+			{
+				if(csType == "M")
+				{
+					return;
+				}
+				cout<<"Third year Modules"<<endl<<endl;
+			}
+			if(vecUC.at(i).getYear() == 3)
+			{
+				cout<<vecUC.at(i).getName()<<endl;
+			}
+
+			if(vecUC.at(i-1).getYear()== 3 && vecUC.at(i).getYear() == 4)
+			{
+				if(csType == "L")
+				{
+					return;
+				}
+				cout<<"Fourth year Modules"<<endl<<endl;
+			}
+
+			if(vecUC.at(i).getYear() == 4)
+			{
+				cout<<vecUC.at(i).getName()<<endl;
+			}
+
+			if(vecUC.at(i-1).getYear()== 4 && vecUC.at(i).getYear() == 5)
+			{
+				cout<<"Fourth year Modules"<<endl<<endl;
+			}
+
+			if(vecUC.at(i).getYear() == 5)
+			{
+				cout<<vecUC.at(i).getName()<<endl;
+			}
+
+		}
+
+}
 
 //UC//
 //////////////////////
