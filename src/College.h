@@ -20,17 +20,27 @@ class Department;
 class Course;
 class Uc;
 
-
+/**
+ * @brief College Class
+ */
 class College{
 	string colName;
 	vector<Department > vecDep;
     vector<vector<People*>> people; //1º vec. for teachers, 2º for students, 3º for staff
 public:
-	College(string name); //class constructor
+    /**
+     * @brief College Constructor
+     * @param name Name of the College
+     */
+    College(string name);
 	//~College(); //class destructor
 
     vector<vector<People*>> getPeople();
 
+    /**
+     * @brief Gets the name of a given College
+     * @return String of the name of the College
+     */
 	string getName();
 	void setName(string name);
 

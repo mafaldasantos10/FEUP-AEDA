@@ -10,9 +10,9 @@ using namespace std;
 
 //COLLEGE//
 //////////////////////
-College::College(string name)
+College::College(string name) /*college constructor*/
 {
-	colName = name;
+	colName = name; /*name of the college 1*/
 }
 
 string College::getName()
