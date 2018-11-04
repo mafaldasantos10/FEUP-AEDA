@@ -33,11 +33,11 @@ void College::showDepartments()
 {
 	for(unsigned int i = 0; i < vecDep.size(); i++)
 	{
-		cout << i << ": 	" <<vecDep.at(i).getName() << endl;
+		cout << i << ": 	" <<vecDep.at(i)->getName() << endl;
 	}
 }
 
-vector<Department> College::getDepartments(){
+vector<Department*> College::getDepartments(){
     return vecDep;
 }
 
@@ -53,8 +53,8 @@ void College::Show_Info(){
 void College::Show_Courses(){
     int n = 0;
     for(int i = 0; i < vecDep.size() ; i++){
-        for(int j = 0; j < vecDep.at(i).getCourses().size(); j++){
-            cout << n << ":    " << vecDep.at(i).getCourses().at(j).getPtName() << endl;
+        for(int j = 0; j < vecDep.at(i)->getCourses().size(); j++){
+            cout << n << ":    " << vecDep.at(i)->getCourses().at(j).getPtName() << endl;
             n++;
         }
     }
@@ -86,9 +86,9 @@ void College::addDepartment()
 
 		for(unsigned int i = 0; i < vecDep.size(); i++)
 		{
-			if(vecDep.at(i).getCode() == code)
+			if(vecDep.at(i)->getCode() == code)
 			{
-				cout << "The code you entered is already associated to Department" << "'" << vecDep.at(i).getName() << "'" << endl;
+				cout << "The code you entered is already associated to Department" << "'" << vecDep.at(i)->getName() << "'" << endl;
 				cout << "Enter a new one: " << endl;
 				differentCode = false;
 				break;
@@ -100,8 +100,8 @@ void College::addDepartment()
 	cout << "Enter the phone of the Department: "<< endl;
 	cin >> phone;
 
-	Department newDepartment(name, code, address, phone, director);
-	vecDep.push_back(newDepartment);
+	Department* dp = new Department(name, code, address, phone, director);
+	vecDep.push_back(dp);
 }
 
 void College::removeDepartment()
@@ -114,9 +114,9 @@ void College::removeDepartment()
 
 	for(unsigned int i = 0; i <= vecDep.size(); i++)
 	{
-		if(vecDep.at(i).getCode() == code)
+		if(vecDep.at(i)->getCode() == code)
 		{
-			name = vecDep.at(i).getName();
+			name = vecDep.at(i)->getName();
 
 			vecDep.erase(vecDep.begin() + i);
 			cout << "Department " << code << "(" << name << ")" << " has been successfully removed. "<< endl;

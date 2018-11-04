@@ -8,8 +8,11 @@
 
 #include <iostream>
 #include "College.h"
+#include <map>
 
 using namespace std;
+
+int access = 0, user_id = 0; //Global variable to determine type of user and id if necessary
 
 int Nav(int bottom, int top){ //tests for valid input keys and returns the inputted char
     int key;
@@ -23,7 +26,7 @@ int Nav(int bottom, int top){ //tests for valid input keys and returns the input
 }
 
 template<class T>
-void Edit_Info(T obj) {
+void Edit_Info(T &obj) {
     int n, i;
     while (1) {
         obj.Show_Info();
@@ -101,14 +104,30 @@ void Departments_Menu(College &college){
         } else if (i == (n - 1)) { //Remove department
             college.removeDepartment();
         } else { //Enter department
-            Dep_Menu(college.getDepartments().at(i));
+            Dep_Menu(*college.getDepartments().at(i));
         }
     }
 }
 
+void Grades_Menu(People &person){
+    Student *st = dynamic_cast<Student*>(&person);
+    st->showAllGrades();
+}
+
 void Person_Menu(People &person){
-    person.Show_Info();
-    cout << "0:   EDIT INFO" << endl;
+    int n = -1, i;
+    while(1){
+        person.Show_Info();
+        if((access == 1 && user_id == person.getCode()) || access == 2){
+            n = person.Special_Info();
+            cout << n << ":   EDIT INFO" << endl;
+        }
+        cout << ++n << ":   PREVIOUS MENU" << endl;
+        i = Nav(0,n);
+        if(i == n) return;
+        else if( i == n-1) Edit_Info(person);
+        else if(i == n-2) Grades_Menu(person);
+    }
 }
 
 void List_People(College &college, int n){
@@ -121,7 +140,7 @@ void List_People(College &college, int n){
         cout << s << ":   PREVIOUS MENU" << endl;
         i = Nav(0,s);
         if(i == s) return;
-        //else Person_Menu(college.getPerson(n,i)); //Get Person in people vector
+        else Person_Menu(*(college.getPeople().at(n).at(i)));
     }
 }
 
@@ -259,7 +278,6 @@ int Log_In(College& college){
 }
 
 int main() {
-    int access = 0;
     while(1){
         College college;
         switch(Main_Menu()){
@@ -289,6 +307,8 @@ int main() {
                 break;
             case 3:
                 break;
+            default:
+                return -1;
         }
     }
 }

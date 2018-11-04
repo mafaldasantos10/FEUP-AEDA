@@ -26,7 +26,7 @@ class Uc;
 class College{
 	string colName;
     string admin; //For logging in as admin
-	vector<Department > vecDep;
+	vector<Department *> vecDep;
     vector<vector<People*>> people; //1º vec. for teachers, 2º for students, 3º for staff
 public:
     /**
@@ -51,7 +51,7 @@ public:
     void Show_Courses();
 
 	void showDepartments();
-    vector<Department> getDepartments();
+    vector<Department*> getDepartments();
 	void addDepartment();
 	void removeDepartment();
 };

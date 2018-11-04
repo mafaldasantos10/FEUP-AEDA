@@ -6,6 +6,8 @@
  */
 
 #include "People.h"
+#include "College.h"
+#include <map>
 
 //////PEOPLE//////
 
@@ -61,6 +63,21 @@ date* People::getDate()
 	return birthday;
 }
 
+int People::Edit_Info() {
+    cout << "0:   NAME" << endl;
+    return 1;
+}
+
+void People::Set(int n) {
+    switch(n){
+        case 0:
+            return;
+    }
+}
+
+void People::Show_Info() {
+    cout << "| " << name << endl;
+}
 
 //////STUDENT//////
 
@@ -73,6 +90,14 @@ Student::Student(string name, string address, date birthday, unsigned int phone,
 Course* Student::getCourse()
 {
 	return course;
+}
+ int Student::Special_Info(){
+    cout << "0:   SHOW GRADES" << endl;
+     return 1;
+}
+
+map <Uc*, float>* Student::getGrades() {
+    return &subjects;
 }
 
 string Student::getCourseName()
@@ -169,7 +194,7 @@ void Student::showUCGrade(string name)
 	}
 }
 
-void Student::showAllMap()
+void Student::showAllGrades()
 {
 	cout << "MODULE\tGRADE\n";
 
@@ -187,6 +212,11 @@ Employee::Employee(string name, string address, date birthday, unsigned int phon
 : People(name, address, birthday, phone, cod){
 	this->salary = salary;
 	this->nif = nif;
+}
+
+int Employee::Special_Info(){
+    cout << "| nif: " << getNIF() << " salary: " << getSalary() << endl;
+    return 0;
 }
 
 float Employee::getSalary()

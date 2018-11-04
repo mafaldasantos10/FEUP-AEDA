@@ -12,11 +12,9 @@
 #include <map>
 #include <string>
 #include <vector>
-#include "College.h"
 
 //PROTOTYPES//
 //////////////////////
-class Department;
 class Course;
 class Uc;
 
@@ -33,8 +31,11 @@ class People {
 	date* birthday;
 public:
 	People(string name, string address, date& birthday, unsigned int phone, unsigned int cod);
-	//virtual static void Build_Person(); //A ideia é usar isto como UI para pedir ao utilizador os parametros necessarios para construir um obj pessoa, ou seja pode ser feito sem objeto posterior
-    virtual void showInfo() = 0;
+	//virtual static void Add_Person(College& college); //A ideia é usar isto como UI para pedir ao utilizador os parametros necessarios para construir um obj pessoa, ou seja pode ser feito sem objeto posterior
+    virtual void Show_Info();
+    virtual int Edit_Info(); //Returns number of parameters
+    virtual void Set(int n);
+    virtual int Special_Info() = 0;
     void setName(string newName);
     string getName();
     string getAddress();
@@ -56,13 +57,15 @@ public:
 	Student(string name, string address, date birthday, unsigned int phone, unsigned int cod, Course *course, map <Uc*, float> subjects);
 	Student(string name, string address, unsigned int phone, unsigned int cod); // falta date
 	Course* getCourse();
+    int Special_Info();
+    map <Uc*, float>* getGrades();
 	string getCourseName();
 	void showInfo();
 	void addUCGrade(string name, float grade);
 	void removeFromMap(string name);
 	void changeGrade(string name);
 	void showUCGrade(string name);
-	void showAllMap();
+	void showAllGrades();
 };
 
 class Employee : public People{
@@ -74,6 +77,7 @@ public:
 	void setSalary(float salary);
 	unsigned int getNIF();
 	void setNIF(unsigned int nif);
+    int Special_Info();
 };
 
 class Teacher : public Employee{
