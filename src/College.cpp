@@ -31,41 +31,46 @@ string College::getName()
 
 void College::setName(string name)
 {
-
 	colName = name;
-
 }
 
 void College::setAdmin(string admin) {
 
 	if(hasNoNumber(admin))
 	{
-    this->admin = admin;
+		this->admin = admin;
 	}
 }
 
-vector<Department*> College::getDepartments(){
+vector<Department*> College::getDepartments()
+{
     return vecDep;
 }
 
-vector<vector<People*>> College::getPeople(){
+vector<vector<People*>> College::getPeople()
+{
     return people;
 }
 
-void College::addPeople(int i, People* person){
+void College::addPeople(int i, People* person)
+{
     people.at(i).push_back(person);
 }
 
-void College::showInfo(){
+void College::showInfo()
+{
     cout << "\n----------------------" << endl;
     cout << "|       " << colName <<"        |" << endl;
     cout << "----------------------" << endl;
 }
 
-vector<Course *> College::getCourses(){
+vector<Course *> College::getCourses()
+{
     vector<Course *> vec;
-    for(unsigned int i = 0; i < vecDep.size() ; i++){
-        for(unsigned int j = 0; j < vecDep.at(i)->getCourses().size(); j++){
+    for(unsigned int i = 0; i < vecDep.size() ; i++)
+    {
+        for(unsigned int j = 0; j < vecDep.at(i)->getCourses().size(); j++)
+        {
             vec.push_back(vecDep.at(i)->getCourses().at(j));
         }
     }
@@ -247,7 +252,7 @@ void College::addCourse(){
     cout << "In Which Department do you want to add a course?" << endl;
     Print_Vec(vecDep);
     cout << vecDep.size() << ":   PREVIOUS MENU" << endl;
-    int i = Nav(0,vecDep.size());
+    unsigned int i = Nav(0,vecDep.size());
     if(i == vecDep.size()) return;
     else vecDep.at(i)->addCourse();
 }
@@ -255,7 +260,7 @@ void College::removeCourse(){
     cout << "In Which Department do you want to remove a course?" << endl;
     Print_Vec(vecDep);
     cout << vecDep.size() << ":   PREVIOUS MENU" << endl;
-    int i = Nav(0,vecDep.size());
+    unsigned int i = Nav(0,vecDep.size());
     if(i == vecDep.size()) return;
     else vecDep.at(i)->removeCourse();
 }
@@ -465,7 +470,7 @@ int Course::editInfo(){
 
 void Course::Set(int n){
     string s;
-    int i;
+    //int i;
     switch(n){
         case 0:
             cout << "\nInsert New Pt_name: " << flush;
@@ -515,6 +520,7 @@ void Course::showSyllabus()
 			}
 			cout << "Third year Modules" << endl << endl;
 		}
+
 		if(vecUC.at(i)->getYear() == 3)
 		{
 			cout << vecUC.at(i)->getName() << endl;
@@ -826,7 +832,7 @@ void Uc::removeStudent()
 	throw NoNameFound(name);
 }
 
-//Compare Ucs
+//Compare UCs
 bool Uc::operator<(Uc uc2)
 {
 	if(ucECTS < uc2.getECTS())
@@ -844,4 +850,3 @@ bool Uc::operator<(Uc uc2)
 
 	return false;
 }
-
