@@ -35,7 +35,7 @@ class People {
 	date* birthday;
 public:
 	People(string name, string address, date& birthday, unsigned int phone,string cod);
-    virtual void Show_Info();
+    virtual void showInfo();
     virtual int Edit_Info(); //Returns number of parameters
     virtual void Set(int n);
     virtual int Special_Info() = 0;

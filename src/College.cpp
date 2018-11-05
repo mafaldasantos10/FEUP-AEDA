@@ -448,31 +448,31 @@ void Course::addUC()
 	cout << "How many hours of workload? "<< endl;
 	cin >> workload;
 
-	cout << "Enter the number of students: "<< endl;
-	cin >> nS ;
+//	cout << "Enter the number of students: "<< endl;
+//	cin >> nS ;
+//
+//	cout << "Enter their names one by one: "<<endl;
+//
+//	for(int i = 1; i <= nS; i++)
+//	{
+//		cout <<"  "<< i << ": ";
+//		cin >> nameS;
+//		students.push_back(nameS);
+//	}
+//
+//	cout << "Enter the number of teachers: "<< endl;
+//	cin >> nT ;
+//
+//	cout << "Enter their names one by one, starting by the Regent: "<<endl;
+//
+//	for(int i = 1; i <= nT; i++)
+//	{
+//		cout << "  "<< i <<": ";
+//		cin >> nameT;
+//		teachers.push_back(nameT);
+//	}
 
-	cout << "Enter their names one by one: "<<endl;
-
-	for(int i = 1; i <= nS; i++)
-	{
-		cout <<"  "<< i << ": ";
-		cin >> nameS;
-		students.push_back(nameS);
-	}
-
-	cout << "Enter the number of teachers: "<< endl;
-	cin >> nT ;
-
-	cout << "Enter their names one by one, starting by the Regent: "<<endl;
-
-	for(int i = 1; i <= nT; i++)
-	{
-		cout << "  "<< i <<": ";
-		cin >> nameT;
-		teachers.push_back(nameT);
-	}
-
-	Uc* newUC = new Uc(name, teachers, students, year, ects, workload);
+	Uc* newUC = new Uc(name, year, ects, workload);
 	vecUC.push_back(newUC);
 }
 
@@ -527,7 +527,7 @@ void Course::sortUc()
 
 //UC//
 //////////////////////
-Uc::Uc(string name, vector<string> teacher, vector<string> student, int year, int ects, int workload)
+Uc::Uc(string name, vector<Teacher*> teacher, vector<Student*> student, int year, int ects, int workload)
 {
 	ucECTS = ects;
 	ucName = name;
@@ -535,6 +535,15 @@ Uc::Uc(string name, vector<string> teacher, vector<string> student, int year, in
 	ucTeacher = teacher;
 	ucWorkload = workload;
 	ucYear = year;
+}
+
+Uc::Uc(string name, int year, int ects, int workload)
+{
+	ucECTS = ects;
+	ucName = name;
+	ucWorkload = workload;
+	ucYear = year;
+
 }
 
 void Uc::showInfo() {
@@ -602,12 +611,12 @@ void Uc::setWorkload(int workload)
 	ucWorkload = workload;
 }
 
-vector<string> Uc::getTeachers()
+vector<Teacher*> Uc::getTeachers()
 {
 	return ucTeacher;
 }
 
-vector<string> Uc::getStudents()
+vector<Student*> Uc::getStudents()
 {
 	return ucStudent;
 }

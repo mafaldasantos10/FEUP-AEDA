@@ -33,20 +33,20 @@ int Nav(int bottom, int top){ //tests for valid input keys and returns the input
 
 template<class T>
 void Print_Vec(vector<T*> vec){  //Prints name of every object in vector of objects
-    for(int i = 0; i < vec.size() ; i++){
+    for(unsigned int i = 0; i < vec.size() ; i++){
         cout << i << ":   " << vec.at(i)->getName() << endl;
     }
 }
 
 template<class T>
-void Edit_Info(T &obj) {
-    int n, i;
+void editInfo(T &obj) {
+   // int n, i;
     while (1) {
-        obj.Show_Info();
-        n = obj.Edit_Info();
-        i = Nav(0,n);
-        if(n == i) return;
-        else obj.Set(n);
+        obj.showInfo();
+      //  n = obj.editInfo();
+      //  i = Nav(0,n);
+       // if(n == i) return;
+      //  else obj.Set(n);
     }
 }
 
@@ -72,7 +72,7 @@ void New_College(College &college){
 
 template<class T>
 void Courses_Menu(T obj){ //Can be either college or Department
-    obj.Show_Info();
+    obj.showInfo();
     obj.Show_Courses;
     cout << ":   ADD COURSE" << endl;
     cout << ":   REMOVE COURSE" << endl;
@@ -80,7 +80,7 @@ void Courses_Menu(T obj){ //Can be either college or Department
 }
 
 void Dep_Menu(Department& department){
-    department.Show_Info();
+    department.showInfo();
     cout << "0:   DEPARTMENT COURSES" << endl;
     cout << "1:   DEPARTMENT SUBJECTS" << endl;
     cout << "2:   EDIT INFO" << endl;
@@ -93,7 +93,7 @@ void Dep_Menu(Department& department){
             //Subjects_Menu(department);  //Organized by course
             break;
         case 2:
-            Edit_Info(department);
+            editInfo(department);
             break;
         case 3:
             return;
@@ -104,7 +104,7 @@ void Departments_Menu(College &college){
     int n;
     while(1) {
         n = college.getDepartments().size();
-        college.Show_Info();
+        college.showInfo();
         college.showDepartments();
         cout << n << ":   ADD DEPARTMENT" << endl;
         cout << ++n << ":   REMOVE DEPARTMENT" << endl;
@@ -132,7 +132,7 @@ void Add_Student(College& college, string name, string address, unsigned int pho
     int year;
     float grade;
     map<Uc*,float> subjects;
-    int i;
+    unsigned int i;
     cod = "0" + to_string(current_year) + to_string(Student::student_count);  //student id is assigned
     cout << "\nChoose Student's Course:" << endl;  //Needs exception in case there are no Courses Created
     Print_Vec(college.getCourses());
@@ -198,7 +198,7 @@ void Add_Person(College& college, int type = -1){ //Needs general function to ch
 void Person_Menu(People &person){
     int n = -1, i;
     while(1){
-        person.Show_Info();
+        person.showInfo();
         if((access == 1 && user_id == person.getCode()) || access == 2){
             n = person.Special_Info();
             cout << n << ":   EDIT INFO" << endl;
@@ -206,7 +206,7 @@ void Person_Menu(People &person){
         cout << ++n << ":   PREVIOUS MENU" << endl;
         i = Nav(0,n);
         if(i == n) return;
-        else if( i == n-1) Edit_Info(person);
+        else if( i == n-1) editInfo(person);
         else if(i == n-2) Grades_Menu(person);
     }
 }
@@ -228,7 +228,7 @@ void List_People(College &college, int n){
 void People_Menu(College &college){
     int i;
     while(1) {
-        college.Show_Info();
+        college.showInfo();
         cout << "0:   LIST ALL TEACHERS" << endl;
         cout << "1:   LIST ALL STUDENTS" << endl;
         cout << "2:   LIST ALL STAFF" << endl;
@@ -259,7 +259,7 @@ void People_Menu(College &college){
 
 void Member_Menu(College &college){ //Can only read
     while(1){
-        college.Show_Info();
+        college.showInfo();
         cout << "0:   DEPARTMENTS" << endl;
         cout << "1:   COURSES" << endl;
         cout << "2:   PEOPLE" << endl;
@@ -287,7 +287,7 @@ void Member_Menu(College &college){ //Can only read
 
 void Vis_Menu(College &college){ //Can only see info
     while(1){
-        college.Show_Info();
+        college.showInfo();
         cout << "0:   DEPARTMENTS" << endl;
         cout << "1:   COURSES" << endl;
         cout << "2:   EXIT COLLEGE" << endl;
@@ -307,7 +307,7 @@ void Vis_Menu(College &college){ //Can only see info
 
 void Admin_Menu(College &college){
     while(1){
-        college.Show_Info();
+        college.showInfo();
         cout << "0:   DEPARTMENTS" << endl;
         cout << "1:   COURSES" << endl;
         cout << "2:   PEOPLE" << endl;

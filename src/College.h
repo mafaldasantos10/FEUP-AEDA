@@ -50,6 +50,11 @@ public:
      * @return String of the name of the College
      */
 	string getName();
+	/**
+	 * @brief Changes the name of a given College
+	 * hello
+	 * @param name New name of the College
+	 */
 	void setName(string name);
     void setAdmin(string admin);
 
@@ -67,7 +72,7 @@ class Department {
    string depName, depAddress;
    Teacher* depDirector;
    int depCode, depPhone;
-   vector<Course > vecCourse;
+   vector<Course> vecCourse;
 public:
    Department(string name, int code, string address, int phone, Teacher* director); //class constructor
    //~Department();
@@ -125,7 +130,8 @@ class Uc{
     vector<Student*> ucStudent;
     int ucYear, ucECTS, ucWorkload;
 public:
-	Uc(string name, vector<string> teacher, vector<string> student, int year, int ects, int workload);
+	Uc(string name, vector<Teacher*> teacher, vector<Student*> student, int year, int ects, int workload);
+	Uc(string name, int year, int ects, int workload);
 	//~Uc();
 
 	void showInfo();
@@ -139,8 +145,8 @@ public:
     void setECTS(int ects);
 	int getWorkload();
 	void setWorkload(int workload);
-	vector<string> getTeachers();
-	vector<string> getStudents();
+	vector<Teacher*> getTeachers();
+	vector<Student*> getStudents();
 
 	//void addTeacher();
 	void removeTeacher();
@@ -186,7 +192,7 @@ bool remove(vector<T> &vector, string name)
 {
 	for(unsigned int i = 0; i <= vector.size(); i++)
 		{
-			if(vector.at(i) == name)
+			if(vector.at(i)->getName() == name)
 			{
 				vector.erase(vector.begin() + i);
 				return true;

@@ -79,7 +79,7 @@ void People::Set(int n) {
     }
 }
 
-void People::Show_Info() {
+void People::showInfo() {
     cout << "| " << name << endl;
 }
 
