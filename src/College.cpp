@@ -191,6 +191,82 @@ void College::removeDepartment()
 	throw NoCodeFound(code);
 }
 
+void College::addStudent(string name, string address, unsigned int phone, string cod, date& birthday){
+    Course* course;
+    int year;
+    float grade;
+    map<Uc*,float> subjects;
+    string uc_name;
+    cod = "0" + to_string(current_year) + to_string(Student::student_count);  //student id is assigned
+
+    cout << "\nChoose Student's Course:" << endl;  //Needs exception in case there are no Courses Created
+    Print_Vec(getCourses());
+    course = getCourses().at(Nav(0,getCourses().size()-1));
+    cout << "\nInsert Student's Grade: " << flush;
+    cin >> year;
+    Student* st = new Student(name, address, birthday, phone, cod, course, subjects);
+    while(1){
+        cout << "\nInsert Student's Uc(? - list/ ! - done): " << flush;
+        getline(cin,uc_name);
+        if(uc_name == "!") break;
+        else if(uc_name == "?") Print_Vec(course->getUCs());
+        cout << "\nInsert Student's Uc grade(-1 if not-evaluated): " << flush;
+        cin >> grade;
+        st->addUCGrade(uc_name,grade);
+    }
+    addPeople(0, st);
+}
+
+void College::addPerson(int type){ //Needs general function to check input
+    string name, address;
+    unsigned int phone;
+    string cod;
+    date* birthday;
+    if(type == -1){
+        cout << "What Type of person would you like to add?" << endl;
+        cout << "0:   STUDENT" << endl;
+        cout << "1:   TEACHER" << endl;
+        cout << "2:   STAFF" << endl;
+        cout << "3:   CANCEL" << endl;
+        type = Nav(0,3);
+    }
+    if(type == 3) return;
+    cout << "Insert Name: " << flush;
+    getline(cin,name);
+    cout << "\nInsert Address: " << flush;
+    getline(cin,address);
+    cout << "\nInsert Phone Number: " << flush;
+    cin >> phone;
+    cin.clear();
+    cin.ignore();
+    birthday = readDate(); //Tests if date is written correctly
+    switch(type){
+        case 0:
+            addStudent(name, address, phone, cod, *birthday);
+            break;
+        case 1:
+            addTeacher(name, address, phone, cod, *birthday);
+            break;
+        case 2:
+            addStaff(name, address, phone, cod, *birthday);
+            break;
+    }
+}
+
+void College::addTeacher(string name, string address, unsigned int phone, string cod, date& birthday){
+
+}
+
+void College::addStaff(string name, string address, unsigned int phone, string cod, date& birthday){
+
+}
+
+void addCourse(){
+
+}
+void removeCourse(){
+}
+
 
 //DEPARTMENT//
 //////////////////////
@@ -321,7 +397,7 @@ void Department::setPhone(int phone)
 {
 	depPhone = phone;
 }
-vector<Course> Department::getCourses()
+vector<Course*> Department::getCourses()
 {
 	return vecCourse;
 }
@@ -343,7 +419,7 @@ void Department::addCourse()
 	cout << "Enter the code of the course: "<< endl;
 	cin >> code;
 
-	Course newCourse(type, engName, ptName, code);
+	Course* newCourse = new Course(type, engName, ptName, code);
 	vecCourse.push_back(newCourse);
 }
 
@@ -357,9 +433,9 @@ void Department::removeCourse()
 
 	for(unsigned int i = 0; i < vecCourse.size(); i++)
 	{
-		if(vecCourse.at(i).getCode() == code)
+		if(vecCourse.at(i)->getCode() == code)
 		{
-			name = vecCourse.at(i).getEngName();
+			name = vecCourse.at(i)->getEngName();
 
 			vecCourse.erase(vecCourse.begin() + i);
 			cout << "Course " << code << "(" << name << ")" << " has been successfully removed. "<< endl;
@@ -385,6 +461,35 @@ void Course::showInfo() {
     cout << "|      " << csPtName << "      |" << endl;
     cout << "| Type: " << csType << endl;
     cout << "|-----------------------------------------" << endl;
+}
+
+int Course::editInfo(){
+    showInfo();
+    cout << "Which parameter do you want to edit?" << endl;
+    cout << "0:   Pt_NAME" << endl;
+    cout << "1:   Eng_NAMR" << endl;
+    cout << "2:   TYPE" << endl;
+    cout << "3:   CODE" <<   endl;
+    cout << "4:   PREVIOUS MENU" << endl;
+    return 4;
+}
+
+void Course::Set(int n){
+    string s;
+    int i;
+    switch(n){
+        case 0:
+            cout << "\nInsert New Pt_name: " << flush;
+            getline(cin,s);
+            setPtName(s);
+            break;
+        case 1:
+            break;
+        case 2:
+            break;
+        case 3:
+            break;
+    }
 }
 
 void Course::showSyllabus()

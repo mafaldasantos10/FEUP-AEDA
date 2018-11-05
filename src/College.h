@@ -24,6 +24,20 @@ class Employee;
 class Student;
 class Teacher;
 class Staff;
+int Nav(int bottom, int top);
+date* readDate();
+extern int current_year;
+
+
+////PRINT VECTOR////
+template<class T>
+void Print_Vec(vector<T*> vec){  //Prints name of every object in vector of objects
+    for(unsigned int i = 0; i < vec.size() ; i++){
+        cout << i << ":   " << vec.at(i)->getName() << endl;
+    }
+}
+////////////////////
+
 
 /**
  * @brief College Class
@@ -75,6 +89,14 @@ public:
     vector<Department*> getDepartments();
 	void addDepartment();
 	void removeDepartment();
+
+    void addPerson(int type = -1);
+    void addStudent(string name, string address, unsigned int phone, string cod, date& birthday);
+    void addTeacher(string name, string address, unsigned int phone, string cod, date& birthday);
+    void addStaff(string name, string address, unsigned int phone, string cod, date& birthday);
+
+    void addCourse();
+    void removeCourse();
 };
 
 
@@ -82,7 +104,7 @@ class Department {
    string depName, depAddress;
    Teacher* depDirector;
    int depCode, depPhone;
-   vector<Course> vecCourse;
+   vector<Course *> vecCourse;
 public:
    Department(string name, int code, string address, int phone, Teacher* director); //class constructor
    Department(string name, int code, string address, int phone); //class constructor
@@ -102,7 +124,7 @@ public:
    void setCode(int code);
    int getPhone();
    void setPhone(int phone);
-   vector<Course> getCourses();
+   vector<Course*> getCourses();
 
    void addCourse();
    void removeCourse();
@@ -118,6 +140,8 @@ public:
 	//~Course();
 
 	void showInfo();
+    int editInfo();
+    void Set(int n);
 	void showSyllabus();
 	string getType();
 	void setType(string type);

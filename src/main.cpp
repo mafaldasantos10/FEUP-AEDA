@@ -8,45 +8,64 @@
 
 #include <iostream>
 #include "College.h"
+#include <sstream>
 #include <map>
 
 using namespace std;
 
+int access = 0; //Global variable to determine type of user
+string user_id;
+
+////CURRENT YEAR//// (used for ids)
 time_t theTime = time(NULL);
 struct tm *aTime = localtime(&theTime);
 
 int current_year = aTime->tm_year + 1900; // Year is # years since 1900
+////////////////////
 
-int access = 0; //Global variable to determine type of user
-string user_id;
-
+////GENERAL FUNCTIONS//// (used thoughout project, mostly for input verification)
 int Nav(int bottom, int top){ //tests for valid input keys and returns the inputted char
     int key;
-    while(cin >> key){
-        cin.ignore();
+    while(cin >> key){ //Problem with cin getting corrupted if several characters are introduced
         cin.clear();
+        cin.ignore();
         if(key >= bottom && key <= top) break;
         else cout << "Invalid Input!" << endl;
     }
     return key;
 }
 
-template<class T>
-void Print_Vec(vector<T*> vec){  //Prints name of every object in vector of objects
-    for(unsigned int i = 0; i < vec.size() ; i++){
-        cout << i << ":   " << vec.at(i)->getName() << endl;
+date* readDate(){
+    unsigned int day, month, year;
+    char c = '/';
+    string data;
+    while(1){
+        cout << "\nInsert Birthday(dd/mm/yyyy): " << flush;
+        getline(cin,data);
+        data = data.substr(0,data.find('\n'));
+        stringstream ss(data);
+        ss >> day >> c >> month >> c >> year;
+        if(day < 0 || day > 31
+                || month < 0 || month > 12
+                || year < 1900 || year > 2018) cout << "\nInvalid date!" << endl;
+        else break;
     }
+    date* d = new date();
+    d->day = day; d->month = month; d->year = year;
+    return d;
 }
+
+////GENERAL FUNCTIONS////
 
 template<class T>
 void editInfo(T &obj) {
-   // int n, i;
+    int n, i;
     while (1) {
         obj.showInfo();
-      //  n = obj.editInfo();
-      //  i = Nav(0,n);
-       // if(n == i) return;
-      //  else obj.Set(n);
+        n = obj.editInfo();
+        i = Nav(0,n);
+        if(i == n) return;
+        else obj.Set(i);
     }
 }
 
@@ -70,32 +89,62 @@ void New_College(College &college){
     cout << "\n\n\n" << endl;
 }
 
+void Course_Menu(Course& course){
+    while(1){
+        course.showInfo();
+        cout << "0:   EDIT INFO" << endl;
+        cout << "1:   SHOW COURSE PROGRAM" << endl;
+        cout << "2:   ADD UC" << endl;
+        cout << "3:   REMOVE UC" << endl;
+        cout << "4:   PREVIOUS MENU" << endl;
+        switch(Nav(0,4)){
+            case 0:
+                editInfo(course);
+                break;
+            case 1:
+                course.showSyllabus();
+                break;
+            case 2:
+                course.addUC();
+                break;
+            case 3:
+                course.removeUC();
+                break;
+            case 4:
+                return;
+        }
+    }
+}
+
 template<class T>
 void Courses_Menu(T obj){ //Can be either college or Department
-    obj.showInfo();
-    obj.Show_Courses;
-    cout << ":   ADD COURSE" << endl;
-    cout << ":   REMOVE COURSE" << endl;
-    cout << ":   PREVIOUS" << endl;
+    while(1){
+        obj.showInfo();
+        Print_Vec(obj.getCourses());
+        size_t n = obj.getCourses().size();
+        cout << n << ":   ADD COURSE" << endl;
+        cout << ++n << ":   REMOVE COURSE" << endl;
+        cout << ++n << ":   PREVIOUS MENU" << endl;
+        int i = Nav(0,n);
+        if(i == n) return;
+        else if(i == n-1) obj.removeCourse();
+        else if(i == n-2) obj.addCourse();
+        else Course_Menu(*(obj.getCourses().at(i)));
+    }
 }
 
 void Dep_Menu(Department& department){
     department.showInfo();
     cout << "0:   DEPARTMENT COURSES" << endl;
-    cout << "1:   DEPARTMENT SUBJECTS" << endl;
-    cout << "2:   EDIT INFO" << endl;
-    cout << "3:   PREVIOUS MENU" << endl;
+    cout << "1:   EDIT INFO" << endl;
+    cout << "2:   PREVIOUS MENU" << endl;
     switch(Nav(0,3)){
         case 0:
-            //Courses_Menu(department);
-            break;
+            Courses_Menu(department);
         case 1:
-            //Subjects_Menu(department);  //Organized by course
-            break;
-        case 2:
             editInfo(department);
             break;
-        case 3:
+        case 2:
             return;
     }
 }
@@ -125,74 +174,6 @@ void Departments_Menu(College &college){
 void Grades_Menu(People &person){
     Student *st = dynamic_cast<Student*>(&person);
     st->showAllGrades();
-}
-
-void Add_Student(College& college, string name, string address, unsigned int phone, string cod, date& birthday){
-    Course* course;
-    int year;
-    float grade;
-    map<Uc*,float> subjects;
-    unsigned int i;
-    cod = "0" + to_string(current_year) + to_string(Student::student_count);  //student id is assigned
-    cout << "\nChoose Student's Course:" << endl;  //Needs exception in case there are no Courses Created
-    Print_Vec(college.getCourses());
-    course = college.getCourses().at(Nav(0,college.getCourses().size()-1));
-    cout << "\nInsert Student's Grade: " << flush;
-    cin >> year;
-    while(1){
-        cout << "\nChoose Student's Ucs: " << endl;
-        Print_Vec(course->getUCs());
-        cout << course->getUCs().size() << ":   DONE" << endl;
-        i = Nav(0,course->getUCs().size());
-        if(i == course->getUCs().size()) break;
-        else if(subjects.find(course->getUCs().at(i)) != subjects.end()){
-            cout << "Insert student's grade on this subject(-1 for no grade): " << flush;
-            cin >> grade;
-            subjects.insert(pair<Uc*,float>(course->getUCs().at(i),grade));
-        }
-        else cout << "Student's already enrolled in this Uc!" << endl;
-    }
-    Student* st = new Student(name, address, birthday, phone, cod, course, subjects);
-    college.addPeople(0, st); //dynamic_cast<People*>(st) if there's an error
-}
-
-void Add_Person(College& college, int type = -1){ //Needs general function to check input
-    string name, address;
-    unsigned int phone;
-    string cod;
-    date birthday;
-    if(type == -1){
-        cout << "What Type of person would you like to add?" << endl;
-        cout << "0:   STUDENT" << endl;
-        cout << "1:   TEACHER" << endl;
-        cout << "2:   STAFF" << endl;
-        cout << "3:   CANCEL" << endl;
-        type = Nav(0,3);
-    }
-    if(type == 3) return;
-    cout << "Insert Name: " << flush;
-    cin >> name;
-    cin.clear();
-    cin.ignore();
-    cout << "\nInsert Address: " << flush;
-    getline(cin,address);
-    cin.clear();
-    cin.ignore();
-    cout << "\nInsert Phone Number: " << flush;
-    cin >> phone;
-    cin.clear();
-    cin.ignore();
-    cout << "\nInsert Birthday(dd/mm/yyyy): " << flush;
-    //Read_date(&birthday) //Tests if date is written correctly
-    switch(type){
-        case 0:
-            Add_Student(college, name, address, phone, cod, birthday);
-            break;
-        case 1:
-            break;
-        case 2:
-            break;
-    }
 }
 
 void Person_Menu(People &person){
@@ -246,7 +227,7 @@ void People_Menu(College &college){
                 //Search people by name or id
                 break;
             case 4:
-                Add_Person(college);
+                college.addPerson();
                 break;
             case 5:
                 //Remove_Person(id);

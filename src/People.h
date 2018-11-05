@@ -25,7 +25,6 @@ using namespace std;
 
 struct date {  //formated date string for better use
 	unsigned int day, month, year;
-	const string format = to_string(day) + "/" + to_string(month) + "/" + to_string(year);
 };
 
 class People {
@@ -36,7 +35,7 @@ class People {
 public:
 	People(string name, string address, date& birthday, unsigned int phone,string cod);
     virtual void showInfo();
-    virtual int Edit_Info(); //Returns number of parameters
+    virtual int editInfo(); //Returns number of parameters
     virtual void Set(int n);
     virtual int Special_Info() = 0;
     void setName(string newName);

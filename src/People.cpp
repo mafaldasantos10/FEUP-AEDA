@@ -67,7 +67,7 @@ date* People::getDate()
 	return birthday;
 }
 
-int People::Edit_Info() {
+int People::editInfo() {
     cout << "0:   NAME" << endl;
     return 1;
 }
@@ -121,7 +121,7 @@ void Student::showInfo(){
 }
 
 void Student::addUCGrade(string name, float grade)
-{
+{  //Needs to Test if name exists, if grade is valid and if student isn't already enrolled in Uc with given name
 	Uc* uc;
 
 	for(unsigned int i = 0; i < course->getUCs().size(); i++)
