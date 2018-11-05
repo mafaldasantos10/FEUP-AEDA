@@ -125,7 +125,7 @@ void Courses_Menu(T obj){ //Can be either college or Department
         cout << n << ":   ADD COURSE" << endl;
         cout << ++n << ":   REMOVE COURSE" << endl;
         cout << ++n << ":   PREVIOUS MENU" << endl;
-        int i = Nav(0,n);
+        unsigned int i = Nav(0,n);
         if(i == n) return;
         else if(i == n-1) obj.removeCourse();
         else if(i == n-2) obj.addCourse();
@@ -141,6 +141,7 @@ void Dep_Menu(Department& department){
     switch(Nav(0,3)){
         case 0:
             Courses_Menu(department);
+            break;
         case 1:
             editInfo(department);
             break;

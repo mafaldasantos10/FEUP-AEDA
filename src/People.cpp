@@ -123,19 +123,28 @@ void Student::showInfo(){
 }
 
 void Student::addUCGrade(string name, float grade)
-{  //Needs to Test if name exists, if grade is valid and if student isn't already enrolled in Uc with given name
+{  //Needs to Test if name exists, if grade is valid and if student isn't already enrolled in Uc with given name - check
 	Uc* uc;
-
+	bool found = false;
 	for(unsigned int i = 0; i < course->getUCs().size(); i++)
 	{
 		if(course->getUCs().at(i)->getName() == name)
 		{
 			uc = course->getUCs().at(i);
+			found = true;
 			break;
 		}
+		else
+		{
+			found = false;
+		}
 	}
-
+if(found)
+{
 	subjects.insert(pair <Uc*, float> (uc, grade));
+}
+else
+	throw NoNameFound(name);
 }
 
 void Student::removeFromMap(string name)
