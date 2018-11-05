@@ -85,7 +85,6 @@ public:
      */
     vector<Course * > getCourses();
 
-	void showDepartments();
     vector<Department*> getDepartments();
 	void addDepartment();
 	void removeDepartment();
@@ -110,9 +109,9 @@ public:
    Department(string name, int code, string address, int phone); //class constructor
    //~Department();
 
-   void showCourses();
    void showInfo();
    int editInfo();
+
    void Set(int n);
    string getName();
    void setName(string name);

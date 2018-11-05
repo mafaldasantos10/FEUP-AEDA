@@ -154,7 +154,7 @@ void Departments_Menu(College &college){
     while(1) {
         n = college.getDepartments().size();
         college.showInfo();
-        college.showDepartments();
+        Print_Vec(college.getDepartments());
         cout << n << ":   ADD DEPARTMENT" << endl;
         cout << ++n << ":   REMOVE DEPARTMENT" << endl;
         cout << ++n << ":   PREVIOUS MENU" << endl;
@@ -299,7 +299,7 @@ void Admin_Menu(College &college){
                 Departments_Menu(college);
                 break;
             case 1:
-                //Courses_Menu(college);
+                Courses_Menu(college);
                 break;
             case 2:
                 People_Menu(college);

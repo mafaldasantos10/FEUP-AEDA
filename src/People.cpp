@@ -20,7 +20,7 @@ People::People(string name, string address, date& birthday, unsigned int phone, 
 	this->address = address;
 	this->birthday = &birthday;
 	this->phone = phone;
-	this->cod = cod;
+	this->code = cod;
 }
 
 string People::getName(){
@@ -54,12 +54,12 @@ void People::setPhone(int newPhone)
 
 string People::getCode()
 {
-	return cod;
+	return code;
 }
 
 void People::setCode(string newCod)
 {
-	cod=newCod;
+	code=newCod;
 }
 
 date* People::getDate()
@@ -80,7 +80,12 @@ void People::Set(int n) {
 }
 
 void People::showInfo() {
-    cout << "| " << name << endl;
+    cout << "|\n-----------------------------------------" << endl;
+    cout << "|      " << name << endl;
+    cout << "| Address: " << address << endl;
+    cout << "| Code: " << code << " Phone: " << phone << endl;
+    cout << "| Birthday: " << birthday->format << endl;
+
 }
 
 //////STUDENT//////
@@ -111,12 +116,9 @@ string Student::getCourseName()
 }
 
 void Student::showInfo(){
-
-	cout << "|      " << getName() << "      |" << endl;
-	cout << "| Address: " << getAddress() << endl;
-	cout << "| Code: " << getCode() << " Phone: " << getPhone() << endl;
-	cout << "| Birthday: " << getDate() << endl;
+    People::showInfo();
 	cout << "| Course: " << getCourseName() << endl;
+    cout << "| Year: " << grade << endl;
 	cout << "|-----------------------------------------" << endl;
 }
 
@@ -275,12 +277,7 @@ void Teacher::addSubject(Uc* uc)
 
 void Teacher::showInfo()
 {
-	cout << "|      " << getName() << "      |" << endl;
-	cout << "| Address: " << getAddress() << endl;
-	cout << "| Code: " << getCode() << " Phone: " << getPhone() << endl;
-	cout << "| Birthday: " << getDate() << endl;
-	cout << "| Salary: "<< getSalary() << endl;
-	cout << "| NIF: "<< getNIF() << endl;
+	People::showInfo();
 	cout << "| Category: " << category << endl;
 	cout << "|-----------------------------------------" << endl;
 }
@@ -304,12 +301,7 @@ void Staff::setWorkArea(string work_area)
 
 void Staff::showInfo()
 {
-	cout << "|      " << getName() << "      |" << endl;
-	cout << "| Address: " << getAddress() << endl;
-	cout << "| Code: " << getCode() << " Phone: " << getPhone() << endl;
-	cout << "| Birthday: " << getDate() << endl;
-	cout << "| Salary: "<< getSalary() << endl;
-	cout << "| NIF: "<< getNIF() << endl;
+	People::showInfo();
 	cout << "| Work Area: " << getWorkArea() << endl;
 	cout << "|-----------------------------------------" << endl;
 }

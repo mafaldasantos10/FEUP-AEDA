@@ -13,15 +13,7 @@ using namespace std;
 
 bool hasNoNumber(string s)
 {
-	for(unsigned int i=0; i<s.size(); i++)
-	{
-		if(s.find_first_of("0123456789") != (unsigned int)(-1))
-		{
-			return false;
-		}
-	}
-
-	return true;
+    return(s.find_first_of("0123456789") == string::npos);
 }
 
 
@@ -52,14 +44,6 @@ void College::setAdmin(string admin) {
 	}
 }
 
-void College::showDepartments()
-{
-	for(unsigned int i = 0; i < vecDep.size(); i++)
-	{
-		cout << i << ": 	" <<vecDep.at(i)->getName() << endl;
-	}
-}
-
 vector<Department*> College::getDepartments(){
     return vecDep;
 }
@@ -73,18 +57,16 @@ void College::addPeople(int i, People* person){
 }
 
 void College::showInfo(){
+    cout << "\n----------------------" << endl;
     cout << "|       " << colName <<"        |" << endl;
     cout << "----------------------" << endl;
 }
 
 vector<Course *> College::getCourses(){
     vector<Course *> vec;
-    int n = 0;
     for(unsigned int i = 0; i < vecDep.size() ; i++){
         for(unsigned int j = 0; j < vecDep.at(i)->getCourses().size(); j++){
-            vec.push_back(&(vecDep.at(i)->getCourses().at(j)));
-            cout << n << ":    " << vecDep.at(i)->getCourses().at(j).getName() << endl;
-            n++;
+            vec.push_back(vecDep.at(i)->getCourses().at(j));
         }
     }
     return vec;
@@ -261,10 +243,21 @@ void College::addStaff(string name, string address, unsigned int phone, string c
 
 }
 
-void addCourse(){
-
+void College::addCourse(){
+    cout << "In Which Department do you want to add a course?" << endl;
+    Print_Vec(vecDep);
+    cout << vecDep.size() << ":   PREVIOUS MENU" << endl;
+    int i = Nav(0,vecDep.size());
+    if(i == vecDep.size()) return;
+    else vecDep.at(i)->addCourse();
 }
-void removeCourse(){
+void College::removeCourse(){
+    cout << "In Which Department do you want to remove a course?" << endl;
+    Print_Vec(vecDep);
+    cout << vecDep.size() << ":   PREVIOUS MENU" << endl;
+    int i = Nav(0,vecDep.size());
+    if(i == vecDep.size()) return;
+    else vecDep.at(i)->removeCourse();
 }
 
 
@@ -290,7 +283,8 @@ Department:: Department(string name, int code, string address, int phone)
 }
 
 void Department::showInfo() {
-    cout << "|      " << depName << "      |" << endl;
+    cout << "\n-----------------------------------------" << endl;
+    cout << "|      " << depName << "      " << endl;
     cout << "| Address: " << depAddress << endl;
     cout << "| Code: " << depCode << " Phone: " << depPhone << endl;
     cout << "| Dep. Director: " << depDirector->getName() << endl;
@@ -339,12 +333,6 @@ void Department::Set(int n){
             Teacher* Dir;
             setDirector(Dir);
             break;
-    }
-}
-
-void Department::showCourses(){
-    for(unsigned int i = 0; i < getCourses().size(); i++){
-        cout << i << ":    " << getCourses().at(i).getName() << endl;
     }
 }
 
@@ -457,8 +445,9 @@ Course::Course(string type, string engName, string ptName, int code)
 }
 
 void Course::showInfo() {
-    cout << "|      " << csEngName << "      |" << endl;
-    cout << "|      " << csPtName << "      |" << endl;
+    cout << "|\n-----------------------------------------" << endl;
+    cout << "|      " << csEngName << endl;
+    cout << "|      " << csPtName << endl;
     cout << "| Type: " << csType << endl;
     cout << "|-----------------------------------------" << endl;
 }
@@ -467,7 +456,7 @@ int Course::editInfo(){
     showInfo();
     cout << "Which parameter do you want to edit?" << endl;
     cout << "0:   Pt_NAME" << endl;
-    cout << "1:   Eng_NAMR" << endl;
+    cout << "1:   Eng_NAME" << endl;
     cout << "2:   TYPE" << endl;
     cout << "3:   CODE" <<   endl;
     cout << "4:   PREVIOUS MENU" << endl;
@@ -719,7 +708,8 @@ Uc::Uc(string name, int year, int ects, int workload)
 }
 
 void Uc::showInfo() {
-    cout << "|      " << ucName << "      |" << endl;
+    cout << "|\n-----------------------------------------" << endl;
+    cout << "|      " << ucName << endl;
     cout << "| Year: " << ucYear << endl;
     cout << "| ECTS: " << ucECTS << endl;
     cout << "| Workload: " << ucWorkload << endl;
