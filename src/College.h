@@ -38,6 +38,7 @@ public:
 	//~College(); //class destructor
 
     vector<vector<People*>> getPeople();
+    void addPeople(int i, People* person);
 
     /**
      * @brief Gets the name of a given College
@@ -48,7 +49,7 @@ public:
     void setAdmin(string admin);
 
     void Show_Info();
-    void Show_Courses();
+    vector<Course * > getCourses();
 
 	void showDepartments();
     vector<Department*> getDepartments();
@@ -90,20 +91,20 @@ public:
 class Course{
 	string csType, csPtName, csEngName;
 	int csCode;
-	vector<Uc > vecUC;
+	vector<Uc *> vecUC;
 public:
 	Course(string type, string engName, string ptName, int code);
 	//~Course();
 
 	string getType();
 	void setType(string type);
-	string getPtName();
+	string getName(); //Returns name in Portuguese
 	void setPtName(string ptName);
 	string getEngName();
 	void setEngName(string engName);
 	int getCode();
 	void setCode(int code);
-	vector<Uc> getUCs();
+	vector<Uc*> getUCs();
 
 	void addUC();
 	void removeUC();

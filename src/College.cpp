@@ -45,19 +45,26 @@ vector<vector<People*>> College::getPeople(){
     return people;
 }
 
+void College::addPeople(int i, People* person){
+    people.at(i).push_back(person);
+}
+
 void College::Show_Info(){
     cout << "|       " << colName <<"        |" << endl;
     cout << "----------------------" << endl;
 }
 
-void College::Show_Courses(){
+vector<Course *> College::getCourses(){
+    vector<Course *> vec;
     int n = 0;
     for(int i = 0; i < vecDep.size() ; i++){
         for(int j = 0; j < vecDep.at(i)->getCourses().size(); j++){
-            cout << n << ":    " << vecDep.at(i)->getCourses().at(j).getPtName() << endl;
+            vec.push_back(&(vecDep.at(i)->getCourses().at(j)));
+            cout << n << ":    " << vecDep.at(i)->getCourses().at(j).getName() << endl;
             n++;
         }
     }
+    return vec;
 }
 
 void College::addDepartment()
@@ -194,7 +201,7 @@ void Department::Set(int n){
 
 void Department::Show_Courses(){
     for(int i = 0; i < getCourses().size(); i++){
-        cout << i << ":    " << getCourses().at(i).getPtName() << endl;
+        cout << i << ":    " << getCourses().at(i).getName() << endl;
     }
 }
 
@@ -316,7 +323,7 @@ void Course::setType(string type)
 	csType=type;
 }
 
-string Course::getPtName()
+string Course::getName()
 {
 	return csPtName;
 }
@@ -346,7 +353,7 @@ void Course::setCode(int code)
 	csCode = code;
 }
 
-vector<Uc> Course::getUCs()
+vector<Uc*> Course::getUCs()
 {
 	return vecUC;
 }
@@ -393,7 +400,7 @@ void Course::addUC()
 		teachers.push_back(nameT);
 	}
 
-	Uc newUC(name, teachers, students, year, ects, workload);
+	Uc* newUC = new Uc(name, teachers, students, year, ects, workload);
 	vecUC.push_back(newUC);
 }
 
@@ -406,7 +413,7 @@ void Course::removeUC()
 
 	for(unsigned int i = 0; i <= vecUC.size(); i++)
 	{
-		if(vecUC.at(i).getName() == name)
+		if(vecUC.at(i)->getName() == name)
 		{
 			vecUC.erase(vecUC.begin() + i);
 			cout << "Course " << name << " has been successfully removed. "<< endl;
@@ -428,22 +435,22 @@ void Course::showSyllabus()
 				cout<<"First year Modules: "<<endl<<endl;
 			}
 
-			if(vecUC.at(i).getYear() == 1)
+			if(vecUC.at(i)->getYear() == 1)
 			{
-				cout<<vecUC.at(i).getName()<<endl;
+				cout<<vecUC.at(i)->getName()<<endl;
 			}
 
-			if(vecUC.at(i-1).getYear() == 1 && vecUC.at(i).getYear()==2)
+			if(vecUC.at(i-1)->getYear() == 1 && vecUC.at(i)->getYear()==2)
 			{
 				cout<<"Second year Modules"<<endl<<endl;
 			}
 
-			if(vecUC.at(i).getYear()== 2)
+			if(vecUC.at(i)->getYear()== 2)
 			{
-				cout<<vecUC.at(i).getName()<<endl;
+				cout<<vecUC.at(i)->getName()<<endl;
 			}
 
-			if(vecUC.at(i-1).getYear()== 2 && vecUC.at(i).getYear() == 3)
+			if(vecUC.at(i-1)->getYear()== 2 && vecUC.at(i)->getYear() == 3)
 			{
 				if(csType == "M")
 				{
@@ -451,12 +458,12 @@ void Course::showSyllabus()
 				}
 				cout<<"Third year Modules"<<endl<<endl;
 			}
-			if(vecUC.at(i).getYear() == 3)
+			if(vecUC.at(i)->getYear() == 3)
 			{
-				cout<<vecUC.at(i).getName()<<endl;
+				cout<<vecUC.at(i)->getName()<<endl;
 			}
 
-			if(vecUC.at(i-1).getYear()== 3 && vecUC.at(i).getYear() == 4)
+			if(vecUC.at(i-1)->getYear()== 3 && vecUC.at(i)->getYear() == 4)
 			{
 				if(csType == "L")
 				{
@@ -465,19 +472,19 @@ void Course::showSyllabus()
 				cout<<"Fourth year Modules"<<endl<<endl;
 			}
 
-			if(vecUC.at(i).getYear() == 4)
+			if(vecUC.at(i)->getYear() == 4)
 			{
-				cout<<vecUC.at(i).getName()<<endl;
+				cout<<vecUC.at(i)->getName()<<endl;
 			}
 
-			if(vecUC.at(i-1).getYear()== 4 && vecUC.at(i).getYear() == 5)
+			if(vecUC.at(i-1)->getYear()== 4 && vecUC.at(i)->getYear() == 5)
 			{
 				cout<<"Fourth year Modules"<<endl<<endl;
 			}
 
-			if(vecUC.at(i).getYear() == 5)
+			if(vecUC.at(i)->getYear() == 5)
 			{
-				cout<<vecUC.at(i).getName()<<endl;
+				cout<<vecUC.at(i)->getName()<<endl;
 			}
 
 		}
@@ -625,15 +632,15 @@ void Course::sortUc()
 		bool troca = false;
 		for(unsigned int i=0; i<j; i++)
 		{
-			if(vecUC.at(i+1).getYear() < vecUC.at(i).getYear())
+			if(vecUC.at(i+1)->getYear() < vecUC.at(i)->getYear())
 			{
 				swap(vecUC.at(i), vecUC.at(i+1));
 				troca = true;
 			}
 
-			if(vecUC.at(i+1).getYear() < vecUC.at(i).getYear())
+			if(vecUC.at(i+1)->getYear() < vecUC.at(i)->getYear())
 			{
-				if(vecUC.at(i+1).getName() < vecUC.at(i).getName())
+				if(vecUC.at(i+1)->getName() < vecUC.at(i)->getName())
 				{
 					swap(vecUC.at(i), vecUC.at(i+1));
 					troca = true;

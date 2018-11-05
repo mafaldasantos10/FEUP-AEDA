@@ -9,9 +9,13 @@
 #include "College.h"
 #include <map>
 
+int Student::student_count = 1;
+int Teacher::teacher_count = 1;
+int Staff::staff_count = 1;
+
 //////PEOPLE//////
 
-People::People(string name, string address, date& birthday, unsigned int phone, unsigned int cod) {
+People::People(string name, string address, date& birthday, unsigned int phone, string cod) {
 	this->name = name;
 	this->address = address;
 	this->birthday = &birthday;
@@ -48,12 +52,12 @@ void People::setPhone(int newPhone)
 	phone = newPhone;
 }
 
-int People::getCode()
+string People::getCode()
 {
 	return cod;
 }
 
-void People::setCode(int newCod)
+void People::setCode(string newCod)
 {
 	cod=newCod;
 }
@@ -81,10 +85,11 @@ void People::Show_Info() {
 
 //////STUDENT//////
 
-Student::Student(string name, string address, date birthday, unsigned int phone, unsigned int cod, Course* course, map <Uc*, float> subjects)
+Student::Student(string name, string address, date birthday, unsigned int phone, string cod, Course* course, map <Uc*, float> subjects)
 : People(name, address, birthday, phone, cod){
 	this->course = course;
 	grade = 0;
+    student_count++;
 }
 
 Course* Student::getCourse()
@@ -121,9 +126,9 @@ void Student::addUCGrade(string name, float grade)
 
 	for(unsigned int i = 0; i < course->getUCs().size(); i++)
 	{
-		if(course->getUCs().at(i).getName() == name)
+		if(course->getUCs().at(i)->getName() == name)
 		{
-			uc = &course->getUCs().at(i);
+			uc = course->getUCs().at(i);
 			break;
 		}
 	}
@@ -137,9 +142,9 @@ void Student::removeFromMap(string name)
 
 	for(unsigned int i = 0; i < course->getUCs().size(); i++)
 	{
-		if(course->getUCs().at(i).getName() == name)
+		if(course->getUCs().at(i)->getName() == name)
 		{
-			uc = &course->getUCs().at(i);
+			uc = course->getUCs().at(i);
 			break;
 		}
 	}
@@ -157,9 +162,9 @@ void Student::changeGrade(string name)
 
 	for(unsigned int i = 0; i < course->getUCs().size(); i++)
 	{
-		if(course->getUCs().at(i).getName() == name)
+		if(course->getUCs().at(i)->getName() == name)
 		{
-			uc = &course->getUCs().at(i);
+			uc = course->getUCs().at(i);
 			break;
 		}
 	}
@@ -177,9 +182,9 @@ void Student::showUCGrade(string name)
 
 	for(unsigned int i = 0; i < course->getUCs().size(); i++)
 	{
-		if(course->getUCs().at(i).getName() == name)
+		if(course->getUCs().at(i)->getName() == name)
 		{
-			uc = &course->getUCs().at(i);
+			uc = course->getUCs().at(i);
 			break;
 		}
 	}
@@ -208,7 +213,7 @@ void Student::showAllGrades()
 
 //////EMPLOYEE//////
 
-Employee::Employee(string name, string address, date birthday, unsigned int phone, unsigned int cod, float salary, unsigned int nif)
+Employee::Employee(string name, string address, date birthday, unsigned int phone, string cod, float salary, unsigned int nif)
 : People(name, address, birthday, phone, cod){
 	this->salary = salary;
 	this->nif = nif;
@@ -242,7 +247,7 @@ void Employee::setNIF(unsigned int nif)
 
 //////TEACHER//////
 
-Teacher::Teacher(string name, string address, date birthday, unsigned int phone, unsigned int cod, float salary, unsigned int nif, string category, vector<Uc *> subjects)
+Teacher::Teacher(string name, string address, date birthday, unsigned int phone, string cod, float salary, unsigned int nif, string category, vector<Uc *> subjects)
 : Employee(name, address, birthday, phone, cod, salary, nif){
 	this->category = category;
 	this->subjects = subjects;
@@ -282,7 +287,7 @@ void Teacher::showInfo()
 
 //////STAFF//////
 
-Staff::Staff(string name, string address, date birthday, unsigned int phone, unsigned int cod, float salary, unsigned int nif, string work_area)
+Staff::Staff(string name, string address, date birthday, unsigned int phone, string cod, float salary, unsigned int nif, string work_area)
 : Employee(name, address, birthday, phone, cod, salary, nif){
 	this->work_area = work_area;
 }
@@ -312,4 +317,3 @@ void Staff::showInfo()
 People::~People() {
 	// TODO Auto-generated destructor stub
 }
-

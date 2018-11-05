@@ -12,7 +12,13 @@
 
 using namespace std;
 
-int access = 0, user_id = 0; //Global variable to determine type of user and id if necessary
+time_t theTime = time(NULL);
+struct tm *aTime = localtime(&theTime);
+
+int current_year = aTime->tm_year + 1900; // Year is # years since 1900
+
+int access = 0; //Global variable to determine type of user
+string user_id;
 
 int Nav(int bottom, int top){ //tests for valid input keys and returns the inputted char
     int key;
@@ -23,6 +29,13 @@ int Nav(int bottom, int top){ //tests for valid input keys and returns the input
         else cout << "Invalid Input!" << endl;
     }
     return key;
+}
+
+template<class T>
+void Print_Vec(vector<T*> vec){  //Prints name of every object in vector of objects
+    for(int i = 0; i < vec.size() ; i++){
+        cout << i << ":   " << vec.at(i)->getName() << endl;
+    }
 }
 
 template<class T>
@@ -114,6 +127,74 @@ void Grades_Menu(People &person){
     st->showAllGrades();
 }
 
+void Add_Student(College& college, string name, string address, unsigned int phone, string cod, date& birthday){
+    Course* course;
+    int year;
+    float grade;
+    map<Uc*,float> subjects;
+    int i;
+    cod = "0" + to_string(current_year) + to_string(Student::student_count);  //student id is assigned
+    cout << "\nChoose Student's Course:" << endl;  //Needs exception in case there are no Courses Created
+    Print_Vec(college.getCourses());
+    course = college.getCourses().at(Nav(0,college.getCourses().size()-1));
+    cout << "\nInsert Student's Grade: " << flush;
+    cin >> year;
+    while(1){
+        cout << "\nChoose Student's Ucs: " << endl;
+        Print_Vec(course->getUCs());
+        cout << course->getUCs().size() << ":   DONE" << endl;
+        i = Nav(0,course->getUCs().size());
+        if(i == course->getUCs().size()) break;
+        else if(subjects.find(course->getUCs().at(i)) != subjects.end()){
+            cout << "Insert student's grade on this subject(-1 for no grade): " << flush;
+            cin >> grade;
+            subjects.insert(pair<Uc*,float>(course->getUCs().at(i),grade));
+        }
+        else cout << "Student's already enrolled in this Uc!" << endl;
+    }
+    Student* st = new Student(name, address, birthday, phone, cod, course, subjects);
+    college.addPeople(0, st); //dynamic_cast<People*>(st) if there's an error
+}
+
+void Add_Person(College& college, int type = -1){ //Needs general function to check input
+    string name, address;
+    unsigned int phone;
+    string cod;
+    date birthday;
+    if(type == -1){
+        cout << "What Type of person would you like to add?" << endl;
+        cout << "0:   STUDENT" << endl;
+        cout << "1:   TEACHER" << endl;
+        cout << "2:   STAFF" << endl;
+        cout << "3:   CANCEL" << endl;
+        type = Nav(0,3);
+    }
+    if(type == 3) return;
+    cout << "Insert Name: " << flush;
+    cin >> name;
+    cin.clear();
+    cin.ignore();
+    cout << "\nInsert Address: " << flush;
+    getline(cin,address);
+    cin.clear();
+    cin.ignore();
+    cout << "\nInsert Phone Number: " << flush;
+    cin >> phone;
+    cin.clear();
+    cin.ignore();
+    cout << "\nInsert Birthday(dd/mm/yyyy): " << flush;
+    //Read_date(&birthday) //Tests if date is written correctly
+    switch(type){
+        case 0:
+            Add_Student(college, name, address, phone, cod, birthday);
+            break;
+        case 1:
+            break;
+        case 2:
+            break;
+    }
+}
+
 void Person_Menu(People &person){
     int n = -1, i;
     while(1){
@@ -165,10 +246,10 @@ void People_Menu(College &college){
                 //Search people by name or id
                 break;
             case 4:
-                //Add_Person(college)
+                Add_Person(college);
                 break;
             case 5:
-                //Remove_Person(id)
+                //Remove_Person(id);
                 break;
             case 6:
                 return;
