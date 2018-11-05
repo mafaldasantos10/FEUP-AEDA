@@ -19,6 +19,11 @@ using namespace std;
 class Department;
 class Course;
 class Uc;
+class People;
+class Employee;
+class Student;
+class Teacher;
+class Staff;
 
 /**
  * @brief College Class
@@ -48,7 +53,7 @@ public:
 	void setName(string name);
     void setAdmin(string admin);
 
-    void Show_Info();
+    void showInfo();
     vector<Course * > getCourses();
 
 	void showDepartments();
@@ -67,9 +72,9 @@ public:
    Department(string name, int code, string address, int phone, Teacher* director); //class constructor
    //~Department();
 
-   void Show_Courses();
-   void Show_Info();
-   int Edit_Info();
+   void showCourses();
+   void showInfo();
+   int editInfo();
    void Set(int n);
    string getName();
    void setName(string name);
@@ -96,6 +101,8 @@ public:
 	Course(string type, string engName, string ptName, int code);
 	//~Course();
 
+	void showInfo();
+	void showSyllabus();
 	string getType();
 	void setType(string type);
 	string getName(); //Returns name in Portuguese
@@ -108,20 +115,22 @@ public:
 
 	void addUC();
 	void removeUC();
-	void showSyllabus();
 	void sortUc();
 };
 
 
 class Uc{
     string ucName;
-    vector<string> ucTeacher; //sendo que o que se encontra na posicao 0 � o regente
-    vector<string> ucStudent;
+    vector<Teacher*> ucTeacher; //sendo que o que se encontra na posicao 0 � o regente
+    vector<Student*> ucStudent;
     int ucYear, ucECTS, ucWorkload;
 public:
 	Uc(string name, vector<string> teacher, vector<string> student, int year, int ects, int workload);
 	//~Uc();
 
+	void showInfo();
+	void showStudents();
+	void showTeachers();
 	string getName();
 	void setName(string name);
     int getYear();
@@ -133,9 +142,9 @@ public:
 	vector<string> getTeachers();
 	vector<string> getStudents();
 
-	void addTeacher();
+	//void addTeacher();
 	void removeTeacher();
-	void addStudent();
+	//void addStudent();
 	void removeStudent();
 
 	bool operator<(Uc uc2);

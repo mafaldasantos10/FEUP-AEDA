@@ -49,7 +49,7 @@ void College::addPeople(int i, People* person){
     people.at(i).push_back(person);
 }
 
-void College::Show_Info(){
+void College::showInfo(){
     cout << "|       " << colName <<"        |" << endl;
     cout << "----------------------" << endl;
 }
@@ -146,7 +146,7 @@ Department:: Department(string name, int code, string address, int phone, Teache
 	depDirector = director;
 }
 
-void Department::Show_Info() {
+void Department::showInfo() {
     cout << "|      " << depName << "      |" << endl;
     cout << "| Address: " << depAddress << endl;
     cout << "| Code: " << depCode << " Phone: " << depPhone << endl;
@@ -154,8 +154,8 @@ void Department::Show_Info() {
     cout << "|-----------------------------------------" << endl;
 }
 
-int Department::Edit_Info(){
-    Show_Info();
+int Department::editInfo(){
+    showInfo();
     cout << "Which parameter do you want to edit?" << endl;
     cout << "0:   NAME" << endl;
     cout << "1:   ADDRESS" << endl;
@@ -199,7 +199,7 @@ void Department::Set(int n){
     }
 }
 
-void Department::Show_Courses(){
+void Department::showCourses(){
     for(int i = 0; i < getCourses().size(); i++){
         cout << i << ":    " << getCourses().at(i).getName() << endl;
     }
@@ -313,6 +313,78 @@ Course::Course(string type, string engName, string ptName, int code)
 	csPtName = ptName;
 }
 
+void Course::showInfo() {
+    cout << "|      " << csEngName << "      |" << endl;
+    cout << "|      " << csPtName << "      |" << endl;
+    cout << "| Type: " << csType << endl;
+    cout << "|-----------------------------------------" << endl;
+}
+
+void Course::showSyllabus()
+{
+	sortUc();
+
+	for(unsigned int i = 0; i < vecUC.size(); i++)
+	{
+		if(i == 0)
+		{
+			cout << "First year Modules: " << endl << endl;
+		}
+
+		if(vecUC.at(i)->getYear() == 1)
+		{
+			cout << vecUC.at(i)->getName() << endl;
+		}
+
+		if(vecUC.at(i-1)->getYear() == 1 && vecUC.at(i)->getYear() == 2)
+		{
+			cout << "Second year Modules"<<endl<<endl;
+		}
+
+		if(vecUC.at(i)->getYear() == 2)
+		{
+			cout << vecUC.at(i)->getName() << endl;
+		}
+
+		if(vecUC.at(i-1)->getYear() == 2 && vecUC.at(i)->getYear() == 3)
+		{
+			if(csType == "M")
+			{
+				return;
+			}
+			cout << "Third year Modules" << endl << endl;
+		}
+		if(vecUC.at(i)->getYear() == 3)
+		{
+			cout << vecUC.at(i)->getName() << endl;
+		}
+
+		if(vecUC.at(i-1)->getYear() == 3 && vecUC.at(i)->getYear() == 4)
+		{
+			if(csType == "L")
+			{
+				return;
+			}
+			cout<<"Fourth year Modules" << endl << endl;
+		}
+
+		if(vecUC.at(i)->getYear() == 4)
+		{
+			cout<<vecUC.at(i)->getName() << endl;
+		}
+
+		if(vecUC.at(i-1)->getYear() == 4 && vecUC.at(i)->getYear() == 5)
+		{
+			cout << "Fourth year Modules" << endl << endl;
+		}
+
+		if(vecUC.at(i)->getYear() == 5)
+		{
+			cout << vecUC.at(i)->getName() << endl;
+		}
+	}
+}
+
 string Course::getType()
 {
 	return csType;
@@ -330,7 +402,7 @@ string Course::getName()
 
 void Course::setPtName(string ptName)
 {
-	csPtName=ptName;
+	csPtName = ptName;
 }
 
 string Course::getEngName()
@@ -409,7 +481,7 @@ void Course::removeUC()
 	string name;
 
 	cout << "Enter the name of the UC to remove: "<< endl;
-	cin >> name; //input validation
+	getline(cin, name); //input validation
 
 	for(unsigned int i = 0; i <= vecUC.size(); i++)
 	{
@@ -424,72 +496,34 @@ void Course::removeUC()
 	throw NoNameFound(name);
 }
 
-void Course::showSyllabus()
+void Course::sortUc()
 {
-	sortUc();
+	for(unsigned int j= vecUC.size() -1; j>0; j--)
+	{
+		bool troca = false;
 
-		for(unsigned int i=0; i<vecUC.size();i++)
+		for(unsigned int i=0; i<j; i++)
 		{
-			if(i==0)
+			if(vecUC.at(i+1)->getYear() < vecUC.at(i)->getYear())
 			{
-				cout<<"First year Modules: "<<endl<<endl;
+				swap(vecUC.at(i), vecUC.at(i+1));
+				troca = true;
 			}
 
-			if(vecUC.at(i)->getYear() == 1)
+			if(vecUC.at(i+1)->getYear() < vecUC.at(i)->getYear())
 			{
-				cout<<vecUC.at(i)->getName()<<endl;
-			}
-
-			if(vecUC.at(i-1)->getYear() == 1 && vecUC.at(i)->getYear()==2)
-			{
-				cout<<"Second year Modules"<<endl<<endl;
-			}
-
-			if(vecUC.at(i)->getYear()== 2)
-			{
-				cout<<vecUC.at(i)->getName()<<endl;
-			}
-
-			if(vecUC.at(i-1)->getYear()== 2 && vecUC.at(i)->getYear() == 3)
-			{
-				if(csType == "M")
+				if(vecUC.at(i+1)->getName() < vecUC.at(i)->getName())
 				{
-					return;
+					swap(vecUC.at(i), vecUC.at(i+1));
+					troca = true;
 				}
-				cout<<"Third year Modules"<<endl<<endl;
 			}
-			if(vecUC.at(i)->getYear() == 3)
-			{
-				cout<<vecUC.at(i)->getName()<<endl;
-			}
-
-			if(vecUC.at(i-1)->getYear()== 3 && vecUC.at(i)->getYear() == 4)
-			{
-				if(csType == "L")
-				{
-					return;
-				}
-				cout<<"Fourth year Modules"<<endl<<endl;
-			}
-
-			if(vecUC.at(i)->getYear() == 4)
-			{
-				cout<<vecUC.at(i)->getName()<<endl;
-			}
-
-			if(vecUC.at(i-1)->getYear()== 4 && vecUC.at(i)->getYear() == 5)
-			{
-				cout<<"Fourth year Modules"<<endl<<endl;
-			}
-
-			if(vecUC.at(i)->getYear() == 5)
-			{
-				cout<<vecUC.at(i)->getName()<<endl;
-			}
-
 		}
 
+		if (!troca) return;
+	}
 }
+
 
 //UC//
 //////////////////////
@@ -503,10 +537,36 @@ Uc::Uc(string name, vector<string> teacher, vector<string> student, int year, in
 	ucYear = year;
 }
 
+void Uc::showInfo() {
+    cout << "|      " << ucName << "      |" << endl;
+    cout << "| Year: " << ucYear << endl;
+    cout << "| ECTS: " << ucECTS << endl;
+    cout << "| Workload: " << ucWorkload << endl;
+    cout << "| Regent: " << ucTeacher.at(0)->getName() << endl;
+    cout << "|-----------------------------------------" << endl;
+}
+
+void Uc::showStudents()
+{
+	for(unsigned int i = 0; i < ucStudent.size(); i++)
+	{
+		cout << i << ": 	" <<ucStudent.at(i)->getName() << endl;
+	}
+}
+
+void Uc::showTeachers()
+{
+	for(unsigned int i = 0; i < ucStudent.size(); i++)
+	{
+		cout << i << ": 	" <<ucStudent.at(i)->getName() << endl;
+	}
+}
+
 string Uc::getName()
 {
 	return ucName;
 }
+
 void Uc::setName(string name)
 {
 	ucName = name;
@@ -552,16 +612,16 @@ vector<string> Uc::getStudents()
 	return ucStudent;
 }
 
-void Uc::addTeacher()
-{
-	string name;
-
-	cout << "Enter the name of the Teacher: "<< endl;
-	cin >> name;
-
-	string newTeacher = name; //temporary while no teacher class is available
-	ucTeacher.push_back(newTeacher);
-}
+//void Uc::addTeacher()
+//{
+//	string name;
+//
+//	cout << "Enter the name of the Teacher: "<< endl;
+//	cin >> name;
+//
+//	string newTeacher = name; //temporary while no teacher class is available
+//	ucTeacher.push_back(newTeacher);
+//}
 
 void Uc::removeTeacher()
 {
@@ -570,24 +630,13 @@ void Uc::removeTeacher()
 	cout << "Enter the name of the Teacher to remove: "<< endl;
 	cin >> name; //input validation
 
-	if(remove(ucTeacher,name))
+	if(remove(ucTeacher, name))
 	{
 		cout << "Teacher " << name << " has been successfully removed. "<< endl;
 		return;
 	}
 
 	throw NoNameFound(name);
-}
-
-void Uc::addStudent()
-{
-	string name;
-
-	cout << "Enter the name of the Student: "<< endl;
-	cin >> name;
-
-	string newStudent = name; //temporary while no student class is available
-	ucStudent.push_back(newStudent);
 }
 
 void Uc::removeStudent()
@@ -623,31 +672,4 @@ bool Uc::operator<(Uc uc2)
 	}
 
 	return false;
-}
-
-void Course::sortUc()
-{
-	for(unsigned int j= vecUC.size() -1; j>0; j--)
-	{
-		bool troca = false;
-		for(unsigned int i=0; i<j; i++)
-		{
-			if(vecUC.at(i+1)->getYear() < vecUC.at(i)->getYear())
-			{
-				swap(vecUC.at(i), vecUC.at(i+1));
-				troca = true;
-			}
-
-			if(vecUC.at(i+1)->getYear() < vecUC.at(i)->getYear())
-			{
-				if(vecUC.at(i+1)->getName() < vecUC.at(i)->getName())
-				{
-					swap(vecUC.at(i), vecUC.at(i+1));
-					troca = true;
-				}
-			}
-		}
-
-		if (!troca) return;
-	}
 }
