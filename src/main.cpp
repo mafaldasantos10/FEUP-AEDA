@@ -359,6 +359,7 @@ int Log_In(College& college){
 }
 
 int main() {
+
     while(1){
         College college;
         switch(Main_Menu()){

@@ -8,6 +8,23 @@
 
 using namespace std;
 
+
+//Input Validations//
+
+bool hasNoNumber(string s)
+{
+	for(unsigned int i=0; i<s.size(); i++)
+	{
+		if(s.find_first_of("0123456789") != (unsigned int)(-1))
+		{
+			return false;
+		}
+	}
+
+	return true;
+}
+
+
 //COLLEGE//
 //////////////////////
 College::College(string name) /*college constructor*/
@@ -22,11 +39,17 @@ string College::getName()
 
 void College::setName(string name)
 {
+
 	colName = name;
+
 }
 
 void College::setAdmin(string admin) {
+
+	if(hasNoNumber(admin))
+	{
     this->admin = admin;
+	}
 }
 
 void College::showDepartments()
@@ -57,8 +80,8 @@ void College::showInfo(){
 vector<Course *> College::getCourses(){
     vector<Course *> vec;
     int n = 0;
-    for(int i = 0; i < vecDep.size() ; i++){
-        for(int j = 0; j < vecDep.at(i)->getCourses().size(); j++){
+    for(unsigned int i = 0; i < vecDep.size() ; i++){
+        for(unsigned int j = 0; j < vecDep.at(i)->getCourses().size(); j++){
             vec.push_back(&(vecDep.at(i)->getCourses().at(j)));
             cout << n << ":    " << vecDep.at(i)->getCourses().at(j).getName() << endl;
             n++;
@@ -75,19 +98,38 @@ void College::addDepartment()
 
 	cout << "Enter the name of the Department: "<< endl;
 	getline(cin, name);
+	while(!hasNoNumber(name))
+	{
+		cout << "Invalid name, try again: "<< endl;
+		getline(cin, name);
+	}
 
 	cout << "Enter the address of the Department: "<< endl;
 	getline(cin, address);
 
-	cout << "Enter the name of the director of the Department: "<< endl;  //NEEDS TO TEST IF DIRECTOR_NAME BELONGS TO AN EXISTING TEACHER
+	cout << "Enter the name of the director of the Department (! to skip): "<< endl;  //NEEDS TO TEST IF DIRECTOR_NAME BELONGS TO AN EXISTING TEACHER
 	getline(cin, directorName);
-    int i = 0;  //This is just so that the code can compile
-    Teacher* director;
-    if(people.at(0).at(i)->getName() == directorName){
-        director = dynamic_cast<Teacher*>(people.at(0).at(i)); //dynamic cast testa e transforma o apontador de people num apontador de teacher
-    }
+
+	Teacher* director;
+
+	if (directorName != "!")
+	{
+
+		while(!hasNoNumber(directorName))
+		{
+			cout << "Invalid name, try again: "<< endl;
+			getline(cin, name);
+		}
+
+    	int i = 0;  //This is just so that the code can compile
+
+    	if(people.at(0).at(i)->getName() == directorName){
+    	director = dynamic_cast<Teacher*>(people.at(0).at(i)); //dynamic cast testa e transforma o apontador de people num apontador de teacher
+    	}
+	}
 
 	cout << "Enter the code of the Department: "<< endl;  //NEEDS TO TEST IF IT'S DIFFERENT FROM OTHER DEP CODES
+
 	do{
 		cin >> code;
 
@@ -106,8 +148,23 @@ void College::addDepartment()
 
 	cout << "Enter the phone of the Department: "<< endl;
 	cin >> phone;
+	while(cin.fail())
+	{
+		cout << "Invalid phone number, try again: "<< endl;
+		cin.clear();
+		cin >> phone;
+	}
 
-	Department* dp = new Department(name, code, address, phone, director);
+	Department* dp;
+
+	if (directorName != "!")
+	{
+		 dp = new Department(name, code, address, phone, director);
+	}
+	else
+	{
+		dp = new Department(name, code, address, phone);
+	}
 	vecDep.push_back(dp);
 }
 
@@ -144,6 +201,16 @@ Department:: Department(string name, int code, string address, int phone, Teache
 	depAddress = address;
 	depPhone = phone;
 	depDirector = director;
+}
+
+Department:: Department(string name, int code, string address, int phone)
+{
+	Teacher* T;
+	depDirector = T;
+	depName = name;
+	depCode = code;
+	depAddress = address;
+	depPhone = phone;
 }
 
 void Department::showInfo() {
@@ -200,7 +267,7 @@ void Department::Set(int n){
 }
 
 void Department::showCourses(){
-    for(int i = 0; i < getCourses().size(); i++){
+    for(unsigned int i = 0; i < getCourses().size(); i++){
         cout << i << ":    " << getCourses().at(i).getName() << endl;
     }
 }
@@ -288,7 +355,7 @@ void Department::removeCourse()
 	cout << "Enter the code of the Course to remove: "<< endl;
 	cin >> code; //input validation
 
-	for(unsigned int i = 0; i <= vecCourse.size(); i++)
+	for(unsigned int i = 0; i < vecCourse.size(); i++)
 	{
 		if(vecCourse.at(i).getCode() == code)
 		{
@@ -433,7 +500,7 @@ vector<Uc*> Course::getUCs()
 void Course::addUC()
 {
 	string name, nameT, nameS;
-	int year, ects, workload, nS, nT;
+	int year, ects, workload;// nS, nT;
 	vector<string> teachers, students;
 
 	cout << "Enter the name of the Curricular Unit: "<< endl;
@@ -682,3 +749,4 @@ bool Uc::operator<(Uc uc2)
 
 	return false;
 }
+

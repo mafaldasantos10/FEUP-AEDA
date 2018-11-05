@@ -56,9 +56,19 @@ public:
 	 * @param name New name of the College
 	 */
 	void setName(string name);
+	/**
+	 * @brief Changes the administrator of a given College
+	 * @param admin New name of the administrator
+	 */
     void setAdmin(string admin);
-
+    /**
+     * @brief Shows all the information of a given College
+     */
     void showInfo();
+    /**
+     * @brief Gets the vector with the courses of a given College
+     * @return Vector with the pointers to the Courses of a given College
+     */
     vector<Course * > getCourses();
 
 	void showDepartments();
@@ -75,6 +85,7 @@ class Department {
    vector<Course> vecCourse;
 public:
    Department(string name, int code, string address, int phone, Teacher* director); //class constructor
+   Department(string name, int code, string address, int phone); //class constructor
    //~Department();
 
    void showCourses();
