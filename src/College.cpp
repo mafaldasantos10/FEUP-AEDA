@@ -43,14 +43,34 @@ vector<Department*> College::getDepartments()
     return vecDep;
 }
 
-vector<vector<People*>> College::getPeople()
+vector<Teacher *> College::getTeachers()
 {
-    return people;
+    return teachers;
 }
 
-void College::addPeople(int i, People* person)
+vector<Student *> College::getStudents()
 {
-    people.at(i).push_back(person);
+    return students;
+}
+
+vector<Staff *> College::getStaff()
+{
+    return staff;
+}
+
+void College::addTeacher(Teacher *teacher)
+{
+    teachers.push_back(teacher);
+}
+
+void College::addStudent(Student *student)
+{
+    students.push_back(student);
+}
+
+void College::addStaff(Staff *staff)
+{
+    this->staff.push_back(staff);
 }
 
 void College::showInfo()
@@ -90,26 +110,17 @@ void College::addDepartment()
 	cout << "Enter the address of the Department: "<< endl;
 	getline(cin, address);
 
-	cout << "Enter the name of the director of the Department (! to skip): "<< endl;  //NEEDS TO TEST IF DIRECTOR_NAME BELONGS TO AN EXISTING TEACHER
-	getline(cin, directorName);
-
 	Teacher* director;
 
-	if (directorName != "!")
-	{
-
-		while(!hasNoNumber(directorName))
-		{
-			cout << "Invalid name, try again: "<< endl;
-			getline(cin, name);
-		}
-
-    	int i = 0;  //This is just so that the code can compile
-
-    	if(people.at(0).at(i)->getName() == directorName){
-    	director = dynamic_cast<Teacher*>(people.at(0).at(i)); //dynamic cast testa e transforma o apontador de people num apontador de teacher
-    	}
-	}
+    while(1){ //Needs to check if Director Exists
+        cout << "Enter the name of the director of the Department (! to skip/ ? for list): "<< endl;
+        getline(cin, directorName);
+        if (directorName == "!") break;
+        else if(directorName == "?") Print_Vec(College::getTeachers());
+        else if(!hasNoNumber(directorName)) cout << "Invalid name, try again: "<< endl;
+        else break;
+    }
+    director = dynamic_cast<Teacher*>(SearchVec(College::getTeachers(),directorName)); //dynamic cast testa e transforma o apontador de people num apontador de teacher
 
 	cout << "Enter the code of the Department: "<< endl;  //NEEDS TO TEST IF IT'S DIFFERENT FROM OTHER DEP CODES
 
@@ -129,7 +140,7 @@ void College::addDepartment()
 
 	} while (!differentCode);
 
-	//falta fazer validation do code!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! (mas estou à espera de saber se é para manter assim ou fazer random)
+	//falta fazer validation do code!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! (mas estou ï¿½ espera de saber se ï¿½ para manter assim ou fazer random)
 
 	cout << "Enter the phone of the Department (9-digit): "<< endl;
 	cin >> phone;
@@ -231,7 +242,7 @@ void College::addStudent(string name, string address, unsigned int phone, string
         }
         st->addUCGrade(uc_name, grade);
     }
-    addPeople(0, st);
+    addStudent(st);
 }
 
 void College::addPerson(int type){ //Needs general function to check input
@@ -325,8 +336,7 @@ Department:: Department(string name, int code, string address, int phone, Teache
 
 Department:: Department(string name, int code, string address, int phone)
 {
-	Teacher* T;
-	depDirector = T;
+    depDirector = nullptr;
 	depName = name;
 	depCode = code;
 	depAddress = address;
@@ -334,11 +344,14 @@ Department:: Department(string name, int code, string address, int phone)
 }
 
 void Department::showInfo() {
-    cout << "\n-----------------------------------------" << endl;
+    string dep_name;
+    if(depDirector != nullptr) dep_name = depDirector->getName();
+    else dep_name = "!Unassigned!";
+    cout << "\n|-----------------------------------------" << endl;
     cout << "|      " << depName << "      " << endl;
     cout << "| Address: " << depAddress << endl;
     cout << "| Code: " << depCode << " Phone: " << depPhone << endl;
-    cout << "| Dep. Director: " << depDirector->getName() << endl;
+    cout << "| Dep. Director: " << dep_name << endl;
     cout << "|-----------------------------------------" << endl;
 }
 
@@ -545,7 +558,7 @@ Course::Course(string type, string engName, string ptName, int code)
 }
 
 void Course::showInfo() {
-    cout << "|\n-----------------------------------------" << endl;
+    cout << "\n|-----------------------------------------" << endl;
     cout << "|      " << csEngName << endl;
     cout << "|      " << csPtName << endl;
     cout << "| Type: " << csType << endl;
@@ -845,7 +858,7 @@ Uc::Uc(string name, int year, int ects, int workload)
 }
 
 void Uc::showInfo() {
-    cout << "|\n-----------------------------------------" << endl;
+    cout << "\n|-----------------------------------------" << endl;
     cout << "|      " << ucName << endl;
     cout << "| Year: " << ucYear << endl;
     cout << "| ECTS: " << ucECTS << endl;

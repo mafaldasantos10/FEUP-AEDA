@@ -80,7 +80,7 @@ void People::Set(int n) {
 }
 
 void People::showInfo() {
-    cout << "|\n-----------------------------------------" << endl;
+    cout << "\n|-----------------------------------------" << endl;
     cout << "|      " << name << endl;
     cout << "| Address: " << address << endl;
     cout << "| Code: " << code << " Phone: " << phone << endl;

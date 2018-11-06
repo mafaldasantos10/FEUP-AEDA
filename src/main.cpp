@@ -55,7 +55,7 @@ date* readDate(){
     return d;
 }
 
-////GENERAL FUNCTIONS////
+//////////////////////
 
 template<class T>
 void editInfo(T &obj) {
@@ -81,7 +81,7 @@ int Main_Menu(){
 void New_College(College &college){
     string college_name, admin;
     cout << "Insert your College Name: " << flush;
-    getline(cin, college_name); //////////INPUT VALIDATION MISSING!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!(só para ter a certeza q vêm)
+    getline(cin, college_name); //////////INPUT VALIDATION MISSING!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!(sï¿½ para ter a certeza q vï¿½m)
     cout << endl << "Insert your Admin Code: " << flush;
     getline(cin, admin);
     college.setName(college_name);
@@ -177,7 +177,8 @@ void Grades_Menu(People &person){
     st->showAllGrades();
 }
 
-void Person_Menu(People &person){
+template<class T>
+void Person_Menu(T &person){
     int n = -1, i;
     while(1){
         person.showInfo();
@@ -193,17 +194,38 @@ void Person_Menu(People &person){
     }
 }
 
-void List_People(College &college, int n){
+void List_Staff(College &college){
     int s, i;
     while(1){
-        s = college.getPeople().at(n).size();
-        for(int j = 0; j < s; j++){
-            cout << j << ":   " << college.getPeople().at(n).at(j)->getName() << endl;
-        }
+        Print_Vec(college.getStaff());
         cout << s << ":   PREVIOUS MENU" << endl;
         i = Nav(0,s);
         if(i == s) return;
-        else Person_Menu(*(college.getPeople().at(n).at(i)));
+        else Person_Menu(*(college.getStudents().at(i)));
+    }
+}
+
+void List_Teachers(College &college){
+    int s, i;
+    while(1){
+        s = college.getTeachers().size();
+        Print_Vec(college.getTeachers());
+        cout << s << ":   PREVIOUS MENU" << endl;
+        i = Nav(0,s);
+        if(i == s) return;
+        else Person_Menu(*(college.getStudents().at(i)));
+    }
+}
+
+void List_Students(College &college){
+    int s, i;
+    while(1){
+        s = college.getStudents().size();
+        Print_Vec(college.getStudents());
+        cout << s << ":   PREVIOUS MENU" << endl;
+        i = Nav(0,s);
+        if(i == s) return;
+        else Person_Menu(*(college.getStudents().at(i)));
     }
 }
 
@@ -211,8 +233,8 @@ void People_Menu(College &college){
     int i;
     while(1) {
         college.showInfo();
-        cout << "0:   LIST ALL TEACHERS" << endl;
-        cout << "1:   LIST ALL STUDENTS" << endl;
+        cout << "0:   LIST ALL STUDENTS" << endl;
+        cout << "1:   LIST ALL TEACHERS" << endl;
         cout << "2:   LIST ALL STAFF" << endl;
         cout << "3:   SEARCH PEOPLE" << endl;
         cout << "4:   ADD PERSON" << endl;
@@ -220,9 +242,13 @@ void People_Menu(College &college){
         cout << "6:   PREVIOUS MENU" << endl;
         switch (i = Nav(0, 6)) {
             case 0:
+                List_Students(college);
+                break;
             case 1:
+                List_Teachers(college);
+                break;
             case 2:
-                List_People(college,i);
+                List_Staff(college);
                 break;
             case 3:
                 //Search people by name or id

@@ -43,6 +43,15 @@ date* readDate();
 extern int current_year;
 
 
+template<class T>
+T* SearchVec(vector<T*> vec, string name){
+   for(size_t i = 0; i < vec.size(); i++){
+       if(vec.at(i)->getName() == name) return vec.at(i);
+   }
+    //throw NotFound exception
+}
+
+
 /** @brief College Class */
 class College{
 	/** @brief Name of the College */
@@ -52,7 +61,9 @@ class College{
 	/** @brief Vector of pointers to each Department of the College */
 	vector<Department*> vecDep;
 	/** @brief Vector of Vectors of pointers to each People of the College */
-    vector<vector<People*>> people; //1º vec. for teachers, 2º for students, 3º for staff
+    vector<Student *> students;
+    vector<Teacher *> teachers;
+    vector<Staff *> staff;
 public:
     /**
      * @brief College Constructor
@@ -68,13 +79,20 @@ public:
      *
      * @return
      */
-    vector<vector<People*>> getPeople();
+    vector<Teacher *> getTeachers();
+
+    vector<Student *> getStudents();
+
+    vector<Staff *> getStaff();
     /**
      *
-     * @param i
-     * @param person
+     * @param teacher
      */
-    void addPeople(int i, People* person);
+    void addTeacher(Teacher* teacher);
+
+    void addStudent(Student* student);
+
+    void addStaff(Staff* staff);
     /**
      * @brief Gets the name of a given College
      * @return String containing the name of the College
