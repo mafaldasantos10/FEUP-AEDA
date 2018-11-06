@@ -93,7 +93,7 @@ void People::showInfo() {
 Student::Student(string name, string address, date birthday, unsigned int phone, string cod, Course* course, map <Uc*, float> subjects)
 : People(name, address, birthday, phone, cod){
 	this->course = course;
-	grade = 0;
+	year = 0;
     student_count++;
 }
 
@@ -118,7 +118,7 @@ string Student::getCourseName()
 void Student::showInfo(){
     People::showInfo();
 	cout << "| Course: " << getCourseName() << endl;
-    cout << "| Year: " << grade << endl;
+    cout << "| Year: " << year << endl;
 	cout << "|-----------------------------------------" << endl;
 }
 
@@ -167,7 +167,7 @@ void Student::removeFromMap(string name)
 	}
 }
 
-void Student::changeGrade(string name)
+void Student::changeGrade(string name, int grade)
 {
 	Uc* uc;
 
