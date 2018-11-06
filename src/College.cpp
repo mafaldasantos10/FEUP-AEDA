@@ -9,8 +9,7 @@
 using namespace std;
 
 
-//Input Validations//
-
+//INPUT VALIDATION//
 bool hasNoNumber(string s)
 {
     return(s.find_first_of("0123456789") == string::npos);
@@ -19,9 +18,9 @@ bool hasNoNumber(string s)
 
 //COLLEGE//
 //////////////////////
-College::College(string name) /*college constructor*/
+College::College(string name)
 {
-	colName = name; /*name of the college 1*/
+	colName = name;
 }
 
 string College::getName()
@@ -34,10 +33,9 @@ void College::setName(string name)
 	colName = name;
 }
 
-void College::setAdmin(string admin) {
-
+void College::setAdmin(string admin)
+{
 		this->admin = admin;
-
 }
 
 vector<Department*> College::getDepartments()
@@ -83,7 +81,7 @@ void College::addDepartment()
 
 	cout << "Enter the name of the Department: "<< endl;
 	getline(cin, name);
-	while(hasNoNumber(name))
+	while(!hasNoNumber(name))
 	{
 		cout << "Invalid name, try again: "<< endl;
 		getline(cin, name);
@@ -100,7 +98,7 @@ void College::addDepartment()
 	if (directorName != "!")
 	{
 
-		while(hasNoNumber(directorName))
+		while(!hasNoNumber(directorName))
 		{
 			cout << "Invalid name, try again: "<< endl;
 			getline(cin, name);
@@ -131,12 +129,15 @@ void College::addDepartment()
 
 	} while (!differentCode);
 
-	cout << "Enter the phone of the Department: "<< endl;
+	//falta fazer validation do code!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! (mas estou à espera de saber se é para manter assim ou fazer random)
+
+	cout << "Enter the phone of the Department (9-digit): "<< endl;
 	cin >> phone;
-	while(cin.fail())
+	while(cin.fail() || to_string(phone).size() != 9)
 	{
 		cout << "Invalid phone number, try again: "<< endl;
 		cin.clear();
+		cin.ignore(100, '\n');
 		cin >> phone;
 	}
 
@@ -161,12 +162,12 @@ void College::removeDepartment()
 	cout << "Enter the code of the Department to remove: "<< endl;
 	cin >> code;
 	while(cin.fail())
-		{
-			cout << "Invalid code, try again: "<< endl;
-			cin.clear();
-			cin >> code;
-		}
-
+	{
+		cout << "Invalid code, try again: "<< endl;
+		cin.clear();
+		cin.ignore(100, '\n');
+		cin >> code;
+	}
 
 	for(unsigned int i = 0; i <= vecDep.size(); i++)
 	{
@@ -194,24 +195,26 @@ void College::addStudent(string name, string address, unsigned int phone, string
     cout << "\nChoose Student's Course:" << endl;  //Needs exception in case there are no Courses Created
     Print_Vec(getCourses());
     course = getCourses().at(Nav(0,getCourses().size()-1));
-    cout << "\nInsert Student's Grade: " << flush; //confusing
+
+    cout << "\nInsert Student's Year: " << flush;
     cin >> year;
     while(cin.fail() || year > 5 || year < 0)
     {
    		cout << "Invalid year, try again: "<< endl;
   		cin.clear();
+  		cin.ignore(100, '\n');
   		cin >> year;
    	}
 
     Student* st = new Student(name, address, birthday, phone, cod, course, subjects);
 
     while(1){
-        cout << "\nInsert Student's Uc(? - list/ ! - done): " << flush;
-        getline(cin,uc_name);
-        while(hasNoNumber(name))
+        cout << "\nInsert Student's UC(? - list/ ! - done): " << flush;
+        getline(cin, uc_name);
+        while(!hasNoNumber(name))
         {
            	cout<<"Invalid name, try again"<<endl;
-           	getline(cin,uc_name);
+           	getline(cin, uc_name);
         }
 
         if(uc_name == "!") break;
@@ -219,13 +222,14 @@ void College::addStudent(string name, string address, unsigned int phone, string
         else if(uc_name == "?") Print_Vec(course->getUCs());
         cout << "\nInsert Student's Uc grade(-1 if not-evaluated): " << flush;
         cin >> grade;
-        while(cin.fail() || grade > 20 || grade < 0)
+        while(cin.fail() || grade > 20 || grade < -1)
         {
            	cout << "Invalid grade, try again: "<< endl;
            	cin.clear();
+           	cin.ignore(100, '\n');
           	cin >> grade;
         }
-        st->addUCGrade(uc_name,grade);
+        st->addUCGrade(uc_name, grade);
     }
     addPeople(0, st);
 }
@@ -244,29 +248,30 @@ void College::addPerson(int type){ //Needs general function to check input
         type = Nav(0,3);
     }
     if(type == 3) return;
+
     cout << "Insert Name: " << flush;
-    getline(cin,name);
-    while(hasNoNumber(name))
+    getline(cin, name);
+    while(!hasNoNumber(name))
     {
     	cout<<"Invalid name, try again"<<endl;
-    	getline(cin,name);
+    	getline(cin, name);
     }
 
     cout << "\nInsert Address: " << flush;
-    getline(cin,address);
+    getline(cin, address);
 
-    cout << "\nInsert Phone Number: " << flush;
+    cout << "\nInsert Phone Number (9-digit): " << flush;
     cin >> phone;
-    while(cin.fail() || to_string(phone).size() != 0)
-    	{
-    		cout << "Invalid phone number, try again: "<< endl;
-    		cin.clear();
-    		cin >> phone;
-    	}
-
+    while(cin.fail() || to_string(phone).size() != 9)
+    {
+    	cout << "Invalid phone number, try again: "<< endl;
+    	cin.clear();
+    	cin.ignore(100, '\n');
+    	cin >> phone;
+    }
 
     //cin.clear();
-   // cin.ignore();
+    // cin.ignore();
     birthday = readDate(); //Tests if date is written correctly
     switch(type){
         case 0:
@@ -356,12 +361,11 @@ void Department::Set(int n){
         case 0:
             cout << "Insert new name: " << flush;
             cin >> s;
-            while(hasNoNumber(s))
-               {
+            while(!hasNoNumber(s))
+            {
                	cout<<"Invalid name, try again"<<endl;
-               	cin>>s;
-               }
-
+               	cin >> s;
+            }
             setName(s);
             break;
         case 1:
@@ -373,23 +377,25 @@ void Department::Set(int n){
             cout << "Insert new code: " << flush;
             cin >> i;
             while(cin.fail())
-            		{
-            			cout << "Invalid code, try again: "<< endl;
-            			cin.clear();
-            			cin >> i;
-            		}
+            {
+            	cout << "Invalid code, try again: "<< endl;
+            	cin.clear();
+            	cin.ignore(100, '\n');
+            	cin >> i;
+            }
 
             setCode(i);
             break;
         case 3:
             cout << "Insert new phone number: " << flush;
             cin >> i;
-            while(cin.fail() || to_string(i).size() != 0)
-               	{
-               		cout << "Invalid phone number, try again: "<< endl;
-               		cin.clear();
-               		cin >> i;
-               	}
+            while(cin.fail() || to_string(i).size() != 9)
+            {
+               	cout << "Invalid phone number, try again: "<< endl;
+               	cin.clear();
+               	cin.ignore(100, '\n');
+               	cin >> i;
+            }
             setPhone(i);
             break;
         case 4: //NEEDS TO TEST IF NEW TEACHER EXISTS!!
@@ -409,7 +415,6 @@ string Department::getName()
 void Department::setName(string name)
 {
 	depName = name;
-
 }
 
 string Department::getAddress()
@@ -463,38 +468,37 @@ void Department::addCourse()
 
 	cout << "Enter the name of the course in Portuguese: "<< endl;
 	cin >> ptName;
-	 while(hasNoNumber(ptName))
-	  {
-	     cout<<"Invalid name, try again"<<endl;
-	     cin>>ptName;
-	  }
-
-	cout << "Enter the name of the course in English: "<< endl;
-	cin >> engName;
-	while(hasNoNumber(engName))
+	while(!hasNoNumber(ptName))
 	{
-		cout<<"Invalid name, try again"<<endl;
-		cin>>engName;
+		cout << "Invalid name, try again"<<endl;
+	    cin >> ptName;
+	}
+
+	cout << "Enter the name of the course in English: " << endl;
+	cin >> engName;
+	while(!hasNoNumber(engName))
+	{
+		cout << "Invalid name, try again: " << endl;
+		cin >> engName;
 	}
 
 	cout << "What type of course is it? (MI,M,L) "<< endl;
 	cin >> type;
-	while(hasNoNumber(ptName)|| (type != "MI" && type != "M" &&type != "L"))
+	while(!hasNoNumber(ptName) || (type != "MI" && type != "M" && type != "L"))
 	{
-	 cout<<"Invalid type, try again"<<endl;
-	 cin>>ptName;
+		cout << "Invalid type, try again" << endl;
+		cin >> ptName;
 	}
 
 	cout << "Enter the code of the course: "<< endl;
 	cin >> code;
 	while(cin.fail())
 	{
-	     cout << "Invalid code, try again: "<< endl;
+	     cout << "Invalid code, try again: " << endl;
 	     cin.clear();
+	     cin.ignore(100, '\n');
 	     cin >> code;
 	}
-
-
 
 	Course* newCourse = new Course(type, engName, ptName, code);
 	vecCourse.push_back(newCourse);
@@ -508,12 +512,12 @@ void Department::removeCourse()
 	cout << "Enter the code of the Course to remove: "<< endl;
 	cin >> code;
 	while(cin.fail())
-	 {
+	{
 	    cout << "Invalid code, try again: "<< endl;
 	    cin.clear();
+	    cin.ignore(100, '\n');
 	    cin >> code;
-	 }
-
+	}
 
 	for(unsigned int i = 0; i < vecCourse.size(); i++)
 	{
@@ -565,13 +569,12 @@ void Course::Set(int n){
     switch(n){
         case 0:
             cout << "\nInsert New Pt_name: " << flush;
-            getline(cin,s);
-            while(hasNoNumber(s))
-           	  {
-           	     cout<<"Invalid name, try again"<<endl;
-           	     cin>>s;
-           	  }
-
+            getline(cin, s);
+            while(!hasNoNumber(s))
+           	{
+            	cout << "Invalid name, try again: " << endl;
+           	    cin >> s;
+           	}
             setPtName(s);
             break;
         case 1:
@@ -601,7 +604,7 @@ void Course::showSyllabus()
 
 		if(vecUC.at(i-1)->getYear() == 1 && vecUC.at(i)->getYear() == 2)
 		{
-			cout << "Second year Modules"<<endl<<endl;
+			cout << "Second year Modules:" << endl << endl;
 		}
 
 		if(vecUC.at(i)->getYear() == 2)
@@ -615,7 +618,7 @@ void Course::showSyllabus()
 			{
 				return;
 			}
-			cout << "Third year Modules" << endl << endl;
+			cout << "Third year Modules:" << endl << endl;
 		}
 
 		if(vecUC.at(i)->getYear() == 3)
@@ -629,17 +632,17 @@ void Course::showSyllabus()
 			{
 				return;
 			}
-			cout<<"Fourth year Modules" << endl << endl;
+			cout << "Fourth year Modules:" << endl << endl;
 		}
 
 		if(vecUC.at(i)->getYear() == 4)
 		{
-			cout<<vecUC.at(i)->getName() << endl;
+			cout << vecUC.at(i)->getName() << endl;
 		}
 
 		if(vecUC.at(i-1)->getYear() == 4 && vecUC.at(i)->getYear() == 5)
 		{
-			cout << "Fourth year Modules" << endl << endl;
+			cout << "Fourth year Modules:" << endl << endl;
 		}
 
 		if(vecUC.at(i)->getYear() == 5)
@@ -656,7 +659,7 @@ string Course::getType()
 
 void Course::setType(string type)
 {
-	csType=type;
+	csType = type;
 }
 
 string Course::getName()
@@ -702,41 +705,41 @@ void Course::addUC()
 
 	cout << "Enter the name of the Curricular Unit: "<< endl;
 	cin >> name;
-	 while(hasNoNumber(name))
-	 {
-		 cout<<"Invalid name, try again"<<endl;
-		 cin>>name;
-	 }
-
+	while(!hasNoNumber(name))
+	{
+		cout << "Invalid name, try again:" << endl;
+		cin >> name;
+	}
 
 	cout << "In which year is it taught? "<< endl;
 	cin >> year;
-	 while(cin.fail() || year > 5 || year < 0)
-	  {
-		 cout << "Invalid year, try again: "<< endl;
-		 cin.clear();
-		 cin >> year;
-	  }
+	while(cin.fail() || year > 5 || year < 1)
+	{
+		cout << "Invalid year, try again: "<< endl;
+		cin.clear();
+		cin.ignore(100, '\n');
+		cin >> year;
+	}
 
 	cout << "How many ETCS does it have? "<< endl;
 	cin >> ects;
 	while(cin.fail() || ects > 10 || ects < 0)
-		  {
-			 cout << "Invalid number of etcs, try again: "<< endl;
-			 cin.clear();
-			 cin >> year;
-		  }
-
+	{
+		cout << "Invalid number of etcs, try again: "<< endl;
+		cin.clear();
+		cin.ignore(100, '\n');
+		cin >> year;
+	}
 
 	cout << "How many hours of workload? "<< endl;
 	cin >> workload;
 	while(cin.fail() || workload > 10 || workload < 0)
-		  {
-			 cout << "Invalid year, try again: "<< endl;
-			 cin.clear();
-			 cin >> workload;
-		  }
-
+	{
+		cout << "Invalid year, try again: "<< endl;
+		cin.clear();
+		cin.ignore(100, '\n');
+		cin >> workload;
+	}
 
 //	cout << "Enter the number of students: "<< endl;
 //	cin >> nS ;
@@ -772,7 +775,7 @@ void Course::removeUC()
 
 	cout << "Enter the name of the UC to remove: "<< endl;
 	getline(cin, name); //input validation
-	while(hasNoNumber(name))
+	while(!hasNoNumber(name))
 	{
 		cout<<"Invalid name, try again"<<endl;
 		getline(cin, name);
@@ -934,10 +937,10 @@ void Uc::removeTeacher()
 
 	cout << "Enter the name of the Teacher to remove: "<< endl;
 	cin >> name; //input validation
-	while(hasNoNumber(name))
+	while(!hasNoNumber(name))
 	{
-		cout<<"Invalid name, try again"<<endl;
-		cin>>name;
+		cout << "Invalid name, try again" << endl;
+		cin >> name;
 	}
 
 	if(remove(ucTeacher, name))
@@ -955,17 +958,15 @@ void Uc::removeStudent()
 
 	cout << "Enter the name of the Student to remove: "<< endl;
 	cin >> name; //input validation
-	while(hasNoNumber(name))
+	while(!hasNoNumber(name))
 	{
-		cout<<"Invalid name, try again"<<endl;
-		cin>>name;
+		cout << "Invalid name, try again: " << endl;
+		cin >> name;
 	}
-
-
 
 	if(remove(ucStudent, name))
 	{
-		cout <<"Student"<< name << " has been successfully removed. "<< endl;
+		cout << "Student" << name << " has been successfully removed. "<< endl;
 		return;
 	}
 
