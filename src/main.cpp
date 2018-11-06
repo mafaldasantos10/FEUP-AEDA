@@ -81,7 +81,7 @@ int Main_Menu(){
 void New_College(College &college){
     string college_name, admin;
     cout << "Insert your College Name: " << flush;
-    getline(cin, college_name);
+    getline(cin, college_name); //////////INPUT VALIDATION MISSING!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!(só para ter a certeza q vêm)
     cout << endl << "Insert your Admin Code: " << flush;
     getline(cin, admin);
     college.setName(college_name);
