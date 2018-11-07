@@ -43,15 +43,6 @@ date* readDate();
 extern int current_year;
 
 
-template<class T>
-T* SearchVec(vector<T*> vec, string name){
-   for(size_t i = 0; i < vec.size(); i++){
-       if(vec.at(i)->getName() == name) return vec.at(i);
-   }
-    //throw NotFound exception
-}
-
-
 /** @brief College Class */
 class College{
 	/** @brief Name of the College */
@@ -170,6 +161,11 @@ public:
 	 * @brief Removes a Course
      */
     void removeCourse();
+    /**
+     * @brief Searches the Department of a given College
+     * @param name Name of the Department of a given College
+     */
+    void searchDepartment(string name);
 };
 
 /** @brief Department Class */
@@ -282,6 +278,11 @@ public:
 	* @brief Removes a Course from the vector of Courses (vecCourse)
     */
    void removeCourse();
+   /**
+    * @brief Searches for a Course of a given Department
+    * @param name Name of the Course of the Department
+    */
+   void searchCourse(string name);
 };
 
 /** @brief Course Class */
@@ -381,6 +382,11 @@ public:
 	 * @brief Sorts the vector of UCs (vecUC) by year
 	 */
 	void sortUc();
+	/**
+	 * @brief Searches for a Uc of the given Course
+	 * @param name Name of the Uc of a given Course
+	 */
+	void searchUc(string name);
 };
 
 /** @brief Uc Class */
@@ -581,5 +587,14 @@ void Print_Vec(vector<T*> vec){
         cout << i << ":   " << vec.at(i)->getName() << endl;
     }
 }
+
+template<class T>
+T* SearchVec(vector<T*> vec, string name){
+   for(size_t i = 0; i < vec.size(); i++){
+       if(vec.at(i)->getName() == name) return vec.at(i);
+   }
+    throw NoNameFound(name);
+}
+
 
 #endif /*COLLEGE_H_*/

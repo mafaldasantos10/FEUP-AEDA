@@ -322,6 +322,12 @@ void College::removeCourse(){
     else vecDep.at(i)->removeCourse();
 }
 
+void College::searchDepartment(string name)
+{
+	Department* dep;
+	dep = SearchVec(vecDep, name);
+	dep->showInfo();
+}
 
 //DEPARTMENT//
 //////////////////////
@@ -547,6 +553,13 @@ void Department::removeCourse()
 	throw NoCodeFound(code);
 }
 
+void Department::searchCourse(string name)
+{
+	Course* cs;
+	cs = SearchVec(vecCourse, name);
+	cs->showInfo();
+}
+
 //COURSE//
 //////////////////////
 Course::Course(string type, string engName, string ptName, int code)
@@ -615,7 +628,7 @@ void Course::showSyllabus()
 			cout << vecUC.at(i)->getName() << endl;
 		}
 
-		if(vecUC.at(i-1)->getYear() == 1 && vecUC.at(i)->getYear() == 2)
+		if((vecUC.at(i-1)->getYear() == 1||i==0) && vecUC.at(i)->getYear() == 2)
 		{
 			cout << "Second year Modules:" << endl << endl;
 		}
@@ -625,7 +638,7 @@ void Course::showSyllabus()
 			cout << vecUC.at(i)->getName() << endl;
 		}
 
-		if(vecUC.at(i-1)->getYear() == 2 && vecUC.at(i)->getYear() == 3)
+		if((vecUC.at(i-1)->getYear() == 2 || i== 0) && vecUC.at(i)->getYear() == 3)
 		{
 			if(csType == "M")
 			{
@@ -639,7 +652,7 @@ void Course::showSyllabus()
 			cout << vecUC.at(i)->getName() << endl;
 		}
 
-		if(vecUC.at(i-1)->getYear() == 3 && vecUC.at(i)->getYear() == 4)
+		if((vecUC.at(i-1)->getYear() == 3 || i == 0)&& vecUC.at(i)->getYear() == 4)
 		{
 			if(csType == "L")
 			{
@@ -653,9 +666,9 @@ void Course::showSyllabus()
 			cout << vecUC.at(i)->getName() << endl;
 		}
 
-		if(vecUC.at(i-1)->getYear() == 4 && vecUC.at(i)->getYear() == 5)
+		if((vecUC.at(i-1)->getYear() == 4 || i==0) && vecUC.at(i)->getYear() == 5)
 		{
-			cout << "Fourth year Modules:" << endl << endl;
+			cout << "Fifth year Modules:" << endl << endl;
 		}
 
 		if(vecUC.at(i)->getYear() == 5)
@@ -748,7 +761,7 @@ void Course::addUC()
 	cin >> workload;
 	while(cin.fail() || workload > 10 || workload < 0)
 	{
-		cout << "Invalid year, try again: "<< endl;
+		cout << "Invalid number of hours, try again: "<< endl;
 		cin.clear();
 		cin.ignore(100, '\n');
 		cin >> workload;
@@ -833,6 +846,13 @@ void Course::sortUc()
 
 		if (!troca) return;
 	}
+}
+
+void Course::searchUc(string name)
+{
+	Uc* uc;
+	uc = SearchVec(vecUC, name);
+	uc->showInfo();
 }
 
 
