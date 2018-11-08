@@ -23,6 +23,30 @@ People::People(string name, string address, date& birthday, unsigned int phone, 
 	this->code = cod;
 }
 
+void People::addPerson(College &college) {
+    cout << "Insert Name: " << flush;
+    getline(cin, name);
+    while(!hasNoNumber(name))
+    {
+        cout<<"Invalid name, try again"<<endl;
+        getline(cin, name);
+    }
+
+    cout << "\nInsert Address: " << flush;
+    getline(cin, address);
+
+    cout << "\nInsert Phone Number (9-digit): " << flush;
+    cin >> phone;
+    while(cin.fail() || to_string(phone).size() != 9)
+    {
+        cout << "Invalid phone number, try again: "<< endl;
+        cin.clear();
+        cin.ignore(100, '\n');
+        cin >> phone;
+    }
+    birthday = readDate(); //Tests if date is written correctly
+}
+
 string People::getName(){
     return name;
 }
@@ -95,6 +119,64 @@ Student::Student(string name, string address, date birthday, unsigned int phone,
 	this->course = course;
 	year = 0;
     student_count++;
+}
+
+void Student::addPerson(College &college) {
+    People::addPerson(college);
+    string uc_name;
+    float grade;
+    string code = "0" + to_string(current_year) + to_string(Student::student_count);  //student id is assigned
+    setCode(code);
+
+    cout << "\nChoose Student's Course:" << endl;  //Needs exception in case there are no Courses Created
+    Print_Vec(college.getCourses());
+    course = college.getCourses().at(Nav(0,college.getCourses().size()-1));
+
+    cout << "\nInsert Student's Year: " << flush;
+    cin >> year;
+    while(cin.fail() || year > 5 || year < 0)
+    {
+        cout << "Invalid year, try again: "<< endl;
+        cin.clear();
+        cin.ignore(100, '\n');
+        cin >> year;
+    }
+
+    bool end = false;
+    while(1){
+        while(1){
+            cout << "\nInsert Student's UC(? - list/ ! - done): " << flush;
+            getline(cin, uc_name);
+            if(uc_name == "!"){
+                end = true;
+                break;
+            }
+            else if(uc_name == "?") Print_Vec(course->getUCs());
+            else {
+                try{
+                    (SearchVec(course->getUCs(),uc_name));
+                }
+                catch(string err){
+                    cout << err << " " << "Try again:" << endl;
+                    continue;
+                }
+                break;
+            }
+        }
+        if(end) break;
+
+        cout << "\nInsert Student's Uc grade(-1 if not-evaluated): " << flush;
+        cin >> grade;
+        while(cin.fail() || grade > 20 || grade < -1)
+        {
+            cout << "Invalid grade, try again: "<< endl;
+            cin.clear();
+            cin.ignore(100, '\n');
+            cin >> grade;
+        }
+        addUCGrade(uc_name, grade);
+    }
+    college.addStudent(this);
 }
 
 Course* Student::getCourse()

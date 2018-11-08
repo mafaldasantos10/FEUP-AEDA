@@ -54,7 +54,6 @@ date* readDate(){
     d->day = day; d->month = month; d->year = year;
     return d;
 }
-
 //////////////////////
 
 template<class T>
@@ -69,6 +68,8 @@ void editInfo(T &obj) {
     }
 }
 
+//////////////////////
+
 int Main_Menu(){
     cout << "|      MAIN MENU     |" << endl;
     cout << "----------------------" << endl;
@@ -77,6 +78,8 @@ int Main_Menu(){
     cout << "2:   EXIT" << endl;
     return Nav(0,2);
 }
+
+//////////////////////
 
 void New_College(College &college){
     string college_name, admin;
@@ -88,6 +91,8 @@ void New_College(College &college){
     college.setAdmin(admin);
     cout << "\n\n\n" << endl;
 }
+
+//////////////////////
 
 void Course_Menu(Course& course){
     while(1){
@@ -116,6 +121,8 @@ void Course_Menu(Course& course){
     }
 }
 
+//////////////////////
+
 template<class T>
 void Courses_Menu(T obj){ //Can be either college or Department
     while(1){
@@ -133,6 +140,8 @@ void Courses_Menu(T obj){ //Can be either college or Department
     }
 }
 
+//////////////////////
+
 void Dep_Menu(Department& department){
     department.showInfo();
     cout << "0:   DEPARTMENT COURSES" << endl;
@@ -149,6 +158,8 @@ void Dep_Menu(Department& department){
             return;
     }
 }
+
+//////////////////////
 
 void Departments_Menu(College &college){
     int n;
@@ -172,10 +183,14 @@ void Departments_Menu(College &college){
     }
 }
 
+//////////////////////
+
 void Grades_Menu(People &person){
     Student *st = dynamic_cast<Student*>(&person);
     st->showAllGrades();
 }
+
+//////////////////////
 
 template<class T>
 void Person_Menu(T &person){
@@ -194,6 +209,8 @@ void Person_Menu(T &person){
     }
 }
 
+//////////////////////
+
 void List_Staff(College &college){
     int s, i;
     while(1){
@@ -204,6 +221,8 @@ void List_Staff(College &college){
         else Person_Menu(*(college.getStudents().at(i)));
     }
 }
+
+//////////////////////
 
 void List_Teachers(College &college){
     int s, i;
@@ -217,6 +236,8 @@ void List_Teachers(College &college){
     }
 }
 
+//////////////////////
+
 void List_Students(College &college){
     int s, i;
     while(1){
@@ -228,6 +249,56 @@ void List_Students(College &college){
         else Person_Menu(*(college.getStudents().at(i)));
     }
 }
+
+void Add_Person(College &college, int type = -1){
+    string name, address;
+    unsigned int phone;
+    string cod;
+    date* birthday;
+    if(type == -1){
+        cout << "What Type of person would you like to add?" << endl;
+        cout << "0:   STUDENT" << endl;
+        cout << "1:   TEACHER" << endl;
+        cout << "2:   STAFF" << endl;
+        cout << "3:   CANCEL" << endl;
+        type = Nav(0,3);
+    }
+    if(type == 3) return;
+
+    cout << "Insert Name: " << flush;
+    getline(cin, name);
+    while(!hasNoNumber(name))
+    {
+        cout<<"Invalid name, try again"<<endl;
+        getline(cin, name);
+    }
+
+    cout << "\nInsert Address: " << flush;
+    getline(cin, address);
+
+    cout << "\nInsert Phone Number (9-digit): " << flush;
+    cin >> phone;
+    while(cin.fail() || to_string(phone).size() != 9)
+    {
+        cout << "Invalid phone number, try again: "<< endl;
+        cin.clear();
+        cin.ignore(100, '\n');
+        cin >> phone;
+    }
+    birthday = readDate(); //Tests if date is written correctly
+    if(type == 0) {
+        Student* st = new Student();
+        st->addPerson(college);
+    }
+    else if(type ==1 ){
+
+    }
+    else if(type == 2){
+
+    }
+}
+
+//////////////////////
 
 void People_Menu(College &college){
     int i;
@@ -254,7 +325,7 @@ void People_Menu(College &college){
                 //Search people by name or id
                 break;
             case 4:
-                college.addPerson();
+                Add_Person(college);
                 break;
             case 5:
                 //Remove_Person(id);
@@ -264,6 +335,8 @@ void People_Menu(College &college){
         }
     }
 }
+
+//////////////////////
 
 void Member_Menu(College &college){ //Can only read
     while(1){
@@ -293,6 +366,8 @@ void Member_Menu(College &college){ //Can only read
     }
 }
 
+//////////////////////
+
 void Vis_Menu(College &college){ //Can only see info
     while(1){
         college.showInfo();
@@ -312,6 +387,8 @@ void Vis_Menu(College &college){ //Can only see info
         }
     }
 }
+
+//////////////////////
 
 void Admin_Menu(College &college){
     while(1){
@@ -341,6 +418,8 @@ void Admin_Menu(College &college){
     }
 }
 
+//////////////////////
+
 int Log_In(College& college){
     int i;
     while(1){
@@ -365,6 +444,8 @@ int Log_In(College& college){
         return i;
     }
 }
+
+//////////////////////
 
 int main() {
 

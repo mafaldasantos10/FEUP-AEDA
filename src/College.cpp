@@ -70,6 +70,7 @@ void College::addStudent(Student *student)
 
 void College::addStaff(Staff *staff)
 {
+
     this->staff.push_back(staff);
 }
 
@@ -193,116 +194,6 @@ void College::removeDepartment()
 	}
 
 	throw NoCodeFound(code);
-}
-
-void College::addStudent(string name, string address, unsigned int phone, string cod, date& birthday){
-    Course* course;
-    int year;
-    float grade;
-    map<Uc*,float> subjects;
-    string uc_name;
-    cod = "0" + to_string(current_year) + to_string(Student::student_count);  //student id is assigned
-
-    cout << "\nChoose Student's Course:" << endl;  //Needs exception in case there are no Courses Created
-    Print_Vec(getCourses());
-    course = getCourses().at(Nav(0,getCourses().size()-1));
-
-    cout << "\nInsert Student's Year: " << flush;
-    cin >> year;
-    while(cin.fail() || year > 5 || year < 0)
-    {
-   		cout << "Invalid year, try again: "<< endl;
-  		cin.clear();
-  		cin.ignore(100, '\n');
-  		cin >> year;
-   	}
-
-    Student* st = new Student(name, address, birthday, phone, cod, course, subjects);
-
-    while(1){
-        cout << "\nInsert Student's UC(? - list/ ! - done): " << flush;
-        getline(cin, uc_name);
-        while(!hasNoNumber(name))
-        {
-           	cout<<"Invalid name, try again"<<endl;
-           	getline(cin, uc_name);
-        }
-
-        if(uc_name == "!") break;
-
-        else if(uc_name == "?") Print_Vec(course->getUCs());
-        cout << "\nInsert Student's Uc grade(-1 if not-evaluated): " << flush;
-        cin >> grade;
-        while(cin.fail() || grade > 20 || grade < -1)
-        {
-           	cout << "Invalid grade, try again: "<< endl;
-           	cin.clear();
-           	cin.ignore(100, '\n');
-          	cin >> grade;
-        }
-        st->addUCGrade(uc_name, grade);
-    }
-    addStudent(st);
-}
-
-void College::addPerson(int type){ //Needs general function to check input
-    string name, address;
-    unsigned int phone;
-    string cod;
-    date* birthday;
-    if(type == -1){
-        cout << "What Type of person would you like to add?" << endl;
-        cout << "0:   STUDENT" << endl;
-        cout << "1:   TEACHER" << endl;
-        cout << "2:   STAFF" << endl;
-        cout << "3:   CANCEL" << endl;
-        type = Nav(0,3);
-    }
-    if(type == 3) return;
-
-    cout << "Insert Name: " << flush;
-    getline(cin, name);
-    while(!hasNoNumber(name))
-    {
-    	cout<<"Invalid name, try again"<<endl;
-    	getline(cin, name);
-    }
-
-    cout << "\nInsert Address: " << flush;
-    getline(cin, address);
-
-    cout << "\nInsert Phone Number (9-digit): " << flush;
-    cin >> phone;
-    while(cin.fail() || to_string(phone).size() != 9)
-    {
-    	cout << "Invalid phone number, try again: "<< endl;
-    	cin.clear();
-    	cin.ignore(100, '\n');
-    	cin >> phone;
-    }
-
-    //cin.clear();
-    // cin.ignore();
-    birthday = readDate(); //Tests if date is written correctly
-    switch(type){
-        case 0:
-            addStudent(name, address, phone, cod, *birthday);
-            break;
-        case 1:
-            addTeacher(name, address, phone, cod, *birthday);
-            break;
-        case 2:
-            addStaff(name, address, phone, cod, *birthday);
-            break;
-    }
-}
-
-void College::addTeacher(string name, string address, unsigned int phone, string cod, date& birthday){
-
-}
-
-void College::addStaff(string name, string address, unsigned int phone, string cod, date& birthday){
-
 }
 
 void College::addCourse(){

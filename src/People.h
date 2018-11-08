@@ -14,19 +14,25 @@
 #include <vector>
 #include <time.h>
 
-//PROTOTYPES//
-//////////////////////
+//////PROTOTYPES//////
 class College;
 class Course;
 class Uc;
 int Nav(int bottom, int top);
+bool hasNoNumber(std::string s);
+//////////////////////
 
 using namespace std;
+
+//////////////////////
 
 struct date {  //formated date string for better use
 	unsigned int day, month, year;
     const string format = to_string(day) + "/" + to_string(month) + "/" + to_string(year);
 };
+
+//////////////////////
+
 /**@brief People class */
 class People {
 	/**@brief name and address of the Person*/
@@ -47,6 +53,10 @@ public:
 	 * @param cod code of the Person
 	 */
 	People(string name, string address, date& birthday, unsigned int phone,string cod);
+
+    People() = default;
+
+    virtual void addPerson(College &college);
 
 	/**
 	 * @brief Virtual function that will be used for particular informations of its derivatives
@@ -138,6 +148,10 @@ public:
 	 */
 	Student(string name, string address, date birthday, unsigned int phone, string cod, Course *course, map <Uc*, float> subjects);
 
+    Student() = default;
+
+    void addPerson(College &college);
+
 	/**
 	 * @brief
 	 * @return
@@ -193,6 +207,8 @@ public:
 	 */
     static int student_count;
 };
+
+
 /**@brief Employee class, inherits the public functions of the Class People*/
 class Employee : public People{
 	/**@brief Salary of a given Employee*/
@@ -211,6 +227,8 @@ public:
 	 * @param nif Nif of a Employee
 	 */
 	Employee(string name, string address, date birthday, unsigned int phone, string cod, float salary, unsigned int nif);
+
+    Employee() = default;
 
 	/**
 	 * @brief
@@ -238,6 +256,8 @@ public:
 	 */
 	void setNIF(unsigned int nif);
 };
+
+
 /**@brief Teacher Class, inherits all the public functions from Employee*/
 class Teacher : public Employee{
 	/** @brief Category of the teacher*/
@@ -259,6 +279,7 @@ public:
 	 */
 	Teacher(string name, string address, date birthday, unsigned int phone, string cod, float salary, unsigned int nif, string category, vector <Uc *> subjects);
 
+    Teacher() = default;
 	/**
 	 * @brief shows all information of a given Teacher
 	 */
@@ -290,6 +311,8 @@ public:
 	 */
     static int teacher_count;
 };
+
+
 /**@brief Staff class, inherits all the public functions from class Employee*/
 class Staff : public Employee{
 	/** @brief Work area of a given Staff member*/
@@ -307,6 +330,8 @@ public:
 	 * @param work_area Work area of the Staff member
 	 */
 	Staff(string name, string adress, date birthday, unsigned int phone, string cod, float salary, unsigned int nif, string work_area);
+
+    Staff() = default;
 
 	/**
 	 * @brief shows all the informations of a given Staff member
