@@ -165,7 +165,7 @@ void Student::addPerson(College &college) {
         }
         if(end) break;
 
-        cout << "\nInsert Student's Uc grade(-1 if not-evaluated): " << flush;
+        cout << "\nInsert Student's UC grade(-1 if not-evaluated): " << flush;
         cin >> grade;
         while(cin.fail() || grade > 20 || grade < -1)
         {
@@ -313,7 +313,7 @@ Employee::Employee(string name, string address, date birthday, unsigned int phon
 }
 
 int Employee::Special_Info(){
-    cout << "| nif: " << getNIF() << " salary: " << getSalary() << endl;
+    cout << "| NIF: " << getNIF() << " salary: " << getSalary() << endl;
     return 0;
 }
 

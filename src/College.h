@@ -544,7 +544,6 @@ bool remove(vector<T> &vector, string name)
     return false;
 }
 
-//PRINT VECTOR//
 /**
  * @brief Prints the name of every Object in a given vector of Objects
  * @param vec Vector of the Objects to be printed

@@ -123,7 +123,7 @@ void College::addDepartment()
     }
     director = dynamic_cast<Teacher*>(SearchVec(College::getTeachers(),directorName)); //dynamic cast testa e transforma o apontador de people num apontador de teacher
 
-	cout << "Enter the code of the Department: "<< endl;  //NEEDS TO TEST IF IT'S DIFFERENT FROM OTHER DEP CODES
+	cout << "Enter the code of the Department: "<< endl;
 
 	do{
 		cin >> code;
@@ -141,7 +141,7 @@ void College::addDepartment()
 
 	} while (!differentCode);
 
-	//falta fazer validation do code!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! (mas estou � espera de saber se � para manter assim ou fazer random)
+	//falta fazer validation do code!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 	cout << "Enter the phone of the Department (9-digit): "<< endl;
 	cin >> phone;
@@ -658,30 +658,6 @@ void Course::addUC()
 		cin >> workload;
 	}
 
-//	cout << "Enter the number of students: "<< endl;
-//	cin >> nS ;
-//
-//	cout << "Enter their names one by one: "<<endl;
-//
-//	for(int i = 1; i <= nS; i++)
-//	{
-//		cout <<"  "<< i << ": ";
-//		cin >> nameS;
-//		students.push_back(nameS);
-//	}
-//
-//	cout << "Enter the number of teachers: "<< endl;
-//	cin >> nT ;
-//
-//	cout << "Enter their names one by one, starting by the Regent: "<<endl;
-//
-//	for(int i = 1; i <= nT; i++)
-//	{
-//		cout << "  "<< i <<": ";
-//		cin >> nameT;
-//		teachers.push_back(nameT);
-//	}
-
 	Uc* newUC = new Uc(name, year, ects, workload);
 	vecUC.push_back(newUC);
 }
@@ -765,7 +741,6 @@ Uc::Uc(string name, int year, int ects, int workload)
 	ucName = name;
 	ucWorkload = workload;
 	ucYear = year;
-
 }
 
 void Uc::showInfo() {
@@ -843,17 +818,6 @@ vector<Student*> Uc::getStudents()
 {
 	return ucStudent;
 }
-
-//void Uc::addTeacher()
-//{
-//	string name;
-//
-//	cout << "Enter the name of the Teacher: "<< endl;
-//	cin >> name;
-//
-//	string newTeacher = name; //temporary while no teacher class is available
-//	ucTeacher.push_back(newTeacher);
-//}
 
 void Uc::removeTeacher()
 {
