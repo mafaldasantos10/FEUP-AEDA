@@ -181,7 +181,7 @@ public:
 	 * @param name Name of the Uc
 	 * @param grade Grade of the Student in the Uc
 	 */
-	void addUCGrade(string name, float grade);
+	void addUCGrade(Uc* uc, float grade);
 	/**
 	 * @brief Removes from the map a Uc and the grade the Student had
 	 * @param name Name of the Uc
@@ -229,6 +229,8 @@ public:
 	Employee(string name, string address, date birthday, unsigned int phone, string cod, float salary, unsigned int nif);
 
     Employee() = default;
+
+    void addPerson(College &college);
 
 	/**
 	 * @brief
@@ -280,6 +282,8 @@ public:
 	Teacher(string name, string address, date birthday, unsigned int phone, string cod, float salary, unsigned int nif, string category, vector <Uc *> subjects);
 
     Teacher() = default;
+
+    void addPerson(College &college);
 	/**
 	 * @brief shows all information of a given Teacher
 	 */
@@ -332,6 +336,8 @@ public:
 	Staff(string name, string adress, date birthday, unsigned int phone, string cod, float salary, unsigned int nif, string work_area);
 
     Staff() = default;
+
+    void addPerson(College &college);
 
 	/**
 	 * @brief shows all the informations of a given Staff member

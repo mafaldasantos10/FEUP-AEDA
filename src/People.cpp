@@ -124,6 +124,7 @@ Student::Student(string name, string address, date birthday, unsigned int phone,
 void Student::addPerson(College &college) {
     People::addPerson(college);
     string uc_name;
+    Uc* uc;
     float grade;
     string code = "0" + to_string(current_year) + to_string(Student::student_count);  //student id is assigned
     setCode(code);
@@ -154,10 +155,14 @@ void Student::addPerson(College &college) {
             else if(uc_name == "?") Print_Vec(course->getUCs());
             else {
                 try{
-                    (SearchVec(course->getUCs(),uc_name));
+                    uc = (SearchVec(course->getUCs(),uc_name));
                 }
                 catch(string err){
                     cout << err << " " << "Try again:" << endl;
+                    continue;
+                }
+                if(subjects.find(uc) == subjects.end()){
+                    cout << "Student already enrolled in this course, try again: " << endl;
                     continue;
                 }
                 break;
@@ -174,7 +179,7 @@ void Student::addPerson(College &college) {
             cin.ignore(100, '\n');
             cin >> grade;
         }
-        addUCGrade(uc_name, grade);
+        addUCGrade(uc, grade);
     }
     college.addStudent(this);
 }
@@ -204,29 +209,9 @@ void Student::showInfo(){
 	cout << "|-----------------------------------------" << endl;
 }
 
-void Student::addUCGrade(string name, float grade)
-{  //Needs to Test if name exists, if grade is valid and if student isn't already enrolled in Uc with given name - check
-	Uc* uc;
-	bool found = false;
-	for(unsigned int i = 0; i < course->getUCs().size(); i++)
-	{
-		if(course->getUCs().at(i)->getName() == name)
-		{
-			uc = course->getUCs().at(i);
-			found = true;
-			break;
-		}
-		else
-		{
-			found = false;
-		}
-	}
-if(found)
+void Student::addUCGrade(Uc* uc, float grade)
 {
 	subjects.insert(pair <Uc*, float> (uc, grade));
-}
-else
-	throw NoNameFound(name);
 }
 
 void Student::removeFromMap(string name)
@@ -312,6 +297,17 @@ Employee::Employee(string name, string address, date birthday, unsigned int phon
 	this->nif = nif;
 }
 
+void Employee::addPerson(College &college){
+    cout << "\nInsert Employee's Salary: " << flush;
+    cin >> salary;
+    cin.clear();
+    cin.ignore(1000,'\n');
+    cout << "\nInsert Employee's NIF: " << flush;
+    cin >> nif;
+    cin.clear();
+    cin.ignore(1000,'\n');
+}
+
 int Employee::Special_Info(){
     cout << "| NIF: " << getNIF() << " salary: " << getSalary() << endl;
     return 0;
@@ -346,6 +342,34 @@ Teacher::Teacher(string name, string address, date birthday, unsigned int phone,
 	this->subjects = subjects;
 }
 
+void Teacher::addPerson(College &college){
+    People::addPerson(college);
+    Employee::addPerson(college);
+    cout << "\nInsert Teacher's Category: " << flush; //Needs to check for valid category
+    getline(cin,category);
+    string uc_name;
+    Uc* uc;
+    while(1){
+        cout << "\nInsert Teacher's Ucs(? - list/ ! - done): " << flush;
+        getline(cin, uc_name);
+        if(uc_name == "!") break;
+        else if(uc_name == "?") {
+            Print_Vec(college.getUCs());
+        }
+        else {
+            try{
+                uc = (SearchVec(college.getUCs(),uc_name));
+            }
+            catch(string err){
+                cout << err << " " << "Try again:" << endl;
+                continue;
+            }
+            subjects.push_back(uc);
+        }
+    }
+    college.addTeacher(this);
+}
+
 string Teacher::getCategory()
 {
 	return category;
@@ -378,6 +402,11 @@ void Teacher::showInfo()
 Staff::Staff(string name, string address, date birthday, unsigned int phone, string cod, float salary, unsigned int nif, string work_area)
 : Employee(name, address, birthday, phone, cod, salary, nif){
 	this->work_area = work_area;
+}
+
+void Staff::addPerson(College &college){
+    cout << "Insert Staff member's working area: " << flush;
+    getline(cin,work_area);
 }
 
 string Staff::getWorkArea()

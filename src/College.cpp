@@ -94,6 +94,21 @@ vector<Course *> College::getCourses()
     return vec;
 }
 
+vector<Uc*> College::getUCs(){
+    vector<Course *> cr = getCourses();
+    vector<Uc*> vec;
+    for(unsigned int i = 0; i < getCourses().size(); i++){
+        vec.insert(vec.end(),cr.at(i)->getUCs().begin(),cr.at(i)->getUCs().end());
+    }
+    return vec;
+}
+
+void College::removeStudent(Student* student) {
+    auto it = find(students.begin(),students.end(),student);
+    if(it != students.end()) students.erase(it);
+    delete student;
+}
+
 void College::addDepartment()
 {
 	string name, address, directorName;

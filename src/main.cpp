@@ -94,6 +94,28 @@ void New_College(College &college){
 
 //////////////////////
 
+template<class T>
+T* Search_Menu(vector<T*> vec){
+    string name;
+    T* t;
+    while(1){
+        cout << "Insert the name you want to search for(! to cancel): " << flush;
+        getline(cin,name);
+        if(name == "!") return nullptr;
+        try{
+            t = SearchVec(vec,name);
+        }
+        catch(string &err){
+            cout << err << endl;
+            continue;
+        }
+        break;
+    }
+    return t;
+}
+
+//////////////////////
+
 void Course_Menu(Course& course){
     while(1){
         course.showInfo();
@@ -131,11 +153,16 @@ void Courses_Menu(T obj){ //Can be either college or Department
         size_t n = obj.getCourses().size();
         cout << n << ":   ADD COURSE" << endl;
         cout << ++n << ":   REMOVE COURSE" << endl;
+        cout << ++n << ":   SEARCH COURSE" << endl;
         cout << ++n << ":   PREVIOUS MENU" << endl;
         unsigned int i = Nav(0,n);
         if(i == n) return;
-        else if(i == n-1) obj.removeCourse();
-        else if(i == n-2) obj.addCourse();
+        else if(i == n-1){
+            auto ptr = Search_Menu(obj.getCourses());
+            if(ptr != nullptr) Course_Menu(*ptr);
+        }
+        else if(i == n-2) obj.removeCourse();
+        else if(i == n-3) obj.addCourse();
         else Course_Menu(*(obj.getCourses().at(i)));
     }
 }
@@ -169,14 +196,18 @@ void Departments_Menu(College &college){
         Print_Vec(college.getDepartments());
         cout << n << ":   ADD DEPARTMENT" << endl;
         cout << ++n << ":   REMOVE DEPARTMENT" << endl;
+        cout << ++n << ":   SEARCH DEPARTMENT" << endl;
         cout << ++n << ":   PREVIOUS MENU" << endl;
         int i = Nav(0, n);
         if (i == n) { //Previous
             return;
-        } else if (i == (n - 2)) { //Add department
+        } else if (i == (n - 3)) { //Add department
             college.addDepartment();
-        } else if (i == (n - 1)) { //Remove department
+        } else if (i == (n - 2)) { //Remove department
             college.removeDepartment();
+        } else if (i == (n - 1)) { //Search Department by name
+           auto ptr = Search_Menu(college.getDepartments());
+            if(ptr != nullptr) Dep_Menu(*ptr);
         } else { //Enter department
             Dep_Menu(*college.getDepartments().at(i));
         }
@@ -211,14 +242,48 @@ void Person_Menu(T &person){
 
 //////////////////////
 
+void Remove_Person(College &college){
+    int i;
+    while(1) {
+        cout << "What Type of person would you like to remove?" << endl;
+        cout << "0:   STUDENT" << endl;
+        cout << "1:   TEACHER" << endl;
+        cout << "2:   STAFF" << endl;
+        cout << "3:   CANCEL" << endl;
+        i = Nav(0,3);
+        if(i == 3) return;
+        else if(i == 0){
+            auto ptr = Search_Menu(college.getStudents());
+            if(ptr != nullptr) college.removeStudent(ptr);
+        }
+
+    }
+}
+
+//////////////////////
+
 void List_Staff(College &college){
     int s, i;
     while(1){
         Print_Vec(college.getStaff());
-        cout << s << ":   PREVIOUS MENU" << endl;
+        cout << s << ":   ADD STAFF" << endl;
+        cout << ++s << ":   REMOVE STAFF" << endl;
+        cout << ++s << ":   SEARCH STAFF" << endl;
+        cout << ++s << ":   PREVIOUS MENU" << endl;
         i = Nav(0,s);
         if(i == s) return;
-        else Person_Menu(*(college.getStudents().at(i)));
+        else if(i == s-3){
+            auto *stf = new Staff();
+            stf->addPerson(college);
+        }
+        else if(i == s-2){
+            //Remove_Person(college);
+        }
+        else if(i == s-1){
+            auto ptr = Search_Menu(college.getStaff());
+            if(ptr != nullptr) Person_Menu(*ptr);
+        }
+        else Person_Menu(*(college.getStaff().at(i)));
     }
 }
 
@@ -229,10 +294,24 @@ void List_Teachers(College &college){
     while(1){
         s = college.getTeachers().size();
         Print_Vec(college.getTeachers());
-        cout << s << ":   PREVIOUS MENU" << endl;
+        cout << s << ":   ADD TEACHER" << endl;
+        cout << ++s << ":   REMOVE TEACHER" << endl;
+        cout << ++s << ":   SEARCH TEACHER" << endl;
+        cout << ++s << ":   PREVIOUS MENU" << endl;
         i = Nav(0,s);
         if(i == s) return;
-        else Person_Menu(*(college.getStudents().at(i)));
+        else if(i == s-3){
+            auto *tch = new Teacher();
+            tch->addPerson(college);
+        }
+        else if(i == s-2){
+            //Remove_Person(college);
+        }
+        else if(i == s-1){
+            auto ptr = Search_Menu(college.getTeachers());
+            if(ptr != nullptr) Person_Menu(*ptr);
+        }
+        else Person_Menu(*(college.getTeachers().at(i)));
     }
 }
 
@@ -243,75 +322,65 @@ void List_Students(College &college){
     while(1){
         s = college.getStudents().size();
         Print_Vec(college.getStudents());
-        cout << s << ":   PREVIOUS MENU" << endl;
+        cout << s << ":   ADD STUDENT" << endl;
+        cout << ++s << ":   REMOVE STUDENT" << endl;
+        cout << ++s << ":   SEARCH STUDENT" << endl;
+        cout << ++s << ":   PREVIOUS MENU" << endl;
         i = Nav(0,s);
         if(i == s) return;
+        else if(i == s-3){
+            auto *st = new Student();
+            st->addPerson(college);
+        }
+        else if(i == s-2){
+            //Remove_Person(college);
+        }
+        else if(i == s-1){
+            auto ptr = Search_Menu(college.getStudents());
+            if(ptr != nullptr) Person_Menu(*ptr);
+        }
         else Person_Menu(*(college.getStudents().at(i)));
     }
 }
 
-void Add_Person(College &college, int type = -1){
-    string name, address;
-    unsigned int phone;
-    string cod;
-    date* birthday;
-    if(type == -1){
+//////////////////////
+
+void Add_Person(College &college){
+    int i;
+    while(1) {
         cout << "What Type of person would you like to add?" << endl;
         cout << "0:   STUDENT" << endl;
         cout << "1:   TEACHER" << endl;
         cout << "2:   STAFF" << endl;
         cout << "3:   CANCEL" << endl;
-        type = Nav(0,3);
-    }
-    if(type == 3) return;
+        i = Nav(0, 3);
 
-    cout << "Insert Name: " << flush;
-    getline(cin, name);
-    while(!hasNoNumber(name))
-    {
-        cout<<"Invalid name, try again"<<endl;
-        getline(cin, name);
-    }
-
-    cout << "\nInsert Address: " << flush;
-    getline(cin, address);
-
-    cout << "\nInsert Phone Number (9-digit): " << flush;
-    cin >> phone;
-    while(cin.fail() || to_string(phone).size() != 9)
-    {
-        cout << "Invalid phone number, try again: "<< endl;
-        cin.clear();
-        cin.ignore(100, '\n');
-        cin >> phone;
-    }
-    birthday = readDate(); //Tests if date is written correctly
-    if(type == 0) {
-        Student* st = new Student();
-        st->addPerson(college);
-    }
-    else if(type ==1 ){
-
-    }
-    else if(type == 2){
-
+        if (i == 3) return;
+        else if (i == 0) {
+            Student *st = new Student();
+            st->addPerson(college);
+        } else if (i == 1) {
+            Teacher *tch = new Teacher();
+            tch->addPerson(college);
+        } else if (i == 2) {
+            Staff *stf = new Staff();
+            stf->addPerson(college);
+        }
     }
 }
 
 //////////////////////
 
 void People_Menu(College &college){
-    int i;
     while(1) {
         college.showInfo();
         cout << "0:   LIST ALL STUDENTS" << endl;
         cout << "1:   LIST ALL TEACHERS" << endl;
         cout << "2:   LIST ALL STAFF" << endl;
-        cout << "3:   SEARCH PEOPLE" << endl;
-        cout << "4:   ADD PERSON" << endl;
-        cout << "5:   REMOVE PERSON" << endl;
-        cout << "6:   PREVIOUS MENU" << endl;
-        switch (i = Nav(0, 6)) {
+        cout << "3:   ADD PERSON" << endl;
+        cout << "4:   REMOVE PERSON" << endl;
+        cout << "5:   PREVIOUS MENU" << endl;
+        switch (Nav(0, 5)) {
             case 0:
                 List_Students(college);
                 break;
@@ -322,15 +391,12 @@ void People_Menu(College &college){
                 List_Staff(college);
                 break;
             case 3:
-                //Search people by name or id
-                break;
-            case 4:
                 Add_Person(college);
                 break;
-            case 5:
+            case 4:
                 //Remove_Person(id);
                 break;
-            case 6:
+            case 5:
                 return;
         }
     }

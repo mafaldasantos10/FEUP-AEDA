@@ -72,9 +72,15 @@ public:
      */
     vector<Teacher *> getTeachers();
 
+    void removeTeacher();
+
     vector<Student *> getStudents();
 
+    void removeStudent(Student* student);
+
     vector<Staff *> getStaff();
+
+    void removeStaff();
     /**
      *
      * @param teacher
@@ -108,6 +114,8 @@ public:
      * @return Vector with the pointers to the Courses of a given College
      */
     vector<Course*> getCourses();
+
+    vector<Uc*> getUCs();
     /**
      * @brief Gets the vector with the Departments of a given College
      * @return Vector with the pointers to the Departments of a given College
