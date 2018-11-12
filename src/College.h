@@ -72,7 +72,7 @@ public:
      */
     vector<Teacher *> getTeachers();
 
-    void removeTeacher();
+    void removeTeacher(Teacher* teacher);
 
     vector<Student *> getStudents();
 
@@ -80,7 +80,7 @@ public:
 
     vector<Staff *> getStaff();
 
-    void removeStaff();
+    void removeStaff(Staff* staff);
     /**
      *
      * @param teacher
