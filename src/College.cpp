@@ -208,7 +208,7 @@ void College::removeDepartment()
 		cin >> code;
 	}
 
-	for(unsigned int i = 0; i <= vecDep.size(); i++)
+	for(unsigned int i = 0; i < vecDep.size(); i++)
 	{
 		if(vecDep.at(i)->getCode() == code)
 		{

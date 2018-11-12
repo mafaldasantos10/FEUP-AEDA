@@ -105,8 +105,8 @@ T* Search_Menu(vector<T*> vec){
         try{
             t = SearchVec(vec,name);
         }
-        catch(string &err){
-            cout << err << endl;
+        catch(NoNameFound &err){
+            cout << err.errorMessage() << endl;
             continue;
         }
         break;
@@ -139,8 +139,8 @@ void Course_Menu(Course& course){
                 try{
                     course.removeUC();
                 }
-                catch(string &err){
-                    cout << err << endl;
+                catch(NoNameFound &err){
+                    cout << err.errorMessage() << endl;
                     continue;
                 }
                 break;
@@ -149,8 +149,8 @@ void Course_Menu(Course& course){
                 try{
                     ptr = Search_Menu(course.getUCs());
                 }
-                catch(string &err){
-                    cout << err << endl;
+                catch(NoNameFound &err){
+                    cout << err.errorMessage() << endl;
                     continue;
                 }
                 //Uc_Menu(*ptr);
@@ -179,8 +179,8 @@ void Courses_Menu(T obj){ //Can be either college or Department
             try{
                 ptr = Search_Menu(obj.getCourses());
             }
-            catch(string &err){
-                cout << err << endl;
+            catch(NoNameFound &err){
+                cout << err.errorMessage() << endl;
                 continue;
             }
             Course_Menu(*ptr);
@@ -231,7 +231,13 @@ void Departments_Menu(College &college){
         } else if (i == (n - 3)) { //Add department
             college.addDepartment();
         } else if (i == (n - 2)) { //Remove department
-            college.removeDepartment();
+            try {
+                college.removeDepartment();
+            }
+            catch(NoCodeFound &err){
+                cout << err.errorMessage() << endl;
+                continue;
+            }
         } else if (i == (n - 1)) { //Search Department by name
             auto ptr = Search_Menu(college.getDepartments());
             if(ptr != nullptr) Dep_Menu(*ptr);
