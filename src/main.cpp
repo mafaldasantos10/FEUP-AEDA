@@ -123,8 +123,9 @@ void Course_Menu(Course& course){
         cout << "1:   SHOW COURSE PROGRAM" << endl;
         cout << "2:   ADD UC" << endl;
         cout << "3:   REMOVE UC" << endl;
-        cout << "4:   PREVIOUS MENU" << endl;
-        switch(Nav(0,4)){
+        cout << "4:   SEARCH UC" << endl;
+        cout << "5:   PREVIOUS MENU" << endl;
+        switch(Nav(0,5)){
             case 0:
                 editInfo(course);
                 break;
@@ -135,9 +136,25 @@ void Course_Menu(Course& course){
                 course.addUC();
                 break;
             case 3:
-                course.removeUC();
+                try{
+                    course.removeUC();
+                }
+                catch(string &err){
+                    cout << err << endl;
+                    continue;
+                }
                 break;
             case 4:
+                Uc* ptr;
+                try{
+                    ptr = Search_Menu(course.getUCs());
+                }
+                catch(string &err){
+                    cout << err << endl;
+                    continue;
+                }
+                //Uc_Menu(*ptr);
+            case 5:
                 return;
         }
     }
@@ -155,13 +172,28 @@ void Courses_Menu(T obj){ //Can be either college or Department
         cout << ++n << ":   REMOVE COURSE" << endl;
         cout << ++n << ":   SEARCH COURSE" << endl;
         cout << ++n << ":   PREVIOUS MENU" << endl;
-        unsigned int i = Nav(0,n);
+        int i = Nav(0,n);
         if(i == n) return;
         else if(i == n-1){
-            auto ptr = Search_Menu(obj.getCourses());
-            if(ptr != nullptr) Course_Menu(*ptr);
+            Course* ptr;
+            try{
+                ptr = Search_Menu(obj.getCourses());
+            }
+            catch(string &err){
+                cout << err << endl;
+                continue;
+            }
+            Course_Menu(*ptr);
         }
-        else if(i == n-2) obj.removeCourse();
+        else if(i == n-2){
+            try{
+                obj.removeCourse();
+            }
+            catch(string &err){
+                cout << err << endl;
+                continue;
+            }
+        }
         else if(i == n-3) obj.addCourse();
         else Course_Menu(*(obj.getCourses().at(i)));
     }
@@ -190,6 +222,7 @@ void Dep_Menu(Department& department){
 
 void Departments_Menu(College &college){
     int n;
+    Department* ptr;
     while(1) {
         n = college.getDepartments().size();
         college.showInfo();
@@ -206,8 +239,14 @@ void Departments_Menu(College &college){
         } else if (i == (n - 2)) { //Remove department
             college.removeDepartment();
         } else if (i == (n - 1)) { //Search Department by name
-           auto ptr = Search_Menu(college.getDepartments());
-            if(ptr != nullptr) Dep_Menu(*ptr);
+            try {
+                ptr = Search_Menu(college.getDepartments());
+            }
+            catch(string err){
+                cout << err << endl;
+                continue;
+            }
+            Dep_Menu(*ptr);
         } else { //Enter department
             Dep_Menu(*college.getDepartments().at(i));
         }
@@ -253,10 +292,38 @@ void Remove_Person(College &college){
         i = Nav(0,3);
         if(i == 3) return;
         else if(i == 0){
-            auto ptr = Search_Menu(college.getStudents());
-            if(ptr != nullptr) college.removeStudent(ptr);
+            Student* ptr;
+            try {
+                ptr = Search_Menu(college.getStudents());
+            }
+            catch(string &err){
+                cout << err << endl;
+                continue;
+            }
+            college.removeStudent(ptr);
         }
-
+        else if(i == 1) {
+            Teacher *ptr;
+            try {
+                ptr = Search_Menu(college.getTeachers());
+            }
+            catch (string &err) {
+                cout << err << endl;
+                continue;
+            }
+            college.removeTeacher(ptr);
+        }
+        else if(i == 2){
+            Staff *ptr;
+            try {
+                ptr = Search_Menu(college.getStaff());
+            }
+            catch (string &err) {
+                cout << err << endl;
+                continue;
+            }
+            college.removeStaff(ptr);
+        }
     }
 }
 
@@ -394,7 +461,7 @@ void People_Menu(College &college){
                 Add_Person(college);
                 break;
             case 4:
-                //Remove_Person(id);
+                Remove_Person(college);
                 break;
             case 5:
                 return;
@@ -417,7 +484,7 @@ void Member_Menu(College &college){ //Can only read
                 Departments_Menu(college);
                 break;
             case 1:
-                //Courses_Menu(college);
+                Courses_Menu(college);
                 break;
             case 2:
                 People_Menu(college);
@@ -445,7 +512,7 @@ void Vis_Menu(College &college){ //Can only see info
                 Departments_Menu(college);
                 break;
             case 1:
-                //Courses_Menu(college);
+                Courses_Menu(college);
                 break;
             case 2:
                 //Destroy College and go back to main menu
