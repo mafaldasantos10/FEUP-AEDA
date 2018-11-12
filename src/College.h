@@ -65,7 +65,7 @@ public:
      * @brief Default College Constructor
      */
     College(){}
-    //~College(); //class destructor
+    ~College();
     /**
      *
      * @return
@@ -176,7 +176,7 @@ public:
      * @param phone Phone of the Department
      */
     Department(string name, int code, string address, int phone);
-    //~Department();
+    ~Department();
     /**
      * @brief Shows all the information of a given Department
      */
@@ -282,7 +282,7 @@ public:
      * @param code Code of the Course
      */
     Course(string type, string engName, string ptName, int code);
-    //~Course();
+    ~Course();
     /**
      * @brief Shows all the information of a given Department
      */
@@ -398,7 +398,7 @@ public:
      * @param workload Workload (in hours) of the UC
      */
     Uc(string name, int year, int ects, int workload);
-    //~Uc();
+    ~Uc();
     /**
      * @brief Shows all the information of a given UC
      */
@@ -544,6 +544,7 @@ bool remove(vector<T> &vector, string name)
     {
         if(vector.at(i)->getName() == name)
         {
+        	delete vector.at(i);
             vector.erase(vector.begin() + i);
             return true;
         }
@@ -552,6 +553,14 @@ bool remove(vector<T> &vector, string name)
     return false;
 }
 
+template <class T>
+void dest_remove(vector<T> &vector)
+{
+    for(unsigned int i = 0; i <= vector.size(); i++)
+    {
+        delete vector.at(i);
+    }
+}
 /**
  * @brief Prints the name of every Object in a given vector of Objects
  * @param vec Vector of the Objects to be printed

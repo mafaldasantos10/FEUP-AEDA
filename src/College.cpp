@@ -28,6 +28,14 @@ string College::getName()
 	return colName;
 }
 
+College::~College()
+{
+	dest_remove(students);
+	dest_remove(teachers);
+	dest_remove(staff);
+	dest_remove(vecDep);
+}
+
 void College::setName(string name)
 {
 	colName = name;
@@ -35,7 +43,7 @@ void College::setName(string name)
 
 void College::setAdmin(string admin)
 {
-		this->admin = admin;
+	this->admin = admin;
 }
 
 vector<Department*> College::getDepartments()
@@ -104,21 +112,39 @@ vector<Uc*> College::getUCs(){
 }
 
 void College::removeStudent(Student* student) {
-    auto it = find(students.begin(),students.end(),student);
-    if(it != students.end()) students.erase(it);
-    delete student;
+
+	 for(unsigned int i=0; i<students.size(); i++)
+	   {
+		   if(students.at(i) == student)
+		   {
+			   delete students.at(i);
+			   students.erase(students.begin() + i);
+		   }
+	   }
 }
 
 void College::removeTeacher(Teacher* teacher){
-    auto it = find(teachers.begin(),teachers.end(),teacher);
-    if(it != teachers.end()) teachers.erase(it);
-    delete teacher;
+
+   for(unsigned int i=0; i<teachers.size(); i++)
+   {
+	   if(teachers.at(i) == teacher)
+	   {
+		   delete teachers.at(i);
+		   teachers.erase(teachers.begin() + i);
+	   }
+   }
 }
 
-void College::removeStaff(Staff* staff){
-    auto it = find(this->staff.begin(), this->staff.end(), staff);
-    if(it != this->staff.end()) this->staff.erase(it);
-    delete staff;
+void College::removeStaff(Staff* staffx){
+
+	for(unsigned int i=0; i<staff.size(); i++)
+   {
+		if(staff.at(i) == staffx)
+	   {
+		   delete staff.at(i);
+		   staff.erase(staff.begin() + i);
+	   }
+   }
 }
 
 void College::addDepartment()
@@ -213,7 +239,7 @@ void College::removeDepartment()
 		if(vecDep.at(i)->getCode() == code)
 		{
 			name = vecDep.at(i)->getName();
-
+			delete vecDep.at(i);
 			vecDep.erase(vecDep.begin() + i);
 			cout << "Department " << code << "(" << name << ")" << " has been successfully removed. "<< endl;
 			return;
@@ -267,6 +293,11 @@ Department:: Department(string name, int code, string address, int phone)
 	depPhone = phone;
 }
 
+Department::~Department()
+{
+	dest_remove(vecCourse);
+	delete depDirector;
+}
 void Department::showInfo() {
     string dep_name;
     if(depDirector != nullptr) dep_name = depDirector->getName();
@@ -461,7 +492,7 @@ void Department::removeCourse()
 		if(vecCourse.at(i)->getCode() == code)
 		{
 			name = vecCourse.at(i)->getEngName();
-
+			delete vecCourse.at(i);
 			vecCourse.erase(vecCourse.begin() + i);
 			cout << "Course " << code << "(" << name << ")" << " has been successfully removed. "<< endl;
 			return;
@@ -488,6 +519,10 @@ Course::Course(string type, string engName, string ptName, int code)
 	csPtName = ptName;
 }
 
+Course::~Course()
+{
+	dest_remove(vecUC);
+}
 void Course::showInfo() {
     cout << "\n|-----------------------------------------" << endl;
     cout << "|      " << csEngName << endl;
@@ -705,6 +740,7 @@ void Course::removeUC()
 	{
 		if(vecUC.at(i)->getName() == name)
 		{
+			delete vecUC.at(i);
 			vecUC.erase(vecUC.begin() + i);
 			cout << "Course " << name << " has been successfully removed. "<< endl;
 			return;
@@ -768,6 +804,12 @@ Uc::Uc(string name, int year, int ects, int workload)
 	ucName = name;
 	ucWorkload = workload;
 	ucYear = year;
+}
+
+Uc::~Uc()
+{
+	dest_remove(ucStudent);
+	dest_remove(ucTeacher);
 }
 
 void Uc::showInfo() {

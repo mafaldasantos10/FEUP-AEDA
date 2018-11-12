@@ -342,6 +342,11 @@ Teacher::Teacher(string name, string address, date birthday, unsigned int phone,
 	this->subjects = subjects;
 }
 
+Teacher::~Teacher()
+{
+	dest_remove(subjects);
+}
+
 void Teacher::addPerson(College &college){
     People::addPerson(college);
     Employee::addPerson(college);
@@ -426,6 +431,3 @@ void Staff::showInfo()
 	cout << "|-----------------------------------------" << endl;
 }
 
-People::~People() {
-	// TODO Auto-generated destructor stub
-}

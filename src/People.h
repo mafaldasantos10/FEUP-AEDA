@@ -56,6 +56,8 @@ public:
 
     People() = default;
 
+    ~People(){delete birthday;}
+
     virtual void addPerson(College &college);
 
 	/**
@@ -125,7 +127,7 @@ public:
     /**
      * @brief Virtual class destructor
      */
-	virtual ~People();
+	//virtual ~People();
 };
 /**@brief Student class,  inherits the public function from the class People*/
 class Student : public People{
@@ -149,6 +151,8 @@ public:
 	Student(string name, string address, date birthday, unsigned int phone, string cod, Course *course, map <Uc*, float> subjects);
 
     Student() = default;
+
+    ~Student(){delete course;}
 
     void addPerson(College &college);
 
@@ -282,6 +286,8 @@ public:
 	Teacher(string name, string address, date birthday, unsigned int phone, string cod, float salary, unsigned int nif, string category, vector <Uc *> subjects);
 
     Teacher() = default;
+
+    ~Teacher();
 
     void addPerson(College &college);
 	/**
