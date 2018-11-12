@@ -109,6 +109,18 @@ void College::removeStudent(Student* student) {
     delete student;
 }
 
+void College::removeTeacher(Teacher* teacher){
+    auto it = find(teachers.begin(),teachers.end(),teacher);
+    if(it != teachers.end()) teachers.erase(it);
+    delete teacher;
+}
+
+void College::removeStaff(Staff* staff){
+    auto it = find(this->staff.begin(), this->staff.end(), staff);
+    if(it != this->staff.end()) this->staff.erase(it);
+    delete staff;
+}
+
 void College::addDepartment()
 {
 	string name, address, directorName;
