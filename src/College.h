@@ -100,6 +100,8 @@ public:
      * @param name New name of the College
      */
     void setName(string name);
+
+    string getAdmin();
     /**
      * @brief Changes the administrator of a given College
      * @param admin New name of the administrator

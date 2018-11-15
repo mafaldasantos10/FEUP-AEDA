@@ -9,6 +9,7 @@
 #include <iostream>
 #include "College.h"
 #include <sstream>
+#include <fstream>
 #include <map>
 
 using namespace std;
@@ -496,6 +497,69 @@ void Vis_Menu(College &college){ //Can only see info
 
 //////////////////////
 
+string Choose_Colleges(){
+    ifstream file;
+    int x = -1,i = 0, input;
+    string file_name = "college0.txt";
+    string college_name;
+    vector<string> colleges;
+    while(i != 30){
+        file.open(file_name);
+        if(file.is_open()){
+            getline(file, college_name);
+            cout << ++x << ":   " << college_name << endl;
+            colleges.push_back(file_name);
+            file.close();
+        }
+        i++;
+        file_name = "college" + to_string(i) + ".txt";
+    }
+    cout << ++x << ":   PREVIOUS MENU" << endl;
+    input = Nav(0,x);
+    if(input == x) return "";
+    else return colleges.at(x);
+}
+
+//////////////////////
+
+void Save_College(College &college){
+    ifstream file;
+    int i = 0;
+    string file_name = "college0.txt";
+    while(i != 30){
+        file.open(file_name);
+        if(!file.is_open()){
+            break;
+        }
+        i++;
+        file_name = "college" + to_string(i) + ".txt";
+    }
+    ofstream save_file (file_name);
+    //------COLLEGE INFO------
+    save_file << college.getName() << endl;
+    save_file << college.getAdmin() << endl;
+    save_file << endl;
+    //------STUDENTS INFO------
+    for(size_t i = 0; i < college.getStudents().size(); i++){
+        save_file << college.getStudents().at(i) << endl; //CREATE << overload for people
+    }
+    save_file << endl;
+    //------TEACHERS INFO------
+    for(size_t i = 0; i < college.getTeachers().size(); i++){
+        save_file << college.getTeachers().at(i) << endl; //CREATE << overload for people
+    }
+    save_file << endl;
+    //------STAFF INFO------
+    for(size_t i = 0; i < college.getStaff().size(); i++){
+        save_file << college.getStaff().at(i) << endl; //CREATE << overload for people
+    }
+    save_file << endl;
+    //------ INFO------
+
+}
+
+//////////////////////
+
 void Admin_Menu(College &college){
     while(1){
         college.showInfo();
@@ -504,6 +568,7 @@ void Admin_Menu(College &college){
         cout << "2:   PEOPLE" << endl;
         cout << "3:   SAVE CHANGES" << endl;
         cout << "4:   EXIT COLLEGE" << endl;
+        cout << "5:   DELETE COLLEGE" << endl;
         switch(Nav(0,4)){
             case 0:
                 Departments_Menu(college);
@@ -515,7 +580,7 @@ void Admin_Menu(College &college){
                 People_Menu(college);
                 break;
             case 3:
-                //Write everything on file
+                Save_College(college);
                 break;
             case 4:
                 //Destroy College and go back to main menu

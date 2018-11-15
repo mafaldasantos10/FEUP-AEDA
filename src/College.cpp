@@ -41,6 +41,10 @@ void College::setName(string name)
 	colName = name;
 }
 
+string College::getAdmin(){
+    return admin;
+}
+
 void College::setAdmin(string admin)
 {
 	this->admin = admin;
@@ -171,10 +175,18 @@ void College::addDepartment()
         getline(cin, directorName);
         if (directorName == "!") break;
         else if(directorName == "?") Print_Vec(College::getTeachers());
-        else if(!hasNoNumber(directorName)) cout << "Invalid name, try again: "<< endl;
-        else break;
+        else{
+            try{
+                director = SearchVec(College::getTeachers(),directorName);
+            }
+            catch(NoNameFound &err){
+                cout << err.errorMessage() << endl;
+                cout << "Invalid name, try again: "<< flush;
+                continue;
+            }
+            break;
+        }
     }
-    director = dynamic_cast<Teacher*>(SearchVec(College::getTeachers(),directorName)); //dynamic cast testa e transforma o apontador de people num apontador de teacher
 
 	cout << "Enter the code of the Department: "<< endl;
 
