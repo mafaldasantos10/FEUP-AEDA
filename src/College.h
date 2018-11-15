@@ -94,7 +94,7 @@ public:
      * @brief Gets the name of a given College
      * @return String containing the name of the College
      */
-    string getName();
+    string getName() const;
     /**
      * @brief Changes the name of a given College
      * @param name New name of the College
@@ -144,6 +144,8 @@ public:
      * @param name Name of the Department of a given College
      */
     void searchDepartment(string name);
+
+    friend ostream& operator<< (ostream& os, const College &college);
 };
 
 /** @brief Department Class */
@@ -261,6 +263,8 @@ public:
      * @param name Name of the Course of the Department
      */
     void searchCourse(string name);
+
+    friend ostream& operator<< (ostream& os, const Department &dep);
 };
 
 /** @brief Course Class */
@@ -365,6 +369,8 @@ public:
      * @param name Name of the Uc of a given Course
      */
     void searchUc(string name);
+
+    friend ostream& operator<< (ostream& os, const Course &course);
 };
 
 /** @brief Uc Class */
@@ -479,6 +485,8 @@ public:
      * @return Holds true if UC1 < UC2
      */
     bool operator<(Uc uc2);
+
+    friend ostream& operator<< (ostream& os, const Uc &uc);
 };
 
 
@@ -558,7 +566,7 @@ bool remove(vector<T> &vector, string name)
 template <class T>
 void dest_remove(vector<T> &vector)
 {
-    for(unsigned int i = 0; i <= vector.size(); i++)
+    for(unsigned int i = 0; i < vector.size(); i++)
     {
         delete vector.at(i);
     }

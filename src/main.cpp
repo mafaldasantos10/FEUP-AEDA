@@ -72,6 +72,7 @@ void editInfo(T &obj) {
 //////////////////////
 
 int Main_Menu(){
+    cout << "----------------------" << endl;
     cout << "|      MAIN MENU     |" << endl;
     cout << "----------------------" << endl;
     cout << "0:   CREATE COLLEGE" << endl;
@@ -164,7 +165,7 @@ void Course_Menu(Course& course){
 //////////////////////
 
 template<class T>
-void Courses_Menu(T obj){ //Can be either college or Department
+void Courses_Menu(T &obj){ //Can be either college or Department
     while(1){
         obj.showInfo();
         Print_Vec(obj.getCourses());
@@ -198,19 +199,21 @@ void Courses_Menu(T obj){ //Can be either college or Department
 //////////////////////
 
 void Dep_Menu(Department& department){
-    department.showInfo();
-    cout << "0:   DEPARTMENT COURSES" << endl;
-    cout << "1:   EDIT INFO" << endl;
-    cout << "2:   PREVIOUS MENU" << endl;
-    switch(Nav(0,3)){
-        case 0:
-            Courses_Menu(department);
-            break;
-        case 1:
-            editInfo(department);
-            break;
-        case 2:
-            return;
+    while(1){
+        department.showInfo();
+        cout << "0:   DEPARTMENT COURSES" << endl;
+        cout << "1:   EDIT INFO" << endl;
+        cout << "2:   PREVIOUS MENU" << endl;
+        switch(Nav(0,3)){
+            case 0:
+                Courses_Menu(department);
+                break;
+            case 1:
+                editInfo(department);
+                break;
+            case 2:
+                return;
+        }
     }
 }
 
@@ -536,26 +539,49 @@ void Save_College(College &college){
     }
     ofstream save_file (file_name);
     //------COLLEGE INFO------
-    save_file << college.getName() << endl;
-    save_file << college.getAdmin() << endl;
-    save_file << endl;
+    save_file << &college;
+    //------ DEP/COURSE/UC INFO------
+    for(size_t i = 0; i < college.getDepartments().size(); i++){
+        save_file << "DEP:" << endl;
+        save_file << college.getDepartments().at(i) << endl;
+        save_file << endl;
+    }
     //------STUDENTS INFO------
+    save_file << "STUDENTS:" << endl;
     for(size_t i = 0; i < college.getStudents().size(); i++){
         save_file << college.getStudents().at(i) << endl; //CREATE << overload for people
     }
     save_file << endl;
     //------TEACHERS INFO------
+    save_file << "TEACHER:" << endl;
     for(size_t i = 0; i < college.getTeachers().size(); i++){
         save_file << college.getTeachers().at(i) << endl; //CREATE << overload for people
     }
     save_file << endl;
     //------STAFF INFO------
+    save_file << "STAFF:" << endl;
     for(size_t i = 0; i < college.getStaff().size(); i++){
         save_file << college.getStaff().at(i) << endl; //CREATE << overload for people
     }
     save_file << endl;
-    //------ INFO------
+}
 
+//////////////////////
+
+bool Exit_College(College &college){
+    college.showInfo();
+    cout << "0:   SAVE AND EXIT" << endl;
+    cout << "1:   EXIT WITHOUT SAVING" << endl;
+    cout << "2:   CANCEL" << endl;
+    switch(Nav(0,2)){
+        case 0:
+            Save_College(college);
+            return true;
+        case 1:
+            return true;
+        case 2:
+            return false;
+    }
 }
 
 //////////////////////
@@ -566,10 +592,8 @@ void Admin_Menu(College &college){
         cout << "0:   DEPARTMENTS" << endl;
         cout << "1:   COURSES" << endl;
         cout << "2:   PEOPLE" << endl;
-        cout << "3:   SAVE CHANGES" << endl;
-        cout << "4:   EXIT COLLEGE" << endl;
-        cout << "5:   DELETE COLLEGE" << endl;
-        switch(Nav(0,4)){
+        cout << "3:   EXIT COLLEGE" << endl;
+        switch(Nav(0,3)){
             case 0:
                 Departments_Menu(college);
                 break;
@@ -580,11 +604,8 @@ void Admin_Menu(College &college){
                 People_Menu(college);
                 break;
             case 3:
-                Save_College(college);
-                break;
-            case 4:
-                //Destroy College and go back to main menu
-                return;
+                if(Exit_College(college)) return;
+                else break;
         }
     }
 }

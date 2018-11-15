@@ -23,7 +23,7 @@ College::College(string name)
 	colName = name;
 }
 
-string College::getName()
+string College::getName() const
 {
 	return colName;
 }
@@ -285,6 +285,11 @@ void College::searchDepartment(string name)
 	dep->showInfo();
 }
 
+ostream& operator<< (ostream& os, const College &college){
+    os << college.colName << "|" << college.admin << endl;
+    return os;
+}
+
 //DEPARTMENT//
 //////////////////////
 Department:: Department(string name, int code, string address, int phone, Teacher* director)
@@ -447,19 +452,19 @@ void Department::addCourse()
 	int code;
 
 	cout << "Enter the name of the course in Portuguese: "<< endl;
-	cin >> ptName;
+	getline(cin,ptName);
 	while(!hasNoNumber(ptName))
 	{
 		cout << "Invalid name, try again"<<endl;
-	    cin >> ptName;
+        getline(cin,ptName);
 	}
 
 	cout << "Enter the name of the course in English: " << endl;
-	cin >> engName;
+    getline(cin,engName);
 	while(!hasNoNumber(engName))
 	{
 		cout << "Invalid name, try again: " << endl;
-		cin >> engName;
+        getline(cin,engName);
 	}
 
 	cout << "What type of course is it? (MI,M,L) "<< endl;
@@ -519,6 +524,15 @@ void Department::searchCourse(string name)
 	Course* cs;
 	cs = SearchVec(vecCourse, name);
 	cs->showInfo();
+}
+
+ostream& operator<< (ostream& os, const Department &dep){
+    os << dep.depName << "|" << dep.depAddress << "|" << dep.depCode << "|" << dep.depPhone << endl;
+    for(size_t i = 0; i < dep.vecCourse.size(); i++){
+        os << "COURSE:" << endl;
+        os << dep.vecCourse.at(i);
+    }
+    return os;
 }
 
 //COURSE//
@@ -797,6 +811,15 @@ void Course::searchUc(string name)
 	uc->showInfo();
 }
 
+ostream& operator<< (ostream& os, const Course &course){
+    os << course.csPtName << "|" << course.csEngName << "|" << course.csCode << "|" << course.csType << endl;
+    for(size_t i = 0; i < course.vecUC.size(); i++){
+        os << "UC:" << endl;
+        os << course.vecUC.at(i);
+    }
+    return os;
+}
+
 
 //UC//
 //////////////////////
@@ -959,4 +982,9 @@ bool Uc::operator<(Uc uc2)
 	}
 
 	return false;
+}
+
+ostream& operator<< (ostream& os, const Uc &uc){
+    os << uc.ucName << "|" << uc.ucYear << "|" << uc.ucECTS << "|" << uc.ucWorkload << endl;
+    return os;
 }

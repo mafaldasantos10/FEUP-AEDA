@@ -112,6 +112,11 @@ void People::showInfo() {
 
 }
 
+ostream& People::write(ostream &os) {
+    os << name << "|" << address << "|" << phone << "|" << code << "|" << birthday->format << "|";
+    return os;
+}
+
 //////STUDENT//////
 
 Student::Student(string name, string address, date birthday, unsigned int phone, string cod, Course* course, map <Uc*, float> subjects)
@@ -288,6 +293,14 @@ void Student::showAllGrades()
 	}
 }
 
+ostream& Student::write(ostream &os) {
+    People::write(os);
+    os << course->getName() << "|" << year << "|[" ;
+    for(auto it = subjects.begin(); it != subjects.end(); it++){
+        os << "(" << it->first->getName() << "," << it->second << ")";
+    }
+    os << "]" << endl;
+}
 
 //////EMPLOYEE//////
 
@@ -333,6 +346,9 @@ void Employee::setNIF(unsigned int nif)
 	this->nif = nif;
 }
 
+ostream& Employee::write(ostream& os){
+    os << salary << "|" << nif << "|";
+}
 
 //////TEACHER//////
 
@@ -402,6 +418,16 @@ void Teacher::showInfo()
 	cout << "|-----------------------------------------" << endl;
 }
 
+ostream& Teacher::write(ostream &os) {
+    People::write(os);
+    Employee::write(os);
+    os << category << "|[" ;
+    for(int i = 0; i < subjects.size(); i++){
+        os << "(" << subjects.at(i)->getName() << ")";
+    }
+    os << "]" << endl;
+}
+
 //////STAFF//////
 
 Staff::Staff(string name, string address, date birthday, unsigned int phone, string cod, float salary, unsigned int nif, string work_area)
@@ -431,3 +457,23 @@ void Staff::showInfo()
 	cout << "|-----------------------------------------" << endl;
 }
 
+ostream& Staff::write(ostream& os){
+    People::write(os);
+    Employee::write(os);
+    os << work_area << endl;
+}
+
+ostream& operator<< (ostream& os, Staff &staff){
+    staff.write(os);
+    return os;
+}
+
+ostream& operator<< (ostream& os, Teacher &teacher){
+    teacher.write(os);
+    return os;
+}
+
+ostream& operator<< (ostream& os, Student &student){
+    student.write(os);
+    return os;
+}
