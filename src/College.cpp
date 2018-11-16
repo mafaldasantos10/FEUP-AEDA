@@ -109,8 +109,10 @@ vector<Course *> College::getCourses()
 vector<Uc*> College::getUCs(){
     vector<Course *> cr = getCourses();
     vector<Uc*> vec;
-    for(unsigned int i = 0; i < getCourses().size(); i++){
-        vec.insert(vec.end(),cr.at(i)->getUCs().begin(),cr.at(i)->getUCs().end());
+    vector<Uc*> course_ucs;
+    for(unsigned int i = 0; i < cr.size(); i++){
+        course_ucs = cr.at(i)->getUCs();
+        vec.insert(vec.end(),course_ucs.begin(),course_ucs.end());
     }
     return vec;
 }

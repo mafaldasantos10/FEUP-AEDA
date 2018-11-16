@@ -526,44 +526,35 @@ string Choose_Colleges(){
 //////////////////////
 
 void Save_College(College &college){
-    ifstream file;
-    int i = 0;
-    string file_name = "college0.txt";
-    while(i != 30){
-        file.open(file_name);
-        if(!file.is_open()){
-            break;
-        }
-        i++;
-        file_name = "college" + to_string(i) + ".txt";
-    }
+    string file_name = college.getName() + ".txt";
     ofstream save_file (file_name);
     //------COLLEGE INFO------
-    save_file << &college;
+    save_file << college;
     //------ DEP/COURSE/UC INFO------
     for(size_t i = 0; i < college.getDepartments().size(); i++){
         save_file << "DEP:" << endl;
-        save_file << college.getDepartments().at(i) << endl;
+        save_file << *college.getDepartments().at(i) << endl;
         save_file << endl;
     }
     //------STUDENTS INFO------
     save_file << "STUDENTS:" << endl;
     for(size_t i = 0; i < college.getStudents().size(); i++){
-        save_file << college.getStudents().at(i) << endl; //CREATE << overload for people
+        save_file << *college.getStudents().at(i) << endl; //CREATE << overload for people
     }
     save_file << endl;
     //------TEACHERS INFO------
     save_file << "TEACHER:" << endl;
     for(size_t i = 0; i < college.getTeachers().size(); i++){
-        save_file << college.getTeachers().at(i) << endl; //CREATE << overload for people
+        save_file << *college.getTeachers().at(i) << endl; //CREATE << overload for people
     }
     save_file << endl;
     //------STAFF INFO------
     save_file << "STAFF:" << endl;
     for(size_t i = 0; i < college.getStaff().size(); i++){
-        save_file << college.getStaff().at(i) << endl; //CREATE << overload for people
+        save_file << *college.getStaff().at(i) << endl; //CREATE << overload for people
     }
     save_file << endl;
+    save_file.close();
 }
 
 //////////////////////

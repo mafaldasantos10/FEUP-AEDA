@@ -112,9 +112,8 @@ void People::showInfo() {
 
 }
 
-ostream& People::write(ostream &os) {
+void People::write(ostream &os) {
     os << name << "|" << address << "|" << phone << "|" << code << "|" << birthday->format << "|";
-    return os;
 }
 
 //////STUDENT//////
@@ -293,7 +292,7 @@ void Student::showAllGrades()
 	}
 }
 
-ostream& Student::write(ostream &os) {
+void Student::write(ostream &os) {
     People::write(os);
     os << course->getName() << "|" << year << "|[" ;
     for(auto it = subjects.begin(); it != subjects.end(); it++){
@@ -346,8 +345,8 @@ void Employee::setNIF(unsigned int nif)
 	this->nif = nif;
 }
 
-ostream& Employee::write(ostream& os){
-    os << salary << "|" << nif << "|";
+void Employee::write(ostream& os){
+    os << to_string(salary) << "|" << to_string(nif) << "|";
 }
 
 //////TEACHER//////
@@ -418,7 +417,7 @@ void Teacher::showInfo()
 	cout << "|-----------------------------------------" << endl;
 }
 
-ostream& Teacher::write(ostream &os) {
+void Teacher::write(ostream &os) {
     People::write(os);
     Employee::write(os);
     os << category << "|[" ;
@@ -457,7 +456,7 @@ void Staff::showInfo()
 	cout << "|-----------------------------------------" << endl;
 }
 
-ostream& Staff::write(ostream& os){
+void Staff::write(ostream& os){
     People::write(os);
     Employee::write(os);
     os << work_area << endl;

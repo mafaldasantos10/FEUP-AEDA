@@ -128,7 +128,7 @@ public:
      * @brief Virtual class destructor
      */
 	//virtual ~People();
-    virtual ostream& write(ostream& os);
+    virtual void write(ostream& os);
 };
 /**@brief Student class,  inherits the public function from the class People*/
 class Student : public People{
@@ -214,7 +214,7 @@ public:
 
     friend ostream& operator<< (ostream& os, Student &student);
 
-    ostream& write(ostream& os);
+    void write(ostream& os);
 };
 
 
@@ -267,7 +267,7 @@ public:
 	 */
 	void setNIF(unsigned int nif);
 
-    ostream& write(ostream& os);
+    void write(ostream& os);
 };
 
 
@@ -330,7 +330,7 @@ public:
 
     friend ostream& operator<< (ostream& os, Teacher &teacher);
 
-    ostream& write(ostream& os);
+    void write(ostream& os);
 };
 
 
@@ -379,7 +379,7 @@ public:
 
     friend ostream& operator<< (ostream& os, Staff &staff);
 
-    ostream& write(ostream& os);
+    void write(ostream& os);
 };
 
 #endif /* PEOPLE_H_ */
