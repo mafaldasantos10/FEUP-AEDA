@@ -471,10 +471,10 @@ void Department::addCourse()
 
 	cout << "What type of course is it? (MI,M,L) "<< endl;
 	cin >> type;
-	while(!hasNoNumber(ptName) || (type != "MI" && type != "M" && type != "L"))
+	while(!hasNoNumber(type) || (type != "MI" && type != "M" && type != "L"))
 	{
 		cout << "Invalid type, try again" << endl;
-		cin >> ptName;
+		cin >> type;
 	}
 
 	cout << "Enter the code of the course: "<< endl;
@@ -532,7 +532,7 @@ ostream& operator<< (ostream& os, const Department &dep){
     os << dep.depName << "|" << dep.depAddress << "|" << dep.depCode << "|" << dep.depPhone << endl;
     for(size_t i = 0; i < dep.vecCourse.size(); i++){
         os << "COURSE:" << endl;
-        os << dep.vecCourse.at(i);
+        os << *dep.vecCourse.at(i);
     }
     return os;
 }
@@ -817,7 +817,7 @@ ostream& operator<< (ostream& os, const Course &course){
     os << course.csPtName << "|" << course.csEngName << "|" << course.csCode << "|" << course.csType << endl;
     for(size_t i = 0; i < course.vecUC.size(); i++){
         os << "UC:" << endl;
-        os << course.vecUC.at(i);
+        os << *course.vecUC.at(i);
     }
     return os;
 }

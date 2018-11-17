@@ -28,7 +28,13 @@ using namespace std;
 
 struct date {  //formated date string for better use
 	unsigned int day, month, year;
-    const string format = to_string(day) + "/" + to_string(month) + "/" + to_string(year);
+    string format;
+    date(unsigned int d, unsigned int m, unsigned int y){
+        day = d;
+        month = m;
+        year = y;
+        format = to_string(day) + "/" + to_string(month) + "/" + to_string(year);
+    }
 };
 
 //////////////////////

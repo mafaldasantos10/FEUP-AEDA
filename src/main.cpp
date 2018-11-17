@@ -40,10 +40,12 @@ date* readDate(){
     unsigned int day, month, year;
     char c = '/';
     string data;
+    cin.clear();
+    cin.ignore(100,'\n');
     while(1){
         cout << "\nInsert Birthday(dd/mm/yyyy): " << flush;
         getline(cin,data);
-        data = data.substr(0,data.find('\n'));
+        //data = data.substr(0,data.find('\n'));
         stringstream ss(data);
         ss >> day >> c >> month >> c >> year;
         if(day < 0 || day > 31
@@ -51,8 +53,7 @@ date* readDate(){
                 || year < 1900 || year > 2018) cout << "\nInvalid date!" << endl;
         else break;
     }
-    date* d = new date();
-    d->day = day; d->month = month; d->year = year;
+    date *d = new date(day, month, year);
     return d;
 }
 //////////////////////

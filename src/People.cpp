@@ -146,7 +146,8 @@ void Student::addPerson(College &college) {
         cin.ignore(100, '\n');
         cin >> year;
     }
-
+    cin.clear();
+    cin.ignore(100, '\n');
     bool end = false;
     while(1){
         while(1){
@@ -435,8 +436,11 @@ Staff::Staff(string name, string address, date birthday, unsigned int phone, str
 }
 
 void Staff::addPerson(College &college){
+    People::addPerson(college);
+    Employee::addPerson(college);
     cout << "Insert Staff member's working area: " << flush;
     getline(cin,work_area);
+    college.addStaff(this);
 }
 
 string Staff::getWorkArea()
