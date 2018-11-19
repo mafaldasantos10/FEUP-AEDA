@@ -118,9 +118,9 @@ void People::write(ostream &os) {
 
 //////STUDENT//////
 
-Student::Student(string name, string address, date birthday, unsigned int phone, string cod, Course* course, map <Uc*, float> subjects)
+Student::Student(string name, string address, date birthday, unsigned int phone, string cod, string course, map <Uc*, float> subjects)
 : People(name, address, birthday, phone, cod){
-	this->course = course;
+	course_string = course;
 	year = 0;
     student_count++;
 }
@@ -162,11 +162,11 @@ void Student::addPerson(College &college) {
                 try{
                     uc = (SearchVec(course->getUCs(),uc_name));
                 }
-                catch(string err){
-                    cout << err << " " << "Try again:" << endl;
+                catch(NoNameFound &err){
+                    cout << err.errorMessage() << " " << "Try again:" << endl;
                     continue;
                 }
-                if(subjects.find(uc) == subjects.end()){
+                if(subjects.find(uc) != subjects.end()){
                     cout << "Student already enrolled in this course, try again: " << endl;
                     continue;
                 }
@@ -295,11 +295,7 @@ void Student::showAllGrades()
 
 void Student::write(ostream &os) {
     People::write(os);
-    os << course->getName() << "|" << year << "|[" ;
-    for(auto it = subjects.begin(); it != subjects.end(); it++){
-        os << "(" << it->first->getName() << "," << it->second << ")";
-    }
-    os << "]" << endl;
+    os << course->getName() << "|" << year << "|" << endl;
 }
 
 //////EMPLOYEE//////
@@ -352,7 +348,7 @@ void Employee::write(ostream& os){
 
 //////TEACHER//////
 
-Teacher::Teacher(string name, string address, date birthday, unsigned int phone, string cod, float salary, unsigned int nif, string category, vector<Uc *> subjects)
+Teacher::Teacher(string name, string address, date birthday, unsigned int phone, string cod, float salary, unsigned int nif, Cat category, vector<Uc *> subjects)
 : Employee(name, address, birthday, phone, cod, salary, nif){
 	this->category = category;
 	this->subjects = subjects;
@@ -366,8 +362,6 @@ Teacher::~Teacher()
 void Teacher::addPerson(College &college){
     People::addPerson(college);
     Employee::addPerson(college);
-    cout << "\nInsert Teacher's Category: " << flush; //Needs to check for valid category
-    getline(cin,category);
     string uc_name;
     Uc* uc;
     while(1){
@@ -381,24 +375,25 @@ void Teacher::addPerson(College &college){
             try{
                 uc = (SearchVec(college.getUCs(),uc_name));
             }
-            catch(string err){
-                cout << err << " " << "Try again:" << endl;
+            catch(NoNameFound &err){
+                cout << err.errorMessage() << " " << "Try again:" << endl;
                 continue;
             }
             subjects.push_back(uc);
         }
     }
+    if(!subjects.empty()) category = Aux;
     college.addTeacher(this);
 }
 
-string Teacher::getCategory()
+enum Cat Teacher::getCategory()
 {
 	return category;
 }
 
-void Teacher::setCategory(string category)
+void Teacher::setCategory(Cat &cat)
 {
-	this->category = category;
+    category = cat;
 }
 
 vector<Uc*> Teacher::getSubjects()
@@ -411,6 +406,10 @@ void Teacher::addSubject(Uc* uc)
 	subjects.push_back(uc);
 }
 
+void Teacher::UpdateCat(Cat cat){
+    if(cat > category) category = cat;
+}
+
 void Teacher::showInfo()
 {
 	People::showInfo();
@@ -421,11 +420,7 @@ void Teacher::showInfo()
 void Teacher::write(ostream &os) {
     People::write(os);
     Employee::write(os);
-    os << category << "|[" ;
-    for(int i = 0; i < subjects.size(); i++){
-        os << "(" << subjects.at(i)->getName() << ")";
-    }
-    os << "]" << endl;
+    os << category << "|" << endl;
 }
 
 //////STAFF//////
@@ -466,6 +461,8 @@ void Staff::write(ostream& os){
     os << work_area << endl;
 }
 
+////FRIEND FUNCTIONS////
+
 ostream& operator<< (ostream& os, Staff &staff){
     staff.write(os);
     return os;
@@ -478,5 +475,25 @@ ostream& operator<< (ostream& os, Teacher &teacher){
 
 ostream& operator<< (ostream& os, Student &student){
     student.write(os);
+    return os;
+}
+
+string CatString(Cat &cat){
+    switch(cat){
+        case Aux:
+            return "Auxiliar Professor";
+        case Reg:
+            return "Regent";
+        case DepDir:
+            return "Deoartment Director";
+        case CourseDir:
+            return "Course Director";
+        default:
+            return "!Unassigned!";
+    }
+}
+
+ostream& operator<< (ostream& os, Cat &cat){
+    os << CatString(cat);
     return os;
 }

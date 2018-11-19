@@ -172,7 +172,7 @@ void College::addDepartment()
 
 	Teacher* director;
 
-    while(1){ //Needs to check if Director Exists
+    while(1){
         cout << "Enter the name of the director of the Department (! to skip/ ? for list): "<< endl;
         getline(cin, directorName);
         if (directorName == "!") break;
@@ -194,7 +194,7 @@ void College::addDepartment()
 
 	do{
 		cin >> code;
-
+        differentCode = true;
 		for(unsigned int i = 0; i < vecDep.size(); i++)
 		{
 			if(vecDep.at(i)->getCode() == code)
@@ -208,7 +208,7 @@ void College::addDepartment()
 
 	} while (!differentCode);
 
-	//falta fazer validation do code!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	/////////////////////////////////////////////////////////////////////////////////falta fazer validation do code!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 	cout << "Enter the phone of the Department (9-digit): "<< endl;
 	cin >> phone;
@@ -224,7 +224,8 @@ void College::addDepartment()
 
 	if (directorName != "!")
 	{
-		 dp = new Department(name, code, address, phone, director);
+        dp = new Department(name, code, address, phone, director);
+        director->UpdateCat(DepDir);
 	}
 	else
 	{
@@ -263,13 +264,13 @@ void College::removeDepartment()
 	throw NoCodeFound(code);
 }
 
-void College::addCourse(){
+void College::addCourse(College &college){
     cout << "In Which Department do you want to add a course?" << endl;
     Print_Vec(vecDep);
     cout << vecDep.size() << ":   PREVIOUS MENU" << endl;
     unsigned int i = Nav(0,vecDep.size());
     if(i == vecDep.size()) return;
-    else vecDep.at(i)->addCourse();
+    else vecDep.at(i)->addCourse(*this);
 }
 void College::removeCourse(){
     cout << "In Which Department do you want to remove a course?" << endl;
@@ -448,7 +449,7 @@ vector<Course*> Department::getCourses()
 	return vecCourse;
 }
 
-void Department::addCourse()
+void Department::addCourse(College& college)
 {
 	string type, ptName, engName;
 	int code;
@@ -486,8 +487,31 @@ void Department::addCourse()
 	     cin.ignore(100, '\n');
 	     cin >> code;
 	}
+    cin.clear();
+    cin.ignore(100, '\n');
 
-	Course* newCourse = new Course(type, engName, ptName, code);
+    string directorName;
+    Teacher *director = nullptr;
+    while(1){
+        cout << "Enter the name of the Course Director (! to skip/ ? for list): "<< endl;
+        getline(cin, directorName);
+        if (directorName == "!") break;
+        else if(directorName == "?") Print_Vec(college.getTeachers());
+        else{
+            try{
+                director = SearchVec(college.getTeachers(),directorName);
+            }
+            catch(NoNameFound &err){
+                cout << err.errorMessage() << endl;
+                cout << "Invalid name, try again: "<< flush;
+                continue;
+            }
+            break;
+        }
+    }
+
+	Course* newCourse = new Course(type, engName, ptName, code, director);
+    if(director != nullptr) director->UpdateCat(CourseDir);
 	vecCourse.push_back(newCourse);
 }
 
@@ -529,7 +553,10 @@ void Department::searchCourse(string name)
 }
 
 ostream& operator<< (ostream& os, const Department &dep){
-    os << dep.depName << "|" << dep.depAddress << "|" << dep.depCode << "|" << dep.depPhone << endl;
+    string dir;
+    if(dep.depDirector == nullptr) dir = "!";
+    else dir = dep.depDirector->getName();
+    os << dep.depName << "|" << dep.depAddress << "|" << dep.depCode << "|" << dep.depPhone << "|" << dir << "|" << endl;
     for(size_t i = 0; i < dep.vecCourse.size(); i++){
         os << "COURSE:" << endl;
         os << *dep.vecCourse.at(i);
@@ -539,12 +566,13 @@ ostream& operator<< (ostream& os, const Department &dep){
 
 //COURSE//
 //////////////////////
-Course::Course(string type, string engName, string ptName, int code)
+Course::Course(string type, string engName, string ptName, int code, Teacher *director)
 {
 	csCode = code;
 	csType = type;
 	csEngName = engName;
 	csPtName = ptName;
+    courseDirector = director;
 }
 
 Course::~Course()
@@ -552,10 +580,14 @@ Course::~Course()
 	dest_remove(vecUC);
 }
 void Course::showInfo() {
+    string dir_name;
+    if(courseDirector == nullptr) dir_name = "!Unassigned!";
+    else dir_name = courseDirector->getName();
     cout << "\n|-----------------------------------------" << endl;
-    cout << "|      " << csEngName << endl;
-    cout << "|      " << csPtName << endl;
+    cout << "| Name: " << csEngName << endl;
+    cout << "| Nome: " << csPtName << endl;
     cout << "| Type: " << csType << endl;
+    cout << "| Director: " << dir_name << endl;
     cout << "|-----------------------------------------" << endl;
 }
 
@@ -704,7 +736,7 @@ vector<Uc*> Course::getUCs()
 	return vecUC;
 }
 
-void Course::addUC()
+void Course::addUC(College &college)
 {
 	string name, nameT, nameS;
 	int year, ects, workload;// nS, nT;
@@ -747,8 +779,31 @@ void Course::addUC()
 		cin.ignore(100, '\n');
 		cin >> workload;
 	}
+    cin.clear();
+    cin.ignore(100, '\n');
 
-	Uc* newUC = new Uc(name, year, ects, workload);
+    string directorName;
+    Teacher *director = nullptr;
+    while(1){
+        cout << "Enter the name of the Uc Regent (! to skip/ ? for list): "<< endl;
+        getline(cin, directorName);
+        if (directorName == "!") break;
+        else if(directorName == "?") Print_Vec(college.getTeachers());
+        else{
+            try{
+                director = SearchVec(college.getTeachers(),directorName);
+            }
+            catch(NoNameFound &err){
+                cout << err.errorMessage() << endl;
+                cout << "Invalid name, try again: "<< flush;
+                continue;
+            }
+            break;
+        }
+    }
+
+	Uc* newUC = new Uc(name, year, ects, workload, director);
+    if(director != nullptr) director->UpdateCat(Reg);
 	vecUC.push_back(newUC);
 }
 
@@ -814,7 +869,10 @@ void Course::searchUc(string name)
 }
 
 ostream& operator<< (ostream& os, const Course &course){
-    os << course.csPtName << "|" << course.csEngName << "|" << course.csCode << "|" << course.csType << endl;
+    string dir;
+    if(course.courseDirector == nullptr) dir = "!";
+    else dir = course.courseDirector->getName();
+    os << course.csPtName << "|" << course.csEngName << "|" << course.csCode << "|" << course.csType << "|" << dir << "|" << endl;
     for(size_t i = 0; i < course.vecUC.size(); i++){
         os << "UC:" << endl;
         os << *course.vecUC.at(i);
@@ -825,7 +883,7 @@ ostream& operator<< (ostream& os, const Course &course){
 
 //UC//
 //////////////////////
-Uc::Uc(string name, vector<Teacher*> teacher, vector<Student*> student, int year, int ects, int workload)
+Uc::Uc(string name, vector<Teacher*> teacher, vector<Student*> student, int year, int ects, int workload, Teacher* director)
 {
 	ucECTS = ects;
 	ucName = name;
@@ -833,14 +891,16 @@ Uc::Uc(string name, vector<Teacher*> teacher, vector<Student*> student, int year
 	ucTeacher = teacher;
 	ucWorkload = workload;
 	ucYear = year;
+    Regent = director;
 }
 
-Uc::Uc(string name, int year, int ects, int workload)
+Uc::Uc(string name, int year, int ects, int workload, Teacher *director)
 {
 	ucECTS = ects;
 	ucName = name;
 	ucWorkload = workload;
 	ucYear = year;
+    Regent = director;
 }
 
 Uc::~Uc()
@@ -850,12 +910,15 @@ Uc::~Uc()
 }
 
 void Uc::showInfo() {
+    string regent;
+    if(Regent == nullptr) regent = "!Unassigned!";
+    else regent = Regent->getName();
     cout << "\n|-----------------------------------------" << endl;
     cout << "|      " << ucName << endl;
     cout << "| Year: " << ucYear << endl;
     cout << "| ECTS: " << ucECTS << endl;
     cout << "| Workload: " << ucWorkload << endl;
-    cout << "| Regent: " << ucTeacher.at(0)->getName() << endl;
+    cout << "| Regent: " << regent << endl;
     cout << "|-----------------------------------------" << endl;
 }
 
@@ -987,6 +1050,17 @@ bool Uc::operator<(Uc uc2)
 }
 
 ostream& operator<< (ostream& os, const Uc &uc){
-    os << uc.ucName << "|" << uc.ucYear << "|" << uc.ucECTS << "|" << uc.ucWorkload << endl;
+    string reg;
+    if(uc.Regent == nullptr) reg = "!";
+    else reg = uc.Regent->getName();
+    os << uc.ucName << "|" << uc.ucYear << "|" << uc.ucECTS << "|" << uc.ucWorkload << "|" << reg << "|[";
+    for(size_t i = 0; i < uc.ucStudent.size(); i++){
+        os << "(" << uc.ucStudent.at(i)->getName() << ")";
+    }
+    os << "]|[";
+    for(size_t i = 0; i < uc.ucTeacher.size(); i++){
+        os << "(" << uc.ucTeacher.at(i)->getName() << ")";
+    }
+    os << "]|" << endl;
     return os;
 }

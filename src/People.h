@@ -138,6 +138,7 @@ public:
 };
 /**@brief Student class,  inherits the public function from the class People*/
 class Student : public People{
+    string course_string; //Used when reading file to store info of inexistent course
 	/** @brief Pointer to the current Course the Student is in*/
 	Course* course;
 	/**@brief College year the given Student is in*/
@@ -155,7 +156,7 @@ public:
 	 * @param course Course the Student is in
 	 * @param subjects Subjects the Student is taking
 	 */
-	Student(string name, string address, date birthday, unsigned int phone, string cod, Course *course, map <Uc*, float> subjects);
+	Student(string name, string address, date birthday, unsigned int phone, string cod, string course, map <Uc*, float> subjects);
 
     Student() = default;
 
@@ -276,11 +277,12 @@ public:
     void write(ostream& os);
 };
 
+enum Cat { Aux, Reg, CourseDir, DepDir};
 
 /**@brief Teacher Class, inherits all the public functions from Employee*/
 class Teacher : public Employee{
 	/** @brief Category of the teacher*/
-	string category;  //maybe the kind of degree the teacher has \(o.o)/
+    enum Cat category;
 	/**@brief vector with the Ucs taught by the Teacher */
 	vector <Uc*> subjects;  //subjects taught by the teacher
 public:
@@ -296,7 +298,7 @@ public:
 	 * @param category Category of the Teacher
 	 * @param subjects Subjects taught by the Teacher
 	 */
-	Teacher(string name, string address, date birthday, unsigned int phone, string cod, float salary, unsigned int nif, string category, vector <Uc *> subjects);
+	Teacher(string name, string address, date birthday, unsigned int phone, string cod, float salary, unsigned int nif, Cat category, vector <Uc *> subjects);
 
     Teacher() = default;
 
@@ -312,12 +314,12 @@ public:
      * Gets the Category of a given Teacher
      * @return String containing the category of the Teacher
      */
-	string getCategory();
+	enum Cat getCategory();
 	/**
 	 * @brief Changes the category of a given Teacher
 	 * @param category New category of the Teacher
 	 */
-	void setCategory(string category);
+	void setCategory(Cat &cat);
 	/**
 	 * @brief Gets the Ucs that are taught by the given Teacher
 	 * @return Vector with the Ucs taught by the Teacher
@@ -337,6 +339,12 @@ public:
     friend ostream& operator<< (ostream& os, Teacher &teacher);
 
     void write(ostream& os);
+
+    void UpdateCat(Cat cat);
+
+    friend string CatString(Cat &cat);
+
+    friend ostream& operator<< (ostream& os, Cat &cat);
 };
 
 

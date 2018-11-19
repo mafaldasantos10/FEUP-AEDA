@@ -119,7 +119,7 @@ T* Search_Menu(vector<T*> vec){
 
 //////////////////////
 
-void Course_Menu(Course& course){
+void Course_Menu(Course& course, College &college){
     while(1){
         course.showInfo();
         cout << "0:   EDIT INFO" << endl;
@@ -136,7 +136,7 @@ void Course_Menu(Course& course){
                 course.showSyllabus();
                 break;
             case 2:
-                course.addUC();
+                course.addUC(college);
                 break;
             case 3:
                 try{
@@ -166,7 +166,7 @@ void Course_Menu(Course& course){
 //////////////////////
 
 template<class T>
-void Courses_Menu(T &obj){ //Can be either college or Department
+void Courses_Menu(T &obj, College &college){ //Can be either college or Department
     while(1){
         obj.showInfo();
         Print_Vec(obj.getCourses());
@@ -186,20 +186,28 @@ void Courses_Menu(T &obj){ //Can be either college or Department
                 cout << err.errorMessage() << endl;
                 continue;
             }
-            Course_Menu(*ptr);
+            Course_Menu(*ptr, college);
         }
         else if(i == n-2){
-            auto ptr = Search_Menu(obj.getCourses());
-            if(ptr != nullptr) Course_Menu(*ptr);
+            Course* ptr;
+            try{
+                ptr = Search_Menu(obj.getCourses());
+            }
+            catch(NoNameFound &err){
+                cout << err.errorMessage() << endl;
+                continue;
+            }
+            delete ptr;
+            cout << "Course Removed!" << endl;
         }
-        else if(i == n-3) obj.addCourse();
-        else Course_Menu(*(obj.getCourses().at(i)));
+        else if(i == n-3) obj.addCourse(college);
+        else Course_Menu(*(obj.getCourses().at(i)),college);
     }
 }
 
 //////////////////////
 
-void Dep_Menu(Department& department){
+void Dep_Menu(Department& department, College &college){
     while(1){
         department.showInfo();
         cout << "0:   DEPARTMENT COURSES" << endl;
@@ -207,7 +215,7 @@ void Dep_Menu(Department& department){
         cout << "2:   PREVIOUS MENU" << endl;
         switch(Nav(0,3)){
             case 0:
-                Courses_Menu(department);
+                Courses_Menu(department,college);
                 break;
             case 1:
                 editInfo(department);
@@ -245,9 +253,9 @@ void Departments_Menu(College &college){
             }
         } else if (i == (n - 1)) { //Search Department by name
             auto ptr = Search_Menu(college.getDepartments());
-            if(ptr != nullptr) Dep_Menu(*ptr);
+            if(ptr != nullptr) Dep_Menu(*ptr,college);
         } else { //Enter department
-            Dep_Menu(*college.getDepartments().at(i));
+            Dep_Menu(*college.getDepartments().at(i),college);
         }
     }
 }
@@ -462,7 +470,7 @@ void Member_Menu(College &college){ //Can only read
                 Departments_Menu(college);
                 break;
             case 1:
-                Courses_Menu(college);
+                Courses_Menu(college,college);
                 break;
             case 2:
                 People_Menu(college);
@@ -490,7 +498,7 @@ void Vis_Menu(College &college){ //Can only see info
                 Departments_Menu(college);
                 break;
             case 1:
-                Courses_Menu(college);
+                Courses_Menu(college,college);
                 break;
             case 2:
                 //Destroy College and go back to main menu
@@ -530,31 +538,31 @@ void Save_College(College &college){
     string file_name = college.getName() + ".txt";
     ofstream save_file (file_name);
     //------COLLEGE INFO------
-    save_file << college;
-    //------ DEP/COURSE/UC INFO------
-    for(size_t i = 0; i < college.getDepartments().size(); i++){
-        save_file << "DEP:" << endl;
-        save_file << *college.getDepartments().at(i) << endl;
-        save_file << endl;
-    }
+    save_file << college << endl;
     //------STUDENTS INFO------
     save_file << "STUDENTS:" << endl;
     for(size_t i = 0; i < college.getStudents().size(); i++){
-        save_file << *college.getStudents().at(i) << endl; //CREATE << overload for people
+        save_file << *college.getStudents().at(i);
     }
     save_file << endl;
     //------TEACHERS INFO------
     save_file << "TEACHER:" << endl;
     for(size_t i = 0; i < college.getTeachers().size(); i++){
-        save_file << *college.getTeachers().at(i) << endl; //CREATE << overload for people
+        save_file << *college.getTeachers().at(i);
     }
     save_file << endl;
     //------STAFF INFO------
     save_file << "STAFF:" << endl;
     for(size_t i = 0; i < college.getStaff().size(); i++){
-        save_file << *college.getStaff().at(i) << endl; //CREATE << overload for people
+        save_file << *college.getStaff().at(i);
     }
     save_file << endl;
+    //------ DEP/COURSE/UC INFO------
+    for(size_t i = 0; i < college.getDepartments().size(); i++){
+        save_file << "DEP:" << endl;
+        save_file << *college.getDepartments().at(i);
+        save_file << endl;
+    }
     save_file.close();
 }
 
@@ -590,7 +598,7 @@ void Admin_Menu(College &college){
                 Departments_Menu(college);
                 break;
             case 1:
-                Courses_Menu(college);
+                Courses_Menu(college,college);
                 break;
             case 2:
                 People_Menu(college);
