@@ -362,6 +362,8 @@ public:
      */
     void searchUc(string name);
 
+    void setDirector(Teacher* dir){courseDirector = dir;}
+
     friend ostream& operator<< (ostream& os, const Course &course);
 };
 

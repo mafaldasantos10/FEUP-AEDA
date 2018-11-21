@@ -119,7 +119,7 @@ vector<Uc*> College::getUCs(){
 
 void College::removeStudent(Student* student) {
 
-	 for(unsigned int i=0; i<students.size(); i++)
+	 for(unsigned int i = 0; i<students.size(); i++)
 	   {
 		   if(students.at(i) == student)
 		   {
@@ -131,7 +131,7 @@ void College::removeStudent(Student* student) {
 
 void College::removeTeacher(Teacher* teacher){
 
-   for(unsigned int i=0; i<teachers.size(); i++)
+   for(unsigned int i = 0; i<teachers.size(); i++)
    {
 	   if(teachers.at(i) == teacher)
 	   {
@@ -157,15 +157,36 @@ void College::addDepartment()
 {
 	string name, address, directorName;
 	int code, phone;
-	bool differentCode = true;
+	bool differentX = true;
 
 	cout << "Enter the name of the Department: "<< endl;
 	getline(cin, name);
-	while(!hasNoNumber(name))
-	{
-		cout << "Invalid name, try again: "<< endl;
-		getline(cin, name);
-	}
+
+	do{
+			getline(cin, name);
+
+			while(!hasNoNumber(name))
+			{
+				cout << "Invalid name, try again: "<< endl;
+				getline(cin, name);
+			}
+
+			for(unsigned int i = 0; i < vecDep.size(); i++)
+			{
+				if(vecDep.at(i)->getName() == name)
+				{
+					cout << "The name you entered is already associated to Department " << "'" << vecDep.at(i)->getName() << "'!" << endl;
+					cout << "Enter a new one: " << endl;
+					differentX = false;
+					break;
+				}
+				else
+				{
+					differentX = true;
+				}
+			}
+
+	} while (!differentX);
 
 	cout << "Enter the address of the Department: "<< endl;
 	getline(cin, address);
@@ -193,32 +214,65 @@ void College::addDepartment()
 	cout << "Enter the code of the Department: "<< endl;
 
 	do{
-		cin >> code;
-        differentCode = true;
-		for(unsigned int i = 0; i < vecDep.size(); i++)
-		{
-			if(vecDep.at(i)->getCode() == code)
-			{
-				cout << "The code you entered is already associated to Department" << "'" << vecDep.at(i)->getName() << "'" << endl;
-				cout << "Enter a new one: " << endl;
-				differentCode = false;
-				break;
-			}
-		}
+			cin >> code;
 
-	} while (!differentCode);
+			while(cin.fail())
+			{
+				cout << "Invalid code number, try again: " << endl;
+				cin.clear();
+				cin.ignore(100, '\n');
+				cin >> phone;
+			}
+
+			for(unsigned int i = 0; i < vecDep.size(); i++)
+			{
+				if(vecDep.at(i)->getCode() == code)
+				{
+					cout << "The code you entered is already associated to Department " << "'" << vecDep.at(i)->getName() << "'!" << endl;
+					cout << "Enter a new one: " << endl;
+					differentX = false;
+					break;
+				}
+				else
+				{
+					differentX = true;
+				}
+			}
+
+	} while (!differentX);
 
 	/////////////////////////////////////////////////////////////////////////////////falta fazer validation do code!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 	cout << "Enter the phone of the Department (9-digit): "<< endl;
 	cin >> phone;
-	while(cin.fail() || to_string(phone).size() != 9)
-	{
-		cout << "Invalid phone number, try again: "<< endl;
-		cin.clear();
-		cin.ignore(100, '\n');
-		cin >> phone;
-	}
+
+	do{
+			cin >> phone;
+
+			while(cin.fail() || to_string(phone).size() != 9)
+			{
+				cout << "Invalid phone number, try again: " << endl;
+				cin.clear();
+				cin.ignore(100, '\n');
+				cin >> phone;
+			}
+
+			for(unsigned int i = 0; i < vecDep.size(); i++)
+			{
+				if(vecDep.at(i)->getPhone() == phone)
+				{
+					cout << "The phone number you entered is already associated to Department " << "'" << vecDep.at(i)->getName() << "'!" << endl;
+					cout << "Enter a new one: " << endl;
+					differentX = false;
+					break;
+				}
+				else
+				{
+					differentX = true;
+				}
+			}
+
+	} while (!differentX);
 
 	Department* dp;
 

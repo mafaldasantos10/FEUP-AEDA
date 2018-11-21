@@ -14,15 +14,273 @@
 
 using namespace std;
 
+
+//VARIABLES
 int access = 0; //Global variable to determine type of user
 string user_id;
+
 
 ////CURRENT YEAR//// (used for ids)
 time_t theTime = time(NULL);
 struct tm *aTime = localtime(&theTime);
-
 int current_year = aTime->tm_year + 1900; // Year is # years since 1900
-////////////////////
+
+
+/// PROTOTYPES ///
+date* changeDate(string data);
+
+
+///READ FILE
+void readFile()
+{
+	string file;
+	ifstream fin;
+	date* d;
+	College c;
+
+	cout << "From what file do you want to extract the information?" << endl;
+	cin >> file;
+
+	fin.open(file);
+	while(!fin.is_open())
+	{
+		cerr << "Input file not found!\n, try again!";
+		cin >> file;
+		fin.open(file);
+	}
+
+	string next; //line from the file
+
+	while(!fin.eof())
+	{
+		getline(fin, next);
+
+			if(next.length() == 0)
+			{
+				continue;
+			}
+
+			if(next == "COLLEGE:")
+			{
+				getline(fin, next);
+
+				int i = next.find("|");
+
+
+				c.setName(next.substr(0, i));
+				next.erase(0, i+1);
+				c.setAdmin(next.substr(0, next.length()));
+			}
+
+			if(next == "STUDENTS:")
+			{
+				while(next.length() != 0)
+				{
+					Student* s;
+
+					getline(fin, next);
+
+					s->setName(next.substr(0,  next.find("|")));
+					next.erase(0,  next.find("|")+1);
+
+					s->setAddress(next.substr(0,  next.find("|")));
+					next.erase(0,  next.find("|")+1);
+
+					s->setPhone(stoi(next.substr(0,  next.find("|"))));
+					next.erase(0,  next.find("|")+1);
+
+					s->setCode(next.substr(0,  next.find("|")));
+					next.erase(0,  next.find("|")+1);
+
+					d = changeDate(next.substr(0, next.find("|")));
+					s->setDate(d);
+					next.erase(0,  next.find("|")+1);
+
+					s->setName(next.substr(0,  next.find("|")));
+					next.erase(0,  next.find("|")+1);
+
+					s->setYear(stoi(next.substr(0,  next.find("|"))));
+					next.erase(0,  next.find("|")+1);
+
+					c.getStudents().push_back(s); //ver se altera o vector mesmo
+				}
+
+			}
+
+			if(next == "TEACHER:")
+			{
+				while(next.length() != 0)
+				{
+					Teacher* t;
+
+					getline(fin, next);
+
+					t->setName(next.substr(0,  next.find("|")));
+					next.erase(0,  next.find("|")+1);
+
+					t->setAddress(next.substr(0,  next.find("|")));
+					next.erase(0,  next.find("|")+1);
+
+					t->setPhone(stoi(next.substr(0,  next.find("|"))));
+					next.erase(0,  next.find("|")+1);
+
+					t->setCode(next.substr(0,  next.find("|")));
+					next.erase(0,  next.find("|")+1);
+
+					d = changeDate(next.substr(0, next.find("|")));
+					t->setDate(d);
+					next.erase(0,  next.find("|")+1);
+
+					t->setSalary(stof(next.substr(0,  next.find("|"))));
+					next.erase(0,  next.find("|")+1);
+
+					t->setNIF(stoi(next.substr(0,  next.find("|"))));
+					next.erase(0,  next.find("|")+1);
+
+					t->setCategory(next.substr(0,  next.find("|")));
+					next.erase(0,  next.find("|")+1);
+
+					c.getTeachers().push_back(t);
+				}
+
+			}
+
+		  if(next == "STAFF:")
+			{
+			  	 while(next.length() != 0)
+			  	 {
+					Staff* sf;
+
+					getline(fin, next);
+
+					sf->setName(next.substr(0,  next.find("|")));
+					next.erase(0,  next.find("|")+1);
+
+					sf->setAddress(next.substr(0,  next.find("|")));
+					next.erase(0,  next.find("|")+1);
+
+					sf->setPhone(stoi(next.substr(0,  next.find("|"))));
+					next.erase(0,  next.find("|")+1);
+
+					sf->setCode(next.substr(0,  next.find("|")));
+					next.erase(0,  next.find("|")+1);
+
+					d = changeDate(next.substr(0, next.find("|")));
+					sf->setDate(d);
+					next.erase(0,  next.find("|")+1);
+
+					sf->setSalary(stof(next.substr(0,  next.find("|"))));
+					next.erase(0,  next.find("|")+1);
+
+					sf->setNIF(stoi(next.substr(0,  next.find("|"))));
+					next.erase(0,  next.find("|")+1);
+
+					sf->setWorkArea(next.substr(0,  next.find("|")));
+					next.erase(0,  next.find("|")+1);
+
+					c.getStaff().push_back(sf);
+				}
+			}
+
+		  if(next == "DEP:")
+		  {
+			    Teacher* dir;
+			  	getline(fin, next);
+		 		Department* d;
+
+		  		d->setName(next.substr(0, next.find("|")));
+		  		next.erase(0, next.find("|")+1);
+
+		  		d->setAddress(next.substr(0, next.find("|")));
+		  		next.erase(0, next.find("|")+1);
+
+		  		d->setCode(stoi(next.substr(0, next.find("|"))));
+		  		next.erase(0, next.find("|")+1);
+
+		  		d->setPhone(stoi(next.substr(0, next.find("|"))));
+		  		next.erase(0, next.find("|")+1);
+
+		  		if((next.substr(0, next.find("|"))) == "!")
+		  		{
+		  			dir = SearchVec( c.getTeachers(),(next.substr(0, next.find("|"))));
+		  			d->setDirector(dir);
+		  		}
+
+		  		c.getDepartments().push_back(d);
+
+		  		getline(fin, next);
+
+		  		while(next.length() != 0)
+		  		{
+			  		if(next == "COURSE:")
+			  		{
+			  			Teacher* dirc;
+			  			Course* cs;
+
+			  			getline(fin, next);
+
+			  			cs->setPtName(next.substr(0, next.find("|")));
+			  			next.erase(0, next.find("|")+1);
+
+			  			cs->setEngName(next.substr(0, next.find("|")));
+			  			next.erase(0, next.find("|")+1);
+
+			  			cs->setCode(stoi(next.substr(0, next.find("|"))));
+			  			next.erase(0, next.find("|")+1);
+
+			  			cs->setType(next.substr(0, next.find("|")));
+			  			next.erase(0, next.find("|")+1);
+
+			  			if((next.substr(0, next.find("|"))) == "!")
+			  			{
+			  				dirc = SearchVec( c.getTeachers(), (next.substr(0, next.find("|"))));
+			  				cs->setDirector(dirc);
+			  			}
+			  			d->getCourses().push_back(cs);
+
+			  			getline(fin, next);
+
+			  			if(next == "UC:")
+			  			{
+			  				while(1)
+			  				{
+			  					Teacher* regent;
+			  					Uc* uc;
+
+			  					getline(fin, next);
+
+			  					if(next == "COURSE:")
+			  						break;
+
+			  					uc->setName(next.substr(0,  next.find("|")));
+			  					next.erase(0,  next.find("|")+1);
+
+			  					uc->setYear(stoi(next.substr(0,  next.find("|"))));
+			  					next.erase(0,  next.find("|")+1);
+
+			  					uc->setECTS(stoi(next.substr(0,  next.find("|"))));
+			  					next.erase(0,  next.find("|")+1);
+
+			  					uc->setWorkload(stoi(next.substr(0,  next.find("|"))));
+			  					next.erase(0,  next.find("|")+1);
+
+			  					if((next.substr(0, next.find("|"))) == "!")
+			  					{
+			  						regent = SearchVec( c.getTeachers(),(next.substr(0, next.find("|"))));
+			  						uc->getTeachers().push_back(regent);
+			  					}
+
+			  					c.getUCs().push_back(uc);
+			  				}
+			  			}
+
+			  			c.getCourses().push_back(cs);
+			  		}
+		  		}
+		}
+	}
+}
+
 
 ////GENERAL FUNCTIONS//// (used thoughout project, mostly for input verification)
 int Nav(int bottom, int top){ //tests for valid input keys and returns the inputted char
@@ -37,25 +295,32 @@ int Nav(int bottom, int top){ //tests for valid input keys and returns the input
     return key;
 }
 
-date* readDate(){
+date* changeDate(string data)
+{
     unsigned int day, month, year;
     char c = '/';
+
+    stringstream ss(data);
+    ss >> day >> c >> month >> c >> year;
+    if(day < 0 || day > 31
+               || month < 0 || month > 12
+               || year < 1900 || year > 2018) cout << "\nInvalid date!" << endl;
+
+    date *d = new date(day, month, year);
+      return d;
+}
+
+date* readDate(){
+    date* d;
     string data;
     cin.clear();
     cin.ignore(100,'\n');
     while(1){
         cout << "\nInsert Birthday(dd/mm/yyyy): " << flush;
         getline(cin,data);
-        //data = data.substr(0,data.find('\n'));
-        stringstream ss(data);
-        ss >> day >> c >> month >> c >> year;
-        if(day < 0 || day > 31
-                || month < 0 || month > 12
-                || year < 1900 || year > 2018) cout << "\nInvalid date!" << endl;
-        else break;
+       d= changeDate(data);
     }
-    date *d = new date(day, month, year);
-    return d;
+return d;
 }
 
 //////////////////////

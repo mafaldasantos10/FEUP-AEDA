@@ -131,6 +131,8 @@ public:
 	//virtual ~People();
     virtual void write(ostream& os);
 
+    void setDate(date* d1){ birthday = d1;}
+
     void InsertName();
 
     void InsertAddress();
@@ -230,6 +232,7 @@ public:
 
     void ChooseCourse(College &college);
 
+    void setYear(int newYear){ year = newYear; }
     void InsertYear();
 };
 
