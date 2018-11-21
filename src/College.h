@@ -134,7 +134,7 @@ public:
     /**
      * @brief Adds a new Course
      */
-    void addCourse();
+    void addCourse(College &college);
     /**
 	 * @brief Removes a Course
      */
@@ -189,12 +189,7 @@ public:
      * @brief
      * @return
      */
-    int editInfo();
-    /**
-     *
-     * @param n
-     */
-    void Set(int n);
+    void editInfo(College& college);
     /**
      * @brief Gets the name of a given Department
      * @return String containing the name of the Department
@@ -253,7 +248,7 @@ public:
     /**
      * @brief Adds a new Course to the vector of Courses (vecCourse)
      */
-    void addCourse();
+    void addCourse(College &college);
     /**
      * @brief Removes a Course from the vector of Courses (vecCourse)
      */
@@ -279,6 +274,7 @@ class Course{
     int csCode;
     /** @brief Vector of pointers to each UC of the Course */
     vector<Uc*> vecUC;
+    /** @brief Pointer to courseDirector */
     Teacher* courseDirector;
 public:
     /**
@@ -288,7 +284,7 @@ public:
      * @param engName English Name of the Course
      * @param code Code of the Course
      */
-    Course(string type, string engName, string ptName, int code);
+    Course(string type, string engName, string ptName, int code, Teacher *director);
     ~Course();
     /**
      * @brief Shows all the information of a given Department
@@ -298,12 +294,7 @@ public:
      *
      * @return
      */
-    int editInfo();
-    /**
-     *
-     * @param n
-     */
-    void Set(int n);
+    void editInfo(College &college);
     /**
 	 * @brief Shows the outline of the topics to be covered in an education Course
      */
@@ -356,13 +347,11 @@ public:
     /**
      * @brief Adds a new UC to the vector of UCs (vecUC)
      */
-    void addUC();
+    void addUC(College &college);
     /**
      * @brief Removes a UC from the vector of UCs (vecUC)
      */
     void removeUC();
-    Teacher* getDirector(){return courseDirector;}
-    void setDirector(Teacher* dir){courseDirector = dir;}
     /**
      * @brief Sorts the vector of UCs (vecUC) by year
      */
@@ -381,7 +370,7 @@ class Uc{
     /** @brief Name of the UC */
     string ucName;
     /** @brief Vector of pointers to each Teacher of the UC */
-    vector<Teacher*> ucTeacher; //sendo que o que se encontra na posicao 0 o regente
+    vector<Teacher*> ucTeacher;
     /** @brief Vector of pointers to each Student of the UC */
     vector<Student*> ucStudent;
     /** @brief Year on which the UC is taught */
@@ -390,6 +379,8 @@ class Uc{
     int ucECTS;
     /** @brief Workload (in hours) of the UC */
     int ucWorkload;
+    /** @brief Pointer to UC's Regent */
+    Teacher* Regent;
 public:
     /**
      * @brief Uc Constructor
@@ -400,7 +391,7 @@ public:
      * @param ects ECTS of the UC
      * @param workload Workload (in hours) of the UC
      */
-    Uc(string name, vector<Teacher*> teacher, vector<Student*> student, int year, int ects, int workload);
+    Uc(string name, vector<Teacher*> teacher, vector<Student*> student, int year, int ects, int workload, Teacher* director);
     /**
      * @brief Uc Default Constructor
      * @param name Name of the UC
@@ -408,7 +399,7 @@ public:
      * @param ects ECTS of the UC
      * @param workload Workload (in hours) of the UC
      */
-    Uc(string name, int year, int ects, int workload);
+    Uc(string name, int year, int ects, int workload, Teacher* director);
     ~Uc();
     /**
      * @brief Shows all the information of a given UC
@@ -540,6 +531,14 @@ public:
     };
 };
 
+class NoCourses{
+public:
+    NoCourses() = default;
+    string errorMessage(){
+        return "There are no Courses created in this College!";
+    }
+};
+
 
 //TEMPLATES//
 //////////////////////
@@ -551,13 +550,12 @@ public:
  * @return Holds true if the Object was removed successfully
  */
 template <class T>
-bool remove(vector<T> &vector, string name)
+bool remove(vector<T*> vector, string name)
 {
-    for(unsigned int i = 0; i <= vector.size(); i++)
+    for(unsigned int i = 0; i < vector.size(); i++)
     {
         if(vector.at(i)->getName() == name)
         {
-        	//delete vector.at(i);
             vector.erase(vector.begin() + i);
             return true;
         }
@@ -567,7 +565,7 @@ bool remove(vector<T> &vector, string name)
 }
 
 template <class T>
-void dest_remove(vector<T> &vector)
+void dest_remove(vector<T*> vector)
 {
     for(unsigned int i = 0; i < vector.size(); i++)
     {

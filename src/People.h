@@ -78,12 +78,7 @@ public:
      * @brief Allows the user to modify the information of a given Person
      * @return
      */
-    virtual int editInfo(); //Returns number of parameters
-    /**
-     * @brief
-     * @param n
-     */
-    virtual void Set(int n);
+    virtual void editInfo(College &college); //Returns number of parameters
     /**
      * @brief Changes the name of the given Person
      * @param newName New name of a given Person
@@ -130,20 +125,26 @@ public:
      */
     date* getDate();
 
-    void setDate(date* d1){birthday=d1;}
-
     /**
      * @brief Virtual class destructor
      */
 	//virtual ~People();
     virtual void write(ostream& os);
+
+    void InsertName();
+
+    void InsertAddress();
+
+    void InsertPhone();
+
+    void InsertBirthday();
 };
 /**@brief Student class,  inherits the public function from the class People*/
 class Student : public People{
+    string course_string; //Used when reading file to store info of inexistent course
 	/** @brief Pointer to the current Course the Student is in*/
 	Course* course;
 	/**@brief College year the given Student is in*/
-	string course_string; //Used when reading file to store info of inexistent course
 	int year;  //year enrolled in
 	/** @brief Map that hold the Ucs and its grades of a given Student */
 	map <Uc*, float> subjects; //In this map the Key is the subject and the float value corresponds to the grade of the student on that particular subject;
@@ -158,7 +159,7 @@ public:
 	 * @param course Course the Student is in
 	 * @param subjects Subjects the Student is taking
 	 */
-	Student(string name, string address, date birthday, unsigned int phone, string cod, Course *course, map <Uc*, float> subjects);
+	Student(string name, string address, date birthday, unsigned int phone, string cod, string course, map <Uc*, float> subjects);
 
     Student() = default;
 
@@ -215,17 +216,21 @@ public:
 	/**
 	 * @brief Shows the map with the Ucs and grades of a given Student
 	 */
-	void setCourseName(string name){course_string = name;}
-    void setYear(int newYear){year = newYear;}
 	void showAllGrades();
 	/**
-	 * @brief
+	 * @brief counter used to know how many students have been created
 	 */
     static int student_count;
+
+    void editInfo(College &college);
 
     friend ostream& operator<< (ostream& os, Student &student);
 
     void write(ostream& os);
+
+    void ChooseCourse(College &college);
+
+    void InsertYear();
 };
 
 
@@ -279,13 +284,20 @@ public:
 	void setNIF(unsigned int nif);
 
     void write(ostream& os);
+
+    void editInfo(College &college);
+
+    void InsertSalary();
+
+    void InsertNif();
 };
 
+enum Cat { Aux, Reg, CourseDir, DepDir};
 
 /**@brief Teacher Class, inherits all the public functions from Employee*/
 class Teacher : public Employee{
 	/** @brief Category of the teacher*/
-	string category;  //maybe the kind of degree the teacher has \(o.o)/
+    enum Cat category;
 	/**@brief vector with the Ucs taught by the Teacher */
 	vector <Uc*> subjects;  //subjects taught by the teacher
 public:
@@ -301,7 +313,7 @@ public:
 	 * @param category Category of the Teacher
 	 * @param subjects Subjects taught by the Teacher
 	 */
-	Teacher(string name, string address, date birthday, unsigned int phone, string cod, float salary, unsigned int nif, string category, vector <Uc *> subjects);
+	Teacher(string name, string address, date birthday, unsigned int phone, string cod, float salary, unsigned int nif, Cat category, vector <Uc *> subjects);
 
     Teacher() = default;
 
@@ -317,12 +329,12 @@ public:
      * Gets the Category of a given Teacher
      * @return String containing the category of the Teacher
      */
-	string getCategory();
+	enum Cat getCategory();
 	/**
 	 * @brief Changes the category of a given Teacher
 	 * @param category New category of the Teacher
 	 */
-	void setCategory(string category);
+	void setCategory(Cat &cat);
 	/**
 	 * @brief Gets the Ucs that are taught by the given Teacher
 	 * @return Vector with the Ucs taught by the Teacher
@@ -335,13 +347,27 @@ public:
 	void addSubject(Uc* uc); //for now it just adds a given UC
 
 	/**
-	 * @brief
+	 * @brief counts teachers created
 	 */
     static int teacher_count;
 
     friend ostream& operator<< (ostream& os, Teacher &teacher);
 
     void write(ostream& os);
+
+    void UpdateCat(Cat cat);
+
+    friend string CatString(Cat &cat);
+
+    friend ostream& operator<< (ostream& os, Cat &cat);
+
+    void editInfo(College &college);
+
+    void ChooseTeacherUCs(College &college);
+
+    bool InsertTeacherUc(College &college);
+
+    void RemoveTeacherUc(int n);
 };
 
 
@@ -384,13 +410,17 @@ public:
 	void setWorkArea(string work_area);
 
 	/**
-	 * @brief
+	 * @brief Counts number of staff members
 	 */
     static int staff_count;
 
     friend ostream& operator<< (ostream& os, Staff &staff);
 
     void write(ostream& os);
+
+    void editInfo(College &college);
+
+    void InsertWorkArea();
 };
 
 #endif /* PEOPLE_H_ */

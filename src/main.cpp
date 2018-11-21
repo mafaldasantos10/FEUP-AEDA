@@ -9,332 +9,53 @@
 #include <iostream>
 #include "College.h"
 #include <sstream>
-#include <string>
 #include <fstream>
 #include <map>
 
 using namespace std;
 
-
-//VARIABLES
 int access = 0; //Global variable to determine type of user
 string user_id;
-
 
 ////CURRENT YEAR//// (used for ids)
 time_t theTime = time(NULL);
 struct tm *aTime = localtime(&theTime);
+
 int current_year = aTime->tm_year + 1900; // Year is # years since 1900
-
-
-/// PROTOTYPES ///
-date* changeDate(string data);
-
-
-///READ FILE
-void readFile()
-{
-	string file;
-	ifstream fin;
-	date* d;
-	College c;
-
-	cout << "From what file do you want to extract the information?" << endl;
-	cin >> file;
-
-	fin.open(file);
-	while(!fin.is_open())
-	{
-		cerr << "Input file not found!\n, try again!";
-		cin >> file;
-		fin.open(file);
-	}
-
-	string next; //line from the file
-
-	while(!fin.eof())
-	{
-		getline(fin, next);
-
-			if(next.length() == 0)
-			{
-				continue;
-			}
-
-			if(next == "COLLEGE:")
-			{
-				getline(fin, next);
-
-				int i = next.find("|");
-
-
-				c.setName(next.substr(0, i));
-				next.erase(0, i+1);
-				c.setAdmin(next.substr(0, next.length()));
-			}
-
-			if(next == "STUDENTS:")
-			{
-				while(next.length() != 0)
-				{
-					Student* s;
-
-					getline(fin, next);
-
-					s->setName(next.substr(0,  next.find("|")));
-					next.erase(0,  next.find("|")+1);
-
-					s->setAddress(next.substr(0,  next.find("|")));
-					next.erase(0,  next.find("|")+1);
-
-					s->setPhone(stoi(next.substr(0,  next.find("|"))));
-					next.erase(0,  next.find("|")+1);
-
-					s->setCode(next.substr(0,  next.find("|")));
-					next.erase(0,  next.find("|")+1);
-
-					d = changeDate(next.substr(0, next.find("|")));
-					s->setDate(d);
-					next.erase(0,  next.find("|")+1);
-
-					s->setCourseName(next.substr(0,  next.find("|")));
-					next.erase(0,  next.find("|")+1);
-
-					s->setYear(stoi(next.substr(0,  next.find("|"))));
-					next.erase(0,  next.find("|")+1);
-
-					c.getStudents().push_back(s); //ver se altera o vector mesmo
-				}
-
-			}
-
-			if(next == "TEACHER:")
-			{
-				while(next.length() != 0)
-				{
-					Teacher* t;
-
-					getline(fin, next);
-
-					t->setName(next.substr(0,  next.find("|")));
-					next.erase(0,  next.find("|")+1);
-
-					t->setAddress(next.substr(0,  next.find("|")));
-					next.erase(0,  next.find("|")+1);
-
-					t->setPhone(stoi(next.substr(0,  next.find("|"))));
-					next.erase(0,  next.find("|")+1);
-
-					t->setCode(next.substr(0,  next.find("|")));
-					next.erase(0,  next.find("|")+1);
-
-					d = changeDate(next.substr(0, next.find("|")));
-					t->setDate(d);
-					next.erase(0,  next.find("|")+1);
-
-					t->setSalary(stof(next.substr(0,  next.find("|"))));
-					next.erase(0,  next.find("|")+1);
-
-					t->setNIF(stoi(next.substr(0,  next.find("|"))));
-					next.erase(0,  next.find("|")+1);
-
-					t->setCategory(next.substr(0,  next.find("|")));
-					next.erase(0,  next.find("|")+1);
-
-					c.getTeachers().push_back(t);
-				}
-
-			}
-
-		  if(next == "STAFF:")
-			{
-			  	 while(next.length() != 0)
-			  	 {
-					Staff* sf;
-
-					getline(fin, next);
-
-					sf->setName(next.substr(0,  next.find("|")));
-					next.erase(0,  next.find("|")+1);
-
-					sf->setAddress(next.substr(0,  next.find("|")));
-					next.erase(0,  next.find("|")+1);
-
-					sf->setPhone(stoi(next.substr(0,  next.find("|"))));
-					next.erase(0,  next.find("|")+1);
-
-					sf->setCode(next.substr(0,  next.find("|")));
-					next.erase(0,  next.find("|")+1);
-
-					d = changeDate(next.substr(0, next.find("|")));
-					sf->setDate(d);
-					next.erase(0,  next.find("|")+1);
-
-					sf->setSalary(stof(next.substr(0,  next.find("|"))));
-					next.erase(0,  next.find("|")+1);
-
-					sf->setNIF(stoi(next.substr(0,  next.find("|"))));
-					next.erase(0,  next.find("|")+1);
-
-					sf->setWorkArea(next.substr(0,  next.find("|")));
-					next.erase(0,  next.find("|")+1);
-
-					c.getStaff().push_back(sf);
-				}
-			}
-
-		  if(next == "DEP:")
-		  {
-			    Teacher* dir;
-			  	getline(fin, next);
-		 		Department* d;
-
-		  		d->setName(next.substr(0, next.find("|")));
-		  		next.erase(0, next.find("|")+1);
-
-		  		d->setAddress(next.substr(0, next.find("|")));
-		  		next.erase(0, next.find("|")+1);
-
-		  		d->setCode(stoi(next.substr(0, next.find("|"))));
-		  		next.erase(0, next.find("|")+1);
-
-		  		d->setPhone(stoi(next.substr(0, next.find("|"))));
-		  		next.erase(0, next.find("|")+1);
-
-		  		if((next.substr(0, next.find("|"))) == "!")
-		  		{
-		  			dir = SearchVec( c.getTeachers(),(next.substr(0, next.find("|"))));
-		  			d->setDirector(dir);
-		  		}
-
-		  		c.getDepartments().push_back(d);
-
-		  		getline(fin, next);
-
-		  		while(next.length() != 0)
-		  		{
-			  		if(next == "COURSE:")
-			  		{
-			  			Teacher* dirc;
-			  			Course* cs;
-
-			  			getline(fin, next);
-
-			  			cs->setPtName(next.substr(0, next.find("|")));
-			  			next.erase(0, next.find("|")+1);
-
-			  			cs->setEngName(next.substr(0, next.find("|")));
-			  			next.erase(0, next.find("|")+1);
-
-			  			cs->setCode(stoi(next.substr(0, next.find("|"))));
-			  			next.erase(0, next.find("|")+1);
-
-			  			cs->setType(next.substr(0, next.find("|")));
-			  			next.erase(0, next.find("|")+1);
-
-			  			if((next.substr(0, next.find("|"))) == "!")
-			  			{
-			  				dirc = SearchVec( c.getTeachers(), (next.substr(0, next.find("|"))));
-			  				cs->setDirector(dirc);
-			  			}
-			  			d->getCourses().push_back(cs);
-
-			  			getline(fin, next);
-
-			  			if(next == "UC:")
-			  			{
-			  				while(1)
-			  				{
-			  					Teacher* regent;
-			  					Uc* uc;
-
-			  					getline(fin, next);
-
-			  					if(next == "COURSE:")
-			  						break;
-
-			  					uc->setName(next.substr(0,  next.find("|")));
-			  					next.erase(0,  next.find("|")+1);
-
-			  					uc->setYear(stoi(next.substr(0,  next.find("|"))));
-			  					next.erase(0,  next.find("|")+1);
-
-			  					uc->setECTS(stoi(next.substr(0,  next.find("|"))));
-			  					next.erase(0,  next.find("|")+1);
-
-			  					uc->setWorkload(stoi(next.substr(0,  next.find("|"))));
-			  					next.erase(0,  next.find("|")+1);
-
-			  					if((next.substr(0, next.find("|"))) == "!")
-			  					{
-			  						regent = SearchVec( c.getTeachers(),(next.substr(0, next.find("|"))));
-			  						uc->getTeachers().push_back(regent);
-			  					}
-
-			  					c.getUCs().push_back(uc);
-			  				}
-			  			}
-
-			  			c.getCourses().push_back(cs);
-			  		}
-		  		}
-		}
-	}
-}
-
+////////////////////
 
 ////GENERAL FUNCTIONS//// (used thoughout project, mostly for input verification)
 int Nav(int bottom, int top){ //tests for valid input keys and returns the inputted char
     int key;
-    while(cin >> key){ //Problem with cin getting corrupted if several characters are introduced
+    while(!(cin >> key) || key < bottom || key > top){ //Problem with cin getting corrupted if several characters are introduced
         cin.clear();
-        cin.ignore();
-        if(key >= bottom && key <= top) break;
-        else cout << "Invalid Input!" << endl;
+        cin.ignore(100,'\n');
+        cout << "Invalid Input!" << endl;
     }
+    cin.clear();
+    cin.ignore(100,'\n');
     return key;
 }
 
-date* changeDate(string data)
-{
+date* readDate(){
     unsigned int day, month, year;
     char c = '/';
-
-    stringstream ss(data);
-    ss >> day >> c >> month >> c >> year;
-    if(day < 0 || day > 31
-               || month < 0 || month > 12
-               || year < 1900 || year > 2018) cout << "\nInvalid date!" << endl;
-
-    date *d = new date(day, month, year);
-      return d;
-}
-
-date* readDate(){
-    date* d;
     string data;
     cin.clear();
     cin.ignore(100,'\n');
     while(1){
         cout << "\nInsert Birthday(dd/mm/yyyy): " << flush;
         getline(cin,data);
-       d= changeDate(data);
+        //data = data.substr(0,data.find('\n'));
+        stringstream ss(data);
+        ss >> day >> c >> month >> c >> year;
+        if(day < 0 || day > 31
+                || month < 0 || month > 12
+                || year < 1900 || year > 2018) cout << "\nInvalid date!" << endl;
+        else break;
     }
-return d;
-}
-	//////////////////////
-
-
-template<class T>
-void editInfo(T &obj) {
-    int n, i;
-    while (1) {
-        obj.showInfo();
-        n = obj.editInfo();
-        i = Nav(0,n);
-        if(i == n) return;
-        else obj.Set(i);
-    }
+    date *d = new date(day, month, year);
+    return d;
 }
 
 //////////////////////
@@ -386,7 +107,7 @@ T* Search_Menu(vector<T*> vec){
 
 //////////////////////
 
-void Course_Menu(Course& course){
+void Course_Menu(Course& course, College &college){
     while(1){
         course.showInfo();
         cout << "0:   EDIT INFO" << endl;
@@ -395,15 +116,16 @@ void Course_Menu(Course& course){
         cout << "3:   REMOVE UC" << endl;
         cout << "4:   SEARCH UC" << endl;
         cout << "5:   PREVIOUS MENU" << endl;
+        Uc* ptr;
         switch(Nav(0,5)){
             case 0:
-                editInfo(course);
+                course.editInfo(college);
                 break;
             case 1:
                 course.showSyllabus();
                 break;
             case 2:
-                course.addUC();
+                course.addUC(college);
                 break;
             case 3:
                 try{
@@ -415,16 +137,9 @@ void Course_Menu(Course& course){
                 }
                 break;
             case 4:
-                Uc* ptr;
-                try{
-                    ptr = Search_Menu(course.getUCs());
-                }
-                catch(NoNameFound &err){
-                    cout << err.errorMessage() << endl;
-                    continue;
-                }
-                //Uc_Menu(*ptr);
-                break;
+                ptr = Search_Menu(course.getUCs());
+                if(ptr != nullptr) ;//Uc_Menu(*ptr);
+                else continue;
             case 5:
                 return;
         }
@@ -434,7 +149,7 @@ void Course_Menu(Course& course){
 //////////////////////
 
 template<class T>
-void Courses_Menu(T &obj){ //Can be either college or Department
+void Courses_Menu(T &obj, College &college){ //Can be either college or Department
     while(1){
         obj.showInfo();
         Print_Vec(obj.getCourses());
@@ -443,7 +158,7 @@ void Courses_Menu(T &obj){ //Can be either college or Department
         cout << ++n << ":   REMOVE COURSE" << endl;
         cout << ++n << ":   SEARCH COURSE" << endl;
         cout << ++n << ":   PREVIOUS MENU" << endl;
-        unsigned int i = Nav(0,n);
+        int i = Nav(0,n);
         if(i == n) return;
         else if(i == n-1){
             Course* ptr;
@@ -454,20 +169,32 @@ void Courses_Menu(T &obj){ //Can be either college or Department
                 cout << err.errorMessage() << endl;
                 continue;
             }
-            Course_Menu(*ptr);
+            if(ptr != nullptr) Course_Menu(*ptr, college);
+            else continue;
         }
         else if(i == n-2){
-            auto ptr = Search_Menu(obj.getCourses());
-            if(ptr != nullptr) Course_Menu(*ptr);
+            Course* ptr;
+            try{
+                ptr = Search_Menu(obj.getCourses());
+            }
+            catch(NoNameFound &err){
+                cout << err.errorMessage() << endl;
+                continue;
+            }
+            if(ptr != nullptr) {
+                delete ptr;
+                cout << "Course Removed!" << endl;
+            }
+            else continue;
         }
-        else if(i == n-3) obj.addCourse();
-        else Course_Menu(*(obj.getCourses().at(i)));
+        else if(i == n-3) obj.addCourse(college);
+        else Course_Menu(*(obj.getCourses().at(i)),college);
     }
 }
 
 //////////////////////
 
-void Dep_Menu(Department& department){
+void Dep_Menu(Department& department, College &college){
     while(1){
         department.showInfo();
         cout << "0:   DEPARTMENT COURSES" << endl;
@@ -475,10 +202,10 @@ void Dep_Menu(Department& department){
         cout << "2:   PREVIOUS MENU" << endl;
         switch(Nav(0,3)){
             case 0:
-                Courses_Menu(department);
+                Courses_Menu(department,college);
                 break;
             case 1:
-                editInfo(department);
+                department.editInfo(college);
                 break;
             case 2:
                 return;
@@ -513,9 +240,9 @@ void Departments_Menu(College &college){
             }
         } else if (i == (n - 1)) { //Search Department by name
             auto ptr = Search_Menu(college.getDepartments());
-            if(ptr != nullptr) Dep_Menu(*ptr);
+            if(ptr != nullptr) Dep_Menu(*ptr,college);
         } else { //Enter department
-            Dep_Menu(*college.getDepartments().at(i));
+            Dep_Menu(*college.getDepartments().at(i),college);
         }
     }
 }
@@ -530,7 +257,7 @@ void Grades_Menu(People &person){
 //////////////////////
 
 template<class T>
-void Person_Menu(T &person){
+void Person_Menu(T &person,College &college){
     int n = -1, i;
     while(1){
         person.showInfo();
@@ -541,7 +268,7 @@ void Person_Menu(T &person){
         cout << ++n << ":   PREVIOUS MENU" << endl;
         i = Nav(0,n);
         if(i == n) return;
-        else if( i == n-1) editInfo(person);
+        else if( i == n-1) person.editInfo(college);
         else if(i == n-2) Grades_Menu(person);
     }
 }
@@ -551,7 +278,7 @@ void Person_Menu(T &person){
 void Remove_Person(College &college){
     int i;
     while(1) {
-        cout << "What Type of person would you like to remove?" << endl;
+        cout << "\nWhat Type of person would you like to remove?" << endl;
         cout << "0:   STUDENT" << endl;
         cout << "1:   TEACHER" << endl;
         cout << "2:   STAFF" << endl;
@@ -578,25 +305,17 @@ void Remove_Person(College &college){
 void List_Staff(College &college){
     int s, i;
     while(1){
+        s = college.getStaff().size();
         Print_Vec(college.getStaff());
-        cout << s << ":   ADD STAFF" << endl;
-        cout << ++s << ":   REMOVE STAFF" << endl;
-        cout << ++s << ":   SEARCH STAFF" << endl;
+        cout << s << ":   SEARCH STAFF" << endl;
         cout << ++s << ":   PREVIOUS MENU" << endl;
         i = Nav(0,s);
         if(i == s) return;
-        else if(i == s-3){
-            auto *stf = new Staff();
-            stf->addPerson(college);
-        }
-        else if(i == s-2){
-            //Remove_Person(college);
-        }
         else if(i == s-1){
             auto ptr = Search_Menu(college.getStaff());
-            if(ptr != nullptr) Person_Menu(*ptr);
+            if(ptr != nullptr) Person_Menu(*ptr,college);
         }
-        else Person_Menu(*(college.getStaff().at(i)));
+        else Person_Menu(*(college.getStaff().at(i)),college);
     }
 }
 
@@ -607,24 +326,15 @@ void List_Teachers(College &college){
     while(1){
         s = college.getTeachers().size();
         Print_Vec(college.getTeachers());
-        cout << s << ":   ADD TEACHER" << endl;
-        cout << ++s << ":   REMOVE TEACHER" << endl;
-        cout << ++s << ":   SEARCH TEACHER" << endl;
+        cout << s << ":   SEARCH TEACHER" << endl;
         cout << ++s << ":   PREVIOUS MENU" << endl;
         i = Nav(0,s);
         if(i == s) return;
-        else if(i == s-3){
-            auto *tch = new Teacher();
-            tch->addPerson(college);
-        }
-        else if(i == s-2){
-            //Remove_Person(college);
-        }
         else if(i == s-1){
             auto ptr = Search_Menu(college.getTeachers());
-            if(ptr != nullptr) Person_Menu(*ptr);
+            if(ptr != nullptr) Person_Menu(*ptr,college);
         }
-        else Person_Menu(*(college.getTeachers().at(i)));
+        else Person_Menu(*(college.getTeachers().at(i)),college);
     }
 }
 
@@ -635,24 +345,15 @@ void List_Students(College &college){
     while(1){
         s = college.getStudents().size();
         Print_Vec(college.getStudents());
-        cout << s << ":   ADD STUDENT" << endl;
-        cout << ++s << ":   REMOVE STUDENT" << endl;
-        cout << ++s << ":   SEARCH STUDENT" << endl;
+        cout << s << ":   SEARCH STUDENT" << endl;
         cout << ++s << ":   PREVIOUS MENU" << endl;
         i = Nav(0,s);
         if(i == s) return;
-        else if(i == s-3){
-            auto *st = new Student();
-            st->addPerson(college);
-        }
-        else if(i == s-2){
-            //Remove_Person(college);
-        }
         else if(i == s-1){
             auto ptr = Search_Menu(college.getStudents());
-            if(ptr != nullptr) Person_Menu(*ptr);
+            if(ptr != nullptr) Person_Menu(*ptr,college);
         }
-        else Person_Menu(*(college.getStudents().at(i)));
+        else Person_Menu(*(college.getStudents().at(i)),college);
     }
 }
 
@@ -671,7 +372,12 @@ void Add_Person(College &college){
         if (i == 3) return;
         else if (i == 0) {
             Student *st = new Student();
-            st->addPerson(college);
+            try{
+                st->addPerson(college);
+            }
+            catch(NoCourses &err){
+                cout << err.errorMessage() << " Please Create a Course before enrolling a student!" << endl;
+            }
         } else if (i == 1) {
             Teacher *tch = new Teacher();
             tch->addPerson(college);
@@ -730,7 +436,7 @@ void Member_Menu(College &college){ //Can only read
                 Departments_Menu(college);
                 break;
             case 1:
-                Courses_Menu(college);
+                Courses_Menu(college,college);
                 break;
             case 2:
                 People_Menu(college);
@@ -758,7 +464,7 @@ void Vis_Menu(College &college){ //Can only see info
                 Departments_Menu(college);
                 break;
             case 1:
-                Courses_Menu(college);
+                Courses_Menu(college,college);
                 break;
             case 2:
                 //Destroy College and go back to main menu
@@ -798,31 +504,32 @@ void Save_College(College &college){
     string file_name = college.getName() + ".txt";
     ofstream save_file (file_name);
     //------COLLEGE INFO------
-    save_file << college;
-    //------ DEP/COURSE/UC INFO------
-    for(size_t i = 0; i < college.getDepartments().size(); i++){
-        save_file << "DEP:" << endl;
-        save_file << *college.getDepartments().at(i) << endl;
-        save_file << endl;
-    }
+    save_file << "COLLEGE:" << endl;
+    save_file << college << endl;
     //------STUDENTS INFO------
     save_file << "STUDENTS:" << endl;
     for(size_t i = 0; i < college.getStudents().size(); i++){
-        save_file << *college.getStudents().at(i) << endl; //CREATE << overload for people
+        save_file << *college.getStudents().at(i);
     }
     save_file << endl;
     //------TEACHERS INFO------
     save_file << "TEACHER:" << endl;
     for(size_t i = 0; i < college.getTeachers().size(); i++){
-        save_file << *college.getTeachers().at(i) << endl; //CREATE << overload for people
+        save_file << *college.getTeachers().at(i);
     }
     save_file << endl;
     //------STAFF INFO------
     save_file << "STAFF:" << endl;
     for(size_t i = 0; i < college.getStaff().size(); i++){
-        save_file << *college.getStaff().at(i) << endl; //CREATE << overload for people
+        save_file << *college.getStaff().at(i);
     }
     save_file << endl;
+    //------ DEP/COURSE/UC INFO------
+    for(size_t i = 0; i < college.getDepartments().size(); i++){
+        save_file << "DEP:" << endl;
+        save_file << *college.getDepartments().at(i);
+        save_file << endl;
+    }
     save_file.close();
 }
 
@@ -841,9 +548,8 @@ bool Exit_College(College &college){
             return true;
         case 2:
             return false;
+        default: return false;
     }
-
-    return false;//nao sei se false or true
 }
 
 //////////////////////
@@ -860,7 +566,7 @@ void Admin_Menu(College &college){
                 Departments_Menu(college);
                 break;
             case 1:
-                Courses_Menu(college);
+                Courses_Menu(college,college);
                 break;
             case 2:
                 People_Menu(college);
