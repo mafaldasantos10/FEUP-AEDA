@@ -189,12 +189,7 @@ public:
      * @brief
      * @return
      */
-    int editInfo();
-    /**
-     *
-     * @param n
-     */
-    void Set(int n);
+    void editInfo(College& college);
     /**
      * @brief Gets the name of a given Department
      * @return String containing the name of the Department
@@ -299,12 +294,7 @@ public:
      *
      * @return
      */
-    int editInfo();
-    /**
-     *
-     * @param n
-     */
-    void Set(int n);
+    void editInfo(College &college);
     /**
 	 * @brief Shows the outline of the topics to be covered in an education Course
      */
@@ -541,6 +531,14 @@ public:
     };
 };
 
+class NoCourses{
+public:
+    NoCourses() = default;
+    string errorMessage(){
+        return "There are no Courses created in this College!";
+    }
+};
+
 
 //TEMPLATES//
 //////////////////////
@@ -552,13 +550,12 @@ public:
  * @return Holds true if the Object was removed successfully
  */
 template <class T>
-bool remove(vector<T> &vector, string name)
+bool remove(vector<T*> vector, string name)
 {
-    for(unsigned int i = 0; i <= vector.size(); i++)
+    for(unsigned int i = 0; i < vector.size(); i++)
     {
         if(vector.at(i)->getName() == name)
         {
-        	delete vector.at(i);
             vector.erase(vector.begin() + i);
             return true;
         }
@@ -568,7 +565,7 @@ bool remove(vector<T> &vector, string name)
 }
 
 template <class T>
-void dest_remove(vector<T> &vector)
+void dest_remove(vector<T*> vector)
 {
     for(unsigned int i = 0; i < vector.size(); i++)
     {

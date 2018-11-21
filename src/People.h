@@ -78,12 +78,7 @@ public:
      * @brief Allows the user to modify the information of a given Person
      * @return
      */
-    virtual int editInfo(); //Returns number of parameters
-    /**
-     * @brief
-     * @param n
-     */
-    virtual void Set(int n);
+    virtual void editInfo(College &college); //Returns number of parameters
     /**
      * @brief Changes the name of the given Person
      * @param newName New name of a given Person
@@ -135,6 +130,14 @@ public:
      */
 	//virtual ~People();
     virtual void write(ostream& os);
+
+    void InsertName();
+
+    void InsertAddress();
+
+    void InsertPhone();
+
+    void InsertBirthday();
 };
 /**@brief Student class,  inherits the public function from the class People*/
 class Student : public People{
@@ -215,13 +218,19 @@ public:
 	 */
 	void showAllGrades();
 	/**
-	 * @brief
+	 * @brief counter used to know how many students have been created
 	 */
     static int student_count;
+
+    void editInfo(College &college);
 
     friend ostream& operator<< (ostream& os, Student &student);
 
     void write(ostream& os);
+
+    void ChooseCourse(College &college);
+
+    void InsertYear();
 };
 
 
@@ -275,6 +284,12 @@ public:
 	void setNIF(unsigned int nif);
 
     void write(ostream& os);
+
+    void editInfo(College &college);
+
+    void InsertSalary();
+
+    void InsertNif();
 };
 
 enum Cat { Aux, Reg, CourseDir, DepDir};
@@ -332,7 +347,7 @@ public:
 	void addSubject(Uc* uc); //for now it just adds a given UC
 
 	/**
-	 * @brief
+	 * @brief counts teachers created
 	 */
     static int teacher_count;
 
@@ -345,6 +360,14 @@ public:
     friend string CatString(Cat &cat);
 
     friend ostream& operator<< (ostream& os, Cat &cat);
+
+    void editInfo(College &college);
+
+    void ChooseTeacherUCs(College &college);
+
+    bool InsertTeacherUc(College &college);
+
+    void RemoveTeacherUc(int n);
 };
 
 
@@ -387,13 +410,17 @@ public:
 	void setWorkArea(string work_area);
 
 	/**
-	 * @brief
+	 * @brief Counts number of staff members
 	 */
     static int staff_count;
 
     friend ostream& operator<< (ostream& os, Staff &staff);
 
     void write(ostream& os);
+
+    void editInfo(College &college);
+
+    void InsertWorkArea();
 };
 
 #endif /* PEOPLE_H_ */
