@@ -846,7 +846,6 @@ string Choose_Colleges(){
             cout << ++x << ":   " << college_name.substr(0, college_name.find("|")) << endl;
             colleges.push_back(file_name);
             file.close();
-            colleges.push_back(file_name);
         }
         i++;
         file_name = "college" + to_string(i) + ".txt";
@@ -854,7 +853,7 @@ string Choose_Colleges(){
     cout << ++x << ":   PREVIOUS MENU" << endl;
     input = Nav(0,x);
     if(input == x) return "BACK";
-    else return colleges.at(x);
+    else return colleges.at(input);
 }
 
 //////////////////////
