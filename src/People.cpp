@@ -344,7 +344,7 @@ void Student::showUCGrade(string name)
 
 	cout << "  MODULE\t\tGRADE\n";
     string s;
-    int i = 0
+	int i = 0;
 	for (auto it = subjects.find(uc); it != subjects.end(); it++)
 	{
         if(it->second == -1) s = "NO GRADE!";
@@ -358,7 +358,7 @@ void Student::showAllGrades()
 {
     cout << "  MODULE\t\tGRADE\n";
     string s;
-    int i = 0
+	int i = 0;
     for (auto it = subjects.begin(); it != subjects.end(); it++)
     {
         if(it->second == -1) s = "NO GRADE!";
