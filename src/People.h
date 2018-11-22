@@ -298,7 +298,9 @@ public:
     void InsertNif();
 };
 
-enum Cat { Aux, Reg, CourseDir, DepDir, Default};
+enum Cat {Default, Aux, Reg, CourseDir, DepDir};
+
+string CatString(Cat &cat);
 
 /**@brief Teacher Class, inherits all the public functions from Employee*/
 class Teacher : public Employee{
@@ -362,10 +364,6 @@ public:
     void write(ostream& os);
 
     void UpdateCat(Cat cat);
-
-    friend string CatString(Cat &cat);
-
-    friend ostream& operator<< (ostream& os, Cat &cat);
 
     void editInfo(College &college);
 

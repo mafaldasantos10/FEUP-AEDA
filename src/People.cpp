@@ -208,8 +208,12 @@ void Student::addPerson(College &college) {
             cin.ignore(100, '\n');
             cin >> grade;
         }
+        cin.clear();
+        cin.ignore(100, '\n');
         addUCGrade(uc, grade);
+        uc->addStudent(this);
     }
+    student_count++;
     college.addStudent(this);
 }
 
@@ -338,34 +342,35 @@ void Student::showUCGrade(string name)
 		}
 	}
 
-	cout << "MODULE\tGRADE\n";
-
+	cout << "  MODULE\t\tGRADE\n";
+    string s;
+    int i = 0
 	for (auto it = subjects.find(uc); it != subjects.end(); it++)
 	{
-		cout << it->first
-			 << '\t' << it->second << '\n';
-		break;
+        if(it->second == -1) s = "NO GRADE!";
+        else s = to_string(it->second);
+		cout << i << ":   " << it->first->getName() << "\t" << s << endl;
+        i++;
 	}
 }
 
 void Student::showAllGrades()
 {
-	cout << "MODULE\tGRADE\n";
-
-	for (map<Uc*,float>::iterator it=subjects.begin(); it!=subjects.end(); ++it)
-	{
-		cout << it->first
-			 << '\t' << it->second << '\n';
-	}
+    cout << "  MODULE\t\tGRADE\n";
+    string s;
+    int i = 0
+    for (auto it = subjects.begin(); it != subjects.end(); it++)
+    {
+        if(it->second == -1) s = "NO GRADE!";
+        else s = to_string(it->second);
+        cout << i << ":   " << it->first->getName() << "\t" << s << endl;
+        i++;
+    }
 }
 
 void Student::write(ostream &os) {
     People::write(os);
-    os << course->getName() << "|" << year << "|[";
-    for(auto it = subjects.begin(); it != subjects.end(); it++){
-        os << "(" << it->first->getName() << "," << it->second << ")";
-    }
-    os << "]|" << endl;
+    os << course->getName() << "|" << year << "|" << endl;
 }
 
 //////EMPLOYEE//////
@@ -474,6 +479,7 @@ bool Teacher::InsertTeacherUc(College &college) {
             return false;
         }
         subjects.push_back(uc);
+        uc->addTeacher(this);
     }
     return false;
 }
@@ -512,7 +518,7 @@ void Teacher::ChooseTeacherUCs(College &college){
             cin.clear();
             cin.ignore(100,'\n');
             if(answer == "Y"){
-                RemoveTeacherUc(n);
+                RemoveTeacherUc(i);
             }
             else continue;
         }
@@ -564,6 +570,7 @@ void Teacher::addPerson(College &college){
     while(!InsertTeacherUc(college));
     if(!subjects.empty()) category = Aux;
     else category = Default;
+    teacher_count++;
     college.addTeacher(this);
 }
 
@@ -594,7 +601,8 @@ void Teacher::UpdateCat(Cat cat){
 void Teacher::showInfo()
 {
 	People::showInfo();
-	cout << "| Category: " << category << endl;
+    string s = CatString(category);
+	cout << "| Category: " << s << endl;
 	cout << "|-----------------------------------------" << endl;
 }
 
@@ -618,6 +626,7 @@ void Staff::addPerson(College &college){
     setCode(code);
     cout << "\nInsert Staff member's working area: " << flush;
     getline(cin,work_area);
+    staff_count++;
     college.addStaff(this);
 }
 
@@ -720,9 +729,4 @@ string CatString(Cat &cat){
         default:
             return "!Unassigned!";
     }
-}
-
-ostream& operator<< (ostream& os, Cat &cat){
-    os << CatString(cat);
-    return os;
 }

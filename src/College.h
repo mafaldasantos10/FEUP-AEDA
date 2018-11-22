@@ -116,7 +116,10 @@ public:
      * @return Vector with the pointers to the Courses of a given College
      */
     vector<Course*> getCourses();
-
+    /**
+     * @brief Gets the vector with the Ucs of a given College
+     * @return Vector with the pointers to the Ucs of a given College
+     */
     vector<Uc*> getUCs();
     /**
      * @brief Gets the vector with the Departments of a given College
@@ -296,7 +299,7 @@ public:
     /**
 	 * @brief Shows the outline of the topics to be covered in an education Course
      */
-    void showSyllabus();
+    unsigned int showSyllabus();
     /**
      * @brief Gets the type of a given Course
      * @return String containing the type of the Course
@@ -474,7 +477,6 @@ public:
      * @brief Removes a Teacher from the vector of Teachers (ucTeachers)
      */
     void removeTeacher();
-    //void addStudent();
     /**
      * @brief Removes a Students from the vector of Students (ucStudents)
      */
@@ -486,7 +488,13 @@ public:
      */
     bool operator<(Uc uc2);
 
-    friend ostream& operator<< (ostream& os, const Uc &uc);
+    friend ostream& operator<< (ostream& os, Uc &uc);
+
+    void editInfo(College &college);
+
+    void addStudent(Student* student);
+
+    void addTeacher(Teacher* teacher);
 };
 
 
@@ -556,7 +564,7 @@ public:
  * @return Holds true if the Object was removed successfully
  */
 template <class T>
-bool remove(vector<T*> vector, string name)
+bool remove(vector<T*> &vector, string name)
 {
     for(unsigned int i = 0; i < vector.size(); i++)
     {
@@ -571,7 +579,7 @@ bool remove(vector<T*> vector, string name)
 }
 
 template <class T>
-void dest_remove(vector<T*> vector)
+void dest_remove(vector<T*> &vector)
 {
     for(unsigned int i = 0; i < vector.size(); i++)
     {

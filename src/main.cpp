@@ -391,7 +391,11 @@ int Main_Menu(){
 void New_College(College &college){
     string college_name, admin;
     cout << "Insert your College Name: " << flush;
-    getline(cin, college_name); //////////INPUT VALIDATION MISSING!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!(s� para ter a certeza q v�m)
+    getline(cin, college_name);
+    while(!hasNoNumber(college_name)){
+        cout << "Invalid college name! Try another: " << endl;
+        getline(cin, college_name);
+    }
     cout << endl << "Insert your Admin Code: " << flush;
     getline(cin, admin);
     college.setName(college_name);
@@ -421,6 +425,43 @@ T* Search_Menu(vector<T*> vec){
     return t;
 }
 
+void List_Teachers(vector<Teacher*> teachers, College &college);
+void List_Students(vector<Student*> students, College &college);
+
+void Uc_Menu(Uc &uc, College &college){
+    while(1){
+        uc.showInfo();
+        cout << "0:   LIST UCs STUDENTS" << endl;
+        cout << "1:   LIST UCs TEACHERS" << endl;
+        cout << "2:   EDIT INFO" << endl;
+        cout << "3:   PREVIOUS" << endl;
+        switch(Nav(0,3)){
+            case 0:
+                List_Students(uc.getStudents(),college);
+                break;
+            case 1:
+                List_Teachers(uc.getTeachers(),college);
+                break;
+            case 2:
+                uc.editInfo(college);
+                break;
+            case 3:
+                return;
+        }
+    }
+}
+
+//////////////////////
+
+void Course_Ucs_Menu(Course &course, College &college){
+    course.showInfo();
+    int x = course.showSyllabus();
+    cout << "\n" << x << ":   PREVIOUS" << endl;
+    int i = Nav(0,x);
+    if(i == x) return;
+    else Uc_Menu(*course.getUCs().at(i),college);
+}
+
 //////////////////////
 
 void Course_Menu(Course& course, College &college){
@@ -438,7 +479,7 @@ void Course_Menu(Course& course, College &college){
                 course.editInfo(college);
                 break;
             case 1:
-                course.showSyllabus();
+                Course_Ucs_Menu(course,college);
                 break;
             case 2:
                 course.addUC(college);
@@ -637,39 +678,39 @@ void List_Staff(College &college){
 
 //////////////////////
 
-void List_Teachers(College &college){
+void List_Teachers(vector<Teacher*> teachers, College &college){
     int s, i;
     while(1){
-        s = college.getTeachers().size();
-        Print_Vec(college.getTeachers());
+        s = teachers.size();
+        Print_Vec(teachers);
         cout << s << ":   SEARCH TEACHER" << endl;
         cout << ++s << ":   PREVIOUS MENU" << endl;
         i = Nav(0,s);
         if(i == s) return;
         else if(i == s-1){
-            auto ptr = Search_Menu(college.getTeachers());
+            auto ptr = Search_Menu(teachers);
             if(ptr != nullptr) Person_Menu(*ptr,college);
         }
-        else Person_Menu(*(college.getTeachers().at(i)),college);
+        else Person_Menu(*teachers.at(i),college);
     }
 }
 
 //////////////////////
 
-void List_Students(College &college){
+void List_Students(vector<Student*> students, College &college){
     int s, i;
     while(1){
-        s = college.getStudents().size();
-        Print_Vec(college.getStudents());
+        s = students.size();
+        Print_Vec(students);
         cout << s << ":   SEARCH STUDENT" << endl;
         cout << ++s << ":   PREVIOUS MENU" << endl;
         i = Nav(0,s);
         if(i == s) return;
         else if(i == s-1){
-            auto ptr = Search_Menu(college.getStudents());
+            auto ptr = Search_Menu(students);
             if(ptr != nullptr) Person_Menu(*ptr,college);
         }
-        else Person_Menu(*(college.getStudents().at(i)),college);
+        else Person_Menu(*students.at(i),college);
     }
 }
 
@@ -717,10 +758,10 @@ void People_Menu(College &college){
         cout << "5:   PREVIOUS MENU" << endl;
         switch (Nav(0, 5)) {
             case 0:
-                List_Students(college);
+                List_Students(college.getStudents(),college);
                 break;
             case 1:
-                List_Teachers(college);
+                List_Teachers(college.getTeachers(),college);
                 break;
             case 2:
                 List_Staff(college);
@@ -802,9 +843,10 @@ string Choose_Colleges(){
         if(file.is_open()){
             getline(file, college_name);
             getline(file, college_name);
-            cout << ++x << ":   " << college_name.substr(0, college_name.find("|"));
+            cout << ++x << ":   " << college_name.substr(0, college_name.find("|")) << endl;
             colleges.push_back(file_name);
             file.close();
+            colleges.push_back(file_name);
         }
         i++;
         file_name = "college" + to_string(i) + ".txt";
@@ -1015,13 +1057,11 @@ int main() {
                 access = 2;
                 break;
             case 1:
-                //file = Choose_Colleges();
-                //if(file == "BACK") {
-                //    access = 3;
-                //    break;
-                //}
-            	cout<<"File name"<<endl;
-            	cin>>file;
+                file = Choose_Colleges();
+                if(file == "BACK") {
+                    access = 3;
+                    break;
+                }
                 readFile(college,file);
                 access = Log_In(college);
                 break;
