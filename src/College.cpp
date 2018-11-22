@@ -23,6 +23,9 @@ College::College(string name)
 	colName = name;
 }
 
+College::College() {
+}
+
 string College::getName() const
 {
 	return colName;

@@ -64,7 +64,7 @@ public:
     /**
      * @brief Default College Constructor
      */
-    College(){}
+    College();
     ~College();
     /**
      *

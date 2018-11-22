@@ -21,10 +21,10 @@ string user_id;
 
 
 ////CURRENT YEAR//// (used for ids)
-//time_t theTime = time(NULL);
-//struct tm *aTime = localtime(&theTime);
-//int current_year = aTime->tm_year + 1900; // Year is # years since 1900
-int current_year = 2018;
+time_t theTime = time(NULL);
+struct tm *aTime = localtime(&theTime);
+int current_year = aTime->tm_year + 1900; // Year is # years since 1900
+//int current_year = 2018;
 
 /// PROTOTYPES ///
 date* changeDate(string data);
@@ -844,7 +844,6 @@ string Choose_Colleges(){
             getline(file, college_name);
             getline(file, college_name);
             cout << ++x << ":   " << college_name.substr(0, college_name.find("|")) << endl;
-            colleges.push_back(file_name);
             file.close();
             colleges.push_back(file_name);
         }
@@ -854,7 +853,7 @@ string Choose_Colleges(){
     cout << ++x << ":   PREVIOUS MENU" << endl;
     input = Nav(0,x);
     if(input == x) return "BACK";
-    else return colleges.at(x);
+    else return colleges.at(input);
 }
 
 //////////////////////
@@ -1057,13 +1056,11 @@ int main() {
                 access = 2;
                 break;
             case 1:
-                //file = Choose_Colleges();
-                //if(file == "BACK") {
-                //    access = 3;
-                //    break;
-                //}
-				cout << "File? " << endl;
-				cin >> file;
+                file = Choose_Colleges();
+                if(file == "BACK") {
+                    access = 3;
+                    break;
+                }
                 readFile(college, file);
                 access = Log_In(college);
                 break;
