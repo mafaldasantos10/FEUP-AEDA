@@ -295,7 +295,7 @@ public:
     void InsertNif();
 };
 
-enum Cat { Aux, Reg, CourseDir, DepDir};
+enum Cat { Aux, Reg, CourseDir, DepDir, Default};
 
 /**@brief Teacher Class, inherits all the public functions from Employee*/
 class Teacher : public Employee{
@@ -337,7 +337,7 @@ public:
 	 * @brief Changes the category of a given Teacher
 	 * @param category New category of the Teacher
 	 */
-	void setCategory(Cat &cat);
+	void setCategory(Cat cat);
 	/**
 	 * @brief Gets the Ucs that are taught by the given Teacher
 	 * @return Vector with the Ucs taught by the Teacher

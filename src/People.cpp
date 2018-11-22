@@ -563,6 +563,7 @@ void Teacher::addPerson(College &college){
     setCode(code);
     while(!InsertTeacherUc(college));
     if(!subjects.empty()) category = Aux;
+    else category = Default;
     college.addTeacher(this);
 }
 
@@ -571,7 +572,7 @@ enum Cat Teacher::getCategory()
 	return category;
 }
 
-void Teacher::setCategory(Cat &cat)
+void Teacher::setCategory(Cat cat)
 {
     category = cat;
 }

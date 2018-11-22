@@ -28,26 +28,16 @@ int current_year = aTime->tm_year + 1900; // Year is # years since 1900
 
 /// PROTOTYPES ///
 date* changeDate(string data);
+enum Cat CatEnum(string s);
 
 
 ///READ FILE
-void readFile()
+void readFile(College &c, string file)
 {
-	string file;
 	ifstream fin;
 	date* d;
-	College c;
-
-	cout << "From what file do you want to extract the information?" << endl;
-	cin >> file;
 
 	fin.open(file);
-	while(!fin.is_open())
-	{
-		cerr << "Input file not found!\n, try again!";
-		cin >> file;
-		fin.open(file);
-	}
 
 	string next; //line from the file
 
@@ -137,7 +127,7 @@ void readFile()
 					t->setNIF(stoi(next.substr(0,  next.find("|"))));
 					next.erase(0,  next.find("|")+1);
 
-					t->setCategory(next.substr(0,  next.find("|")));
+					t->setCategory(CatEnum(next.substr(0,  next.find("|"))));
 					next.erase(0,  next.find("|")+1);
 
 					c.getTeachers().push_back(t);
@@ -285,10 +275,12 @@ void readFile()
 ////GENERAL FUNCTIONS//// (used thoughout project, mostly for input verification)
 int Nav(int bottom, int top){ //tests for valid input keys and returns the inputted char
     int key;
-    while(!(cin >> key) || key < bottom || key > top){ //Problem with cin getting corrupted if several characters are introduced
+    cin >> key;
+    while(cin.fail() || key < bottom || key > top){ //Problem with cin getting corrupted if several characters are introduced
         cin.clear();
         cin.ignore(100,'\n');
         cout << "Invalid Input!" << endl;
+        cin >> key;
     }
     cin.clear();
     cin.ignore(100,'\n');
@@ -304,7 +296,10 @@ date* changeDate(string data)
     ss >> day >> c >> month >> c >> year;
     if(day < 0 || day > 31
                || month < 0 || month > 12
-               || year < 1900 || year > 2018) cout << "\nInvalid date!" << endl;
+               || year < 1900 || year > 2018) {
+        cout << "\nInvalid date!" << endl;
+        return nullptr;
+    }
 
     date *d = new date(day, month, year);
       return d;
@@ -318,9 +313,18 @@ date* readDate(){
     while(1){
         cout << "\nInsert Birthday(dd/mm/yyyy): " << flush;
         getline(cin,data);
-       d= changeDate(data);
+        d = changeDate(data);
+        if(d != nullptr) break;
     }
 return d;
+}
+
+enum Cat CatEnum(string s){
+    if(s == "Auxiliar Professor") return Aux;
+    else if( s == "Regent") return Reg;
+    else if(s ==  "Department Director") return DepDir;
+    else if(s == "Course Director") return CourseDir;
+    else return Default;
 }
 
 //////////////////////
@@ -750,7 +754,8 @@ string Choose_Colleges(){
         file.open(file_name);
         if(file.is_open()){
             getline(file, college_name);
-            cout << ++x << ":   " << college_name << endl;
+            getline(file, college_name);
+            cout << ++x << ":   " << college_name.substr(0, college_name.find("|"));
             colleges.push_back(file_name);
             file.close();
         }
@@ -759,14 +764,25 @@ string Choose_Colleges(){
     }
     cout << ++x << ":   PREVIOUS MENU" << endl;
     input = Nav(0,x);
-    if(input == x) return "";
+    if(input == x) return "BACK";
     else return colleges.at(x);
 }
 
 //////////////////////
 
 void Save_College(College &college){
-    string file_name = college.getName() + ".txt";
+    string file_name = "college0.txt";
+    ifstream file;
+    int i = 0;
+    while(i != 30){
+        file.open(file_name);
+        if(file.is_open()){
+            i++;
+            file_name = "college" + to_string(i) + ".txt";
+            file.close();
+        }
+        else break;
+    }
     ofstream save_file (file_name);
     //------COLLEGE INFO------
     save_file << "COLLEGE:" << endl;
@@ -845,6 +861,77 @@ void Admin_Menu(College &college){
 
 //////////////////////
 
+bool Admin_LogIn(College& college) {
+    string code;
+    while (1) {
+        cout << "\nEnter Admin code(! - cancel): " << flush;
+        getline(cin,code);
+        if(code == "!") return false;
+        else if(code == college.getAdmin()) return true;
+        else cout << "Wrong code, Try again!" << endl;
+    }
+}
+
+//////////////////////
+
+bool Member_LogIn(College& college){
+    while(1){
+        string name, code, type;
+        cout << "\nDo you want to log in as a Teacher or Student?(! to cancel/ S - Student/ T - Teacher): " << endl;
+        getline(cin,type);
+        if(type == "!") return false;
+        else if(type != "S" && type != "T"){
+            cout << "Invalid Input! Try again!" << endl;
+            continue;
+        }
+        cout << "\nInsert your name(! to cancel): " << flush;
+        getline(cin,name);
+        if(name == "!") continue;
+        else if(type == "T"){
+            Teacher* t;
+            try{
+                t = SearchVec(college.getTeachers(), name);
+            }
+            catch(NoNameFound &err){
+                cout << err.errorMessage() << " Try again!" << endl;
+                continue;
+            }
+            while(1){
+                cout << "\nInsert your code(! to cancel): " << flush;
+                getline(cin,code);
+                if(code == "!") break;
+                else if(code == t->getCode()){
+                    user_id = code;
+                    return true;
+                }
+                else cout << "\nWrong Code! Try again!" << endl;
+            }
+        }
+        else if(type == "S"){
+            Student* s;
+            try{
+                s = SearchVec(college.getStudents(), name);
+            }
+            catch(NoNameFound &err){
+                cout << err.errorMessage() << " Try again!" << endl;
+                continue;
+            }
+            while(1){
+                cout << "\nInsert your code(! to cancel): " << flush;
+                getline(cin,code);
+                if(code == "!") break;
+                else if(code == s->getCode()){
+                    user_id = code;
+                    return true;
+                }
+                else cout << "\nWrong Code! Try again!" << endl;
+            }
+        }
+    }
+}
+
+//////////////////////
+
 int Log_In(College& college){
     int i;
     while(1){
@@ -855,13 +942,12 @@ int Log_In(College& college){
         i = Nav(0,3);
         switch(i){
             case 0:
-                //Continue as visitor
                 break;
             case 1:
-                //Log in as member
+                if(!Member_LogIn(college)) continue;
                 break;
             case 2:
-                //Log in as admin
+                if(!Admin_LogIn(college)) continue;
                 break;
             case 3:
                 break;
@@ -873,17 +959,21 @@ int Log_In(College& college){
 //////////////////////
 
 int main() {
-
     while(1){
         College college;
+        string file;
         switch(Main_Menu()){
             case 0:
                 New_College(college);
                 access = 2;
                 break;
             case 1:
-                // Load_College();
-                // display created college files and read a College from a .txt file
+                file = Choose_Colleges();
+                if(file == "BACK") {
+                    access = 3;
+                    break;
+                }
+                readFile(college,file);
                 access = Log_In(college);
                 break;
             case 2:
