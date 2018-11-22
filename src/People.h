@@ -233,6 +233,9 @@ public:
     void ChooseCourse(College &college);
 
     void setYear(int newYear){ year = newYear; }
+    int getYear(){return year;}
+    void setCourseString(string name){course_string = name;}
+    string getCourseString(){return course_string;}
     void InsertYear();
 };
 

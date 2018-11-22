@@ -70,15 +70,15 @@ public:
      *
      * @return
      */
-    vector<Teacher *> getTeachers();
+    vector<Teacher *>& getTeachers();
 
     void removeTeacher(Teacher* teacher);
 
-    vector<Student *> getStudents();
+    vector<Student *>& getStudents();
 
     void removeStudent(Student* student);
 
-    vector<Staff *> getStaff();
+    vector<Staff *>& getStaff();
 
     void removeStaff(Staff* staff);
     /**
@@ -122,7 +122,7 @@ public:
      * @brief Gets the vector with the Departments of a given College
      * @return Vector with the pointers to the Departments of a given College
      */
-    vector<Department*> getDepartments();
+    vector<Department*>& getDepartments();
     /**
      * @brief Adds a new Department to the vector of Departments (vecDep)
      */
@@ -180,6 +180,7 @@ public:
      * @param phone Phone of the Department
      */
     Department(string name, int code, string address, int phone);
+    Department() = default;
     ~Department();
     /**
      * @brief Shows all the information of a given Department
@@ -244,7 +245,7 @@ public:
      * @brief Gets the vector with the Courses of a given College
      * @return Vector with the pointers to the Courses of a given College
      */
-    vector<Course*> getCourses();
+    vector<Course*>& getCourses();
     /**
      * @brief Adds a new Course to the vector of Courses (vecCourse)
      */
@@ -285,16 +286,13 @@ public:
      * @param code Code of the Course
      */
     Course(string type, string engName, string ptName, int code, Teacher *director);
+    Course() = default;
     ~Course();
     /**
      * @brief Shows all the information of a given Department
      */
     void showInfo();
-    /**
-     *
-     * @return
-     */
-    void editInfo(College &college);
+
     /**
 	 * @brief Shows the outline of the topics to be covered in an education Course
      */
@@ -343,7 +341,7 @@ public:
      * @brief Gets the vector with the UCs of a given Course
      * @return Vector of pointers to each UC of the Course
      */
-    vector<Uc*> getUCs();
+    vector<Uc*>& getUCs();
     /**
      * @brief Adds a new UC to the vector of UCs (vecUC)
      */
@@ -361,6 +359,11 @@ public:
      * @param name Name of the Uc of a given Course
      */
     void searchUc(string name);
+    /**
+     *
+     * @return
+     */
+    void editInfo(College &college);
 
     void setDirector(Teacher* dir){courseDirector = dir;}
 
@@ -403,6 +406,7 @@ public:
      */
     Uc(string name, int year, int ects, int workload, Teacher* director);
     ~Uc();
+    Uc() = default;
     /**
      * @brief Shows all the information of a given UC
      */
@@ -459,12 +463,12 @@ public:
      * @brief Gets the vector with the Teachers of a given UC
      * @return Vector of pointers to each Teacher of the UC
      */
-    vector<Teacher*> getTeachers();
+    vector<Teacher*>& getTeachers();
     /**
      * @brief Gets the vector with the Students of a given UC
      * @return Vector of pointers to each Student of the UC
      */
-    vector<Student*> getStudents();
+    vector<Student*>& getStudents();
     //void addTeacher();
     /**
      * @brief Removes a Teacher from the vector of Teachers (ucTeachers)

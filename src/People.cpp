@@ -161,7 +161,7 @@ void Student::InsertYear() {
 void Student::addPerson(College &college) {
     People::addPerson(college);
     string uc_name;
-    Uc* uc;
+    
     float grade;
     string code = "0" + to_string(current_year) + to_string(Student::student_count);  //student id is assigned
     setCode(code);
@@ -171,7 +171,7 @@ void Student::addPerson(College &college) {
 
     cout << "\nInsert Student's Year: " << flush;
     InsertYear();
-
+	Uc* uc = new Uc ();
     bool end = false;
     while(1){
         while(1){

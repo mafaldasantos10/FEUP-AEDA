@@ -21,10 +21,10 @@ string user_id;
 
 
 ////CURRENT YEAR//// (used for ids)
-time_t theTime = time(NULL);
-struct tm *aTime = localtime(&theTime);
-int current_year = aTime->tm_year + 1900; // Year is # years since 1900
-
+//time_t theTime = time(NULL);
+//struct tm *aTime = localtime(&theTime);
+//int current_year = aTime->tm_year + 1900; // Year is # years since 1900
+int current_year = 2018;
 
 /// PROTOTYPES ///
 date* changeDate(string data);
@@ -38,6 +38,12 @@ void readFile(College &c, string file)
 	date* d;
 
 	fin.open(file);
+	while(!fin.is_open())
+	{
+		cerr << "Input file not found, try again!" << endl;
+		cin >> file;
+		fin.open(file);
+	}
 
 	string next; //line from the file
 
@@ -59,16 +65,17 @@ void readFile(College &c, string file)
 
 				c.setName(next.substr(0, i));
 				next.erase(0, i+1);
+
 				c.setAdmin(next.substr(0, next.length()));
 			}
 
 			if(next == "STUDENTS:")
 			{
+				getline(fin, next);
+
 				while(next.length() != 0)
 				{
-					Student* s;
-
-					getline(fin, next);
+					Student* s = new Student ();
 
 					s->setName(next.substr(0,  next.find("|")));
 					next.erase(0,  next.find("|")+1);
@@ -86,22 +93,25 @@ void readFile(College &c, string file)
 					s->setDate(d);
 					next.erase(0,  next.find("|")+1);
 
-					s->setName(next.substr(0,  next.find("|")));
+					s->setCourseString(next.substr(0,  next.find("|")));
 					next.erase(0,  next.find("|")+1);
 
 					s->setYear(stoi(next.substr(0,  next.find("|"))));
-					next.erase(0,  next.find("|")+1);
+					next.clear();
 
 					c.getStudents().push_back(s); //ver se altera o vector mesmo
+
+					getline(fin, next);
 				}
 
 			}
-
+//cout<<next;
 			if(next == "TEACHER:")
 			{
+
 				while(next.length() != 0)
 				{
-					Teacher* t;
+					Teacher* t = new Teacher ();
 
 					getline(fin, next);
 
@@ -139,7 +149,7 @@ void readFile(College &c, string file)
 			{
 			  	 while(next.length() != 0)
 			  	 {
-					Staff* sf;
+					Staff* sf = new Staff ();
 
 					getline(fin, next);
 
@@ -174,9 +184,10 @@ void readFile(College &c, string file)
 
 		  if(next == "DEP:")
 		  {
-			    Teacher* dir;
 			  	getline(fin, next);
-		 		Department* d;
+
+			    Teacher* dir = new Teacher ();
+		 		Department* d = new Department ();
 
 		  		d->setName(next.substr(0, next.find("|")));
 		  		next.erase(0, next.find("|")+1);
@@ -190,9 +201,13 @@ void readFile(College &c, string file)
 		  		d->setPhone(stoi(next.substr(0, next.find("|"))));
 		  		next.erase(0, next.find("|")+1);
 
-		  		if((next.substr(0, next.find("|"))) == "!")
+		  		if((next.substr(0, next.find("|"))) != "!")
 		  		{
-		  			dir = SearchVec( c.getTeachers(),(next.substr(0, next.find("|"))));
+		  			try
+		  			{
+		  				dir = SearchVec( c.getTeachers(),(next.substr(0, next.find("|"))));
+		  			}catch(NoNameFound &e){cout << "Name not found!";}
+
 		  			d->setDirector(dir);
 		  		}
 
@@ -204,8 +219,9 @@ void readFile(College &c, string file)
 		  		{
 			  		if(next == "COURSE:")
 			  		{
-			  			Teacher* dirc;
-			  			Course* cs;
+			  			cout<<"course here"<<endl;
+			  			Teacher* dirc = new Teacher ();
+			  			Course* cs = new Course ();
 
 			  			getline(fin, next);
 
@@ -221,26 +237,34 @@ void readFile(College &c, string file)
 			  			cs->setType(next.substr(0, next.find("|")));
 			  			next.erase(0, next.find("|")+1);
 
-			  			if((next.substr(0, next.find("|"))) == "!")
+			  			if((next.substr(0, next.find("|"))) != "!")
 			  			{
-			  				dirc = SearchVec( c.getTeachers(), (next.substr(0, next.find("|"))));
+			  				try{
+			  					dirc = SearchVec( c.getTeachers(), (next.substr(0, next.find("|"))));
+			  				}catch(NoNameFound &e){cout << "No name Found!";}
+
 			  				cs->setDirector(dirc);
 			  			}
-			  			d->getCourses().push_back(cs);
 
+			  			d->getCourses().push_back(cs);
 			  			getline(fin, next);
+
 
 			  			if(next == "UC:")
 			  			{
+			  				getline(fin, next);
 			  				while(1)
 			  				{
-			  					Teacher* regent;
-			  					Uc* uc;
 
-			  					getline(fin, next);
+			  					Teacher* regent = new Teacher ();
+			  					Uc* uc = new Uc ();
 
-			  					if(next == "COURSE:")
+			  					cout << next << endl;
+
+			  					if(next == "COURSE:" || next.length() == 0)
+			  					{
 			  						break;
+			  					}
 
 			  					uc->setName(next.substr(0,  next.find("|")));
 			  					next.erase(0,  next.find("|")+1);
@@ -250,25 +274,48 @@ void readFile(College &c, string file)
 
 			  					uc->setECTS(stoi(next.substr(0,  next.find("|"))));
 			  					next.erase(0,  next.find("|")+1);
-
+			  					cout<<uc->getECTS()<<endl;
 			  					uc->setWorkload(stoi(next.substr(0,  next.find("|"))));
 			  					next.erase(0,  next.find("|")+1);
 
-			  					if((next.substr(0, next.find("|"))) == "!")
+			  					cout << next << endl;
+
+			  					if((next.substr(0, next.find("|"))) != "!")
 			  					{
-			  						regent = SearchVec( c.getTeachers(),(next.substr(0, next.find("|"))));
+			  						cout << "pois" << endl;
+			  						regent = SearchVec( c.getTeachers(), (next.substr(0, next.find("|"))));
 			  						uc->getTeachers().push_back(regent);
 			  					}
+			  					cout<<"hey"<<endl;
+			  					//cout << uc->getTeachers().at(0)->getName() << endl;
 
-			  					c.getUCs().push_back(uc);
-			  				}
-			  			}
+								cout << cs->getUCs().size() << endl;
+								cout << c.getUCs().size() << endl;
+								cout << c.getCourses().size() << endl;
+								cout << c.getDepartments().size() << endl;
 
-			  			c.getCourses().push_back(cs);
-			  		}
-		  		}
-		}
+			  					cs->getUCs().push_back(uc); //matando o programa
+			  					
+								cout<<"Para aqui"<<endl;
+
+								cout << cs->getUCs().size() << endl;
+								cout << c.getUCs().size() << endl;
+								cout << c.getCourses().size() << endl;
+
+								next.clear();
+
+			  					getline(fin, next);
+
+			  					cout << next << endl;
+
+			  				}cout<<"1 fim"<<endl;
+			  			}cout<<"2 fim"<<endl;
+			  		}cout<<"3 fim"<<endl;
+		  		}cout<<"4 fim"<<endl;
+		}cout<<"5 fim"<<endl;
 	}
+
+	cout << "Load Finished!" << endl;
 }
 
 
@@ -968,11 +1015,13 @@ int main() {
                 access = 2;
                 break;
             case 1:
-                file = Choose_Colleges();
-                if(file == "BACK") {
-                    access = 3;
-                    break;
-                }
+                //file = Choose_Colleges();
+                //if(file == "BACK") {
+                //    access = 3;
+                //    break;
+                //}
+            	cout<<"File name"<<endl;
+            	cin>>file;
                 readFile(college,file);
                 access = Log_In(college);
                 break;

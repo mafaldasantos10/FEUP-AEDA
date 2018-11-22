@@ -50,22 +50,22 @@ void College::setAdmin(string admin)
 	this->admin = admin;
 }
 
-vector<Department*> College::getDepartments()
+vector<Department*>& College::getDepartments()
 {
     return vecDep;
 }
 
-vector<Teacher *> College::getTeachers()
+vector<Teacher *>& College::getTeachers()
 {
     return teachers;
 }
 
-vector<Student *> College::getStudents()
+vector<Student *>& College::getStudents()
 {
     return students;
 }
 
-vector<Staff *> College::getStaff()
+vector<Staff *>& College::getStaff()
 {
     return staff;
 }
@@ -112,7 +112,8 @@ vector<Uc*> College::getUCs(){
     vector<Uc*> course_ucs;
     for(unsigned int i = 0; i < cr.size(); i++){
         course_ucs = cr.at(i)->getUCs();
-        vec.insert(vec.end(),course_ucs.begin(),course_ucs.end());
+        vec.insert(vec.end(), course_ucs.begin(), course_ucs.end());
+		//vec.push_back(cr.at(i)->getUCs());
     }
     return vec;
 }
@@ -160,7 +161,6 @@ void College::addDepartment()
 	bool differentX = true;
 
 	cout << "Enter the name of the Department: "<< endl;
-	getline(cin, name);
 
 	do{
 			getline(cin, name);
@@ -191,7 +191,7 @@ void College::addDepartment()
 	cout << "Enter the address of the Department: "<< endl;
 	getline(cin, address);
 
-	Teacher* director;
+	Teacher* director = new Teacher ();
 
     while(1){
         cout << "Enter the name of the director of the Department (! to skip/ ? for list): "<< endl;
@@ -244,7 +244,6 @@ void College::addDepartment()
 	/////////////////////////////////////////////////////////////////////////////////falta fazer validation do code!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 	cout << "Enter the phone of the Department (9-digit): "<< endl;
-	cin >> phone;
 
 	do{
 			cin >> phone;
@@ -274,7 +273,7 @@ void College::addDepartment()
 
 	} while (!differentX);
 
-	Department* dp;
+	Department* dp = new Department ();
 
 	if (directorName != "!")
 	{
@@ -395,6 +394,7 @@ void Department::editInfo(College &college){
         cout << "4:   DIRECTOR" << endl;
         cout << "5:   PREVIOUS" << endl;
         string s;
+		Teacher* director = new Teacher();
         int i;
         switch (Nav(0,5)) {
             case 0:
@@ -438,7 +438,6 @@ void Department::editInfo(College &college){
                 setPhone(i);
                 break;
             case 4:
-                Teacher* director;
                 while(1){
                     cout << "Enter the name of the director of the Department (! - cancel/? for list): "<< endl;
                     getline(cin, s);
@@ -513,7 +512,7 @@ void Department::setPhone(int phone)
 {
 	depPhone = phone;
 }
-vector<Course*> Department::getCourses()
+vector<Course*>& Department::getCourses()
 {
 	return vecCourse;
 }
@@ -847,7 +846,7 @@ void Course::setCode(int code)
 	csCode = code;
 }
 
-vector<Uc*> Course::getUCs()
+vector<Uc*>& Course::getUCs()
 {
 	return vecUC;
 }
@@ -1091,12 +1090,12 @@ void Uc::setWorkload(int workload)
 	ucWorkload = workload;
 }
 
-vector<Teacher*> Uc::getTeachers()
+vector<Teacher*>& Uc::getTeachers()
 {
 	return ucTeacher;
 }
 
-vector<Student*> Uc::getStudents()
+vector<Student*>& Uc::getStudents()
 {
 	return ucStudent;
 }
