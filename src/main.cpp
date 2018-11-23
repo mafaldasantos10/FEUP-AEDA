@@ -301,15 +301,27 @@ void readFile(College &c, string file)
 										break;
 									}
 								}
-								next.erase(0, next.find("]") + 1);
 
+								next.erase(0, next.find("]") + 1);
 							}
+
 							next.erase(0, next.find("|") + 1);
 
 							while (next.length() != 1)
 							{
-								teacher = SearchVec(c.getTeachers(), next.substr(1, next.find("]")-1));
+								string name = next.substr(1, next.find("]") - 1);
+								teacher = SearchVec(c.getTeachers(), name );
 								uc->getTeachers().push_back(teacher);
+
+								for (unsigned int j = 0; j < c.getTeachers().size(); j++)
+								{
+									if (c.getTeachers().at(j)->getName() == name)
+									{
+										c.getTeachers().at(j)->getSubjects().push_back(uc);
+										break;
+									}
+								}
+
 								next.erase(0, next.find("]") + 1);
 							}
 
@@ -326,6 +338,7 @@ void readFile(College &c, string file)
 
 		studentsCourses(c);
 	}
+
 	cout << endl << "--------------" << endl;
 	cout << "Load Finished!" << endl;
 	cout << "--------------" << endl << endl;
@@ -345,8 +358,9 @@ void studentsCourses(College &c)
 	}
 }
 
-////GENERAL FUNCTIONS//// (used thoughout project, mostly for input verification)
-int Nav(int bottom, int top) { //tests for valid input keys and returns the inputted char
+
+////GENERAL FUNCTIONS//// (used throughout project, mostly for input verification)
+int Nav(int bottom, int top) { //tests for valid input keys and returns the inputed char
 	int key;
 	cin >> key;
 	while (cin.fail() || key < bottom || key > top) { //Problem with cin getting corrupted if several characters are introduced
@@ -538,7 +552,7 @@ void Courses_Menu(T &obj, College &college) { //Can be either college or Departm
 		if (access == 2) cout << ++n << ":   REMOVE COURSE" << endl;
 		cout << ++n << ":   SEARCH COURSE" << endl;
 		cout << ++n << ":   PREVIOUS MENU" << endl;
-		int i = Nav(0, n);
+		unsigned int i = Nav(0, n);
 		if (i == n) return;
 		else if (i == n - 1) {
 			Course* ptr;

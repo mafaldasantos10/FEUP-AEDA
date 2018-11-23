@@ -10,6 +10,11 @@ using namespace std;
 
 
 //INPUT VALIDATION//
+/**
+ * @brief Checks if the string inputed has a number when it is not supposed to
+ * @param s String to be analyzed
+ * @return Holds true if the string is correct
+ */
 bool hasNoNumber(string s)
 {
     return(s.find_first_of("0123456789") == string::npos);
@@ -1180,7 +1185,7 @@ void Uc::removeTeacher()
 		cin >> name;
 	}
 
-    Teacher* t = SearchVec(ucTeacher,name);
+    //Teacher* t = SearchVec(ucTeacher, name);
 
 	if(remove(ucTeacher, name))
 	{

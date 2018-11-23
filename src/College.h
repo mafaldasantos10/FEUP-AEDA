@@ -13,9 +13,11 @@
 #include <map>
 #include "People.h"
 
+
 using namespace std;
 
-//PROTOTYPES
+
+//////PROTOTYPES//////
 class Department;
 class Course;
 class Uc;
@@ -24,22 +26,24 @@ class Employee;
 class Student;
 class Teacher;
 class Staff;
+//////////////////////
+
 
 /**
- * @brief
- * @param bottom
- * @param top
- * @return
+ * @brief Tests for valid input keys and returns the inputed char
+ * @param bottom Last option of the menu
+ * @param top First option of the menu
+ * @return Returns the option
  */
 int Nav(int bottom, int top);
 
 /**
- * @brief
- * @return
+ * @brief Reads the given date in the format XX/XX/XX
+ * @return Returns a date Object
  */
 date* readDate();
 
-/** @brief */
+/** @brief Current Year */
 extern int current_year;
 
 
@@ -47,13 +51,15 @@ extern int current_year;
 class College{
     /** @brief Name of the College */
     string colName;
-    /** @brief idk */
-    string admin; //For logging in as admin
+    /** @brief To log in as an Admin */
+    string admin;
     /** @brief Vector of pointers to each Department of the College */
     vector<Department*> vecDep;
-    /** @brief Vector of Vectors of pointers to each People of the College */
+    /** @brief Vector of Vectors of pointers to each Student of the College */
     vector<Student *> students;
+    /** @brief Vector of Vectors of pointers to each Teacher of the College */
     vector<Teacher *> teachers;
+    /** @brief Vector of Vectors of pointers to each Staff of the College */
     vector<Staff *> staff;
 public:
     /**
@@ -65,48 +71,53 @@ public:
      * @brief Default College Constructor
      */
     College();
+    /**
+     * @brief College destructor
+     */
     ~College();
     /**
      * @brief Gets Teacher vector by reference
-     * @return
+     * @return Returns the vector of Teachers by reference
      */
     vector<Teacher *>& getTeachers();
 	/**
-	* @brief Removes Teacher fomm College
+	* @brief Removes Teacher from College
 	* @param teacher Pointer to teacher
 	*/
     void removeTeacher(Teacher* teacher);
 	/**
-	* @brief Gets Student vector by reference
-	*/
+	 * @brief Gets Student vector by reference
+     * @return Returns the vector of Students by reference
+     */
     vector<Student *>& getStudents();
 	/**
-	* @brief Removes Student fomm College
+	* @brief Removes Student from College
 	* @param student Pointer to student
 	*/
     void removeStudent(Student* student);
 	/**
 	* @brief Gets Staff vector by reference
+	* @return Returns the vector of Staff by reference
 	*/
     vector<Staff *>& getStaff();
 	/**
-	* @brief Removes Staff fomm College
-	* @param staff Pointer to staff
+	* @brief Removes Staff from College
+	* @param staff Pointer to Staff
 	*/
     void removeStaff(Staff* staff);
     /**
      * @brief Adds teacher to College
-     * @param teacher
+     * @param teacher Pointer to Teacher
      */
     void addTeacher(Teacher* teacher);
 	/**
 	* @brief Adds student to College
-	* @param student
+	* @param student Pointer to Student
 	*/
     void addStudent(Student* student);
 	/**
 	* @brief Adds Staff to College
-	* @param staff
+	* @param staff Pointer to Staff
 	*/
     void addStaff(Staff* staff);
     /**
@@ -119,7 +130,10 @@ public:
      * @param name New name of the College
      */
     void setName(string name);
-
+    /**
+     * @brief Gets the admin of a given College
+     * @return String containing the admin of the College
+     */
     string getAdmin();
     /**
      * @brief Changes the administrator of a given College
@@ -136,8 +150,8 @@ public:
      */
     vector<Course*> getCourses();
     /**
-     * @brief Gets the vector with the Ucs of a given College
-     * @return Vector with the pointers to the Ucs of a given College
+     * @brief Gets the vector with the UCs of a given College
+     * @return Vector with the pointers to the UCs of a given College
      */
     vector<Uc*> getUCs();
     /**
@@ -167,9 +181,9 @@ public:
      */
     void searchDepartment(string name);
 	/**
-	* @brief Prints college info
+	* @brief Prints College info
 	* @param os
-	* @param college
+	* @param college College to be used
 	*/
     friend ostream& operator<< (ostream& os, const College &college);
 };
@@ -206,7 +220,13 @@ public:
      * @param phone Phone of the Department
      */
     Department(string name, int code, string address, int phone);
+    /**
+     * @brief Department Default constructor
+     */
     Department() = default;
+    /**
+     * @brief Department destructor
+     */
     ~Department();
     /**
      * @brief Shows all the information of a given Department
@@ -286,9 +306,9 @@ public:
      */
     void searchCourse(string name);
 	/**
-	* @brief Prints department info
+	* @brief Prints Department info
 	* @param os
-	* @param dep Department
+	* @param dep Department Department to be used
 	*/
     friend ostream& operator<< (ostream& os, const Department &dep);
 };
@@ -311,18 +331,24 @@ public:
     /**
      * @brief Course Constructor
      * @param type Type of the Course
-     * @param ptName Portuguese Name of the Course
      * @param engName English Name of the Course
+     * @param ptName Portuguese Name of the Course
      * @param code Code of the Course
+     * @param director Director of the Course
      */
     Course(string type, string engName, string ptName, int code, Teacher *director);
+    /**
+     * @brief Default Course Constructor
+     */
     Course() = default;
+    /**
+     * @brief Course destructor
+     */
     ~Course();
     /**
      * @brief Shows all the information of a given Department
      */
     void showInfo();
-
     /**
 	 * @brief Shows the outline of the topics to be covered in an education Course
      */
@@ -385,8 +411,8 @@ public:
      */
     void sortUc();
     /**
-     * @brief Searches for a Uc of the given Course
-     * @param name Name of the Uc of a given Course
+     * @brief Searches for a UC of the given Course
+     * @param name Name of the UC of a given Course
      */
     void searchUc(string name);
     /**
@@ -402,7 +428,7 @@ public:
 	/**
 	* @brief Prints course info
 	* @param os
-	* @param course
+	* @param course Course to be used
 	*/
     friend ostream& operator<< (ostream& os, const Course &course);
 };
@@ -425,24 +451,32 @@ class Uc{
     Teacher* Regent;
 public:
     /**
-     * @brief Uc Constructor
+     * @brief UC Constructor
      * @param name Name of the UC
      * @param teacher Vector of pointers to each Teacher of the UC
      * @param student Vector of pointers to each Student of the UC
      * @param year Year on which the UC is taught
      * @param ects ECTS of the UC
      * @param workload Workload (in hours) of the UC
+     * @param director Director of the UC
      */
     Uc(string name, vector<Teacher*> teacher, vector<Student*> student, int year, int ects, int workload, Teacher* director);
     /**
-     * @brief Uc Default Constructor
+     * @brief UC Another UC constructor
      * @param name Name of the UC
-     * @param year Year on which the UC is taught
      * @param ects ECTS of the UC
+     * @param year Year on which the UC is taught
      * @param workload Workload (in hours) of the UC
+     * @param director Director of the UC
      */
     Uc(string name, int year, int ects, int workload, Teacher* director);
+    /**
+     * @brief UC destructor
+     */
     ~Uc();
+    /**
+     * @brief UC Default Constructor
+     */
     Uc() = default;
     /**
      * @brief Shows all the information of a given UC
@@ -521,21 +555,26 @@ public:
      * @return Holds true if UC1 < UC2
      */
     bool operator<(Uc uc2);
-
+    /**
+     * @brief Prints info
+     * @param os
+     * @param uc UC to be used
+     * @return
+     */
     friend ostream& operator<< (ostream& os, Uc &uc);
 	/**
 	* @brief Opens a Menu to edit class info
-	* @param college
+	* @param college College info to be edited
 	*/
     void editInfo(College &college);
 	/**
 	* @brief Adds Student to UC
-	* @param student
+	* @param student Student to be added
 	*/
     void addStudent(Student* student);
 	/**
 	* @brief Adds Teacher to UC
-	* @param teacher
+	* @param teacher Teacher to be added
 	*/
     void addTeacher(Teacher* teacher);
 };
@@ -588,9 +627,17 @@ public:
     };
 };
 
+/** @brief Exception for non-existing courses */
 class NoCourses{
 public:
+	/**
+	 * @brief Default constructor
+	 */
     NoCourses() = default;
+    /**
+     * @brief Error Message
+     * @return String containing the course that caused the Exception
+     */
     string errorMessage(){
         return "There are no Courses created in this College!";
     }
@@ -621,6 +668,10 @@ bool remove(vector<T*> &vector, string name)
     return false;
 }
 
+/**
+ * @brief Template to all Objects from a vector
+ * @param vector Vector of the Objects to be removed
+ */
 template <class T>
 void dest_remove(vector<T*> &vector)
 {
@@ -629,6 +680,7 @@ void dest_remove(vector<T*> &vector)
         delete vector.at(i);
     }
 }
+
 /**
  * @brief Prints the name of every Object in a given vector of Objects
  * @param vec Vector of the Objects to be printed
@@ -640,6 +692,12 @@ void Print_Vec(vector<T*> vec){
     }
 }
 
+/**
+ * @brief Template to search a given Object from a given vector
+ * @param vec Vector of the Object to be searched
+ * @param name Name that the object needs to hold to be found
+ * @return throws exception if not found
+ */
 template<class T>
 T* SearchVec(vector<T*> vec, string name){
     for(size_t i = 0; i < vec.size(); i++){
@@ -648,6 +706,12 @@ T* SearchVec(vector<T*> vec, string name){
     throw NoNameFound(name);
 }
 
+/**
+ * @brief Template to search a given Object from a given vector
+ * @param vec Vector of the Object to be searched
+ * @param id ID that the object needs to hold to be found
+ * @return throws exception if not found
+ */
 template<class T>
 T* SearchID(vector<T*> vec, string id) {
 	for (size_t i = 0; i < vec.size(); i++) {

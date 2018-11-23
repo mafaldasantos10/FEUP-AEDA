@@ -14,20 +14,38 @@
 #include <vector>
 #include <time.h>
 
+//////////////////////
+/** @brief Type of access */
+extern int access;
+
+using namespace std;
+//////////////////////
+
 //////PROTOTYPES//////
 class College;
 class Course;
 class Uc;
 int Nav(int bottom, int top);
+/**
+ * @brief Checks if the string inputed has a number when it is not supposed to
+ * @param s String to be analyzed
+ * @return Holds true if the string is correct
+ */
 bool hasNoNumber(std::string s);
-extern int access;
+/** @brief Category of the teacher*/
+enum Cat {Default, Aux, Reg, CourseDir, DepDir};
+/**
+ * @brief Gets the current string
+ * @param cat Enum to be used
+ * @return Returns the string corresponding to the enum
+ */
+string CatString(Cat &cat);
+
 //////////////////////
-
-using namespace std;
-
-//////////////////////
-
-struct date {  //formated date string for better use
+/**
+ * @brief formated date string for better use
+ */
+struct date {
 	unsigned int day, month, year;
     string format;
     date(unsigned int d, unsigned int m, unsigned int y){
@@ -37,8 +55,8 @@ struct date {  //formated date string for better use
         format = to_string(day) + "/" + to_string(month) + "/" + to_string(year);
     }
 };
-
 //////////////////////
+
 
 /**@brief People class */
 class People {
@@ -60,13 +78,17 @@ public:
 	 * @param cod code of the Person
 	 */
 	People(string name, string address, date& birthday, unsigned int phone,string cod);
-
+	/**
+	 * @brief Default People constructor
+	 */
     People() = default;
-
+    /**
+     * @brief People destructor
+     */
     ~People(){delete birthday;}
 	/**
-	* @brief Virtual function to add a Perso to college
-	* @param college
+	* @brief Virtual function to add a Person to college
+	* @param college College to which the person will be added
 	*/
     virtual void addPerson(College &college);
 	/**
@@ -163,7 +185,7 @@ class Student : public People{
 	Course* course;
 	/**@brief College year the given Student is in*/
 	int year;  //year enrolled in
-	/** @brief Map that hold the Ucs and its grades of a given Student */
+	/** @brief Map that hold the UCs and its grades of a given Student */
 	map <Uc*, float> subjects; //In this map the Key is the subject and the float value corresponds to the grade of the student on that particular subject;
 public:
 	/**
@@ -177,9 +199,13 @@ public:
 	 * @param subjects Subjects the Student is taking
 	 */
 	Student(string name, string address, date birthday, unsigned int phone, string cod, string course, map <Uc*, float> subjects);
-
+	/**
+	 * @brief Default Student constructor
+	 */
     Student() = default;
-
+	/**
+	 * @brief People destructor
+	 */
     ~Student(){/*delete course;*/}
 	/**
 	* @brief Adds Student to college
@@ -201,8 +227,8 @@ public:
      */
 	Course* getCourse();
 	/**
-	 * @brief Gets the grades and Ucs of a given Student
-	 * @return Map containing the grades and Ucs of the Student
+	 * @brief Gets the grades and UCs of a given Student
+	 * @return Map containing the grades and UCs of the Student
 	 */
     map <Uc*, float>* getGrades();
     /**
@@ -210,32 +236,36 @@ public:
      * @return String with the name of the course
      */
 	string getCourseName();
+	/**
+	 * @brief Changes the Course
+	 * @param cs Course to change to
+	 */
 	void setCourse(Course* cs) { course = cs; }
 	/**
-	 * @brief Adds to the map a new Uc and the Students grade in it
-	 * @param name Name of the Uc
-	 * @param grade Grade of the Student in the Uc
+	 * @brief Adds to the map a new UC and the Students grade in it
+	 * @param uc Grade to be added to the UC
+	 * @param grade Grade of the Student in the UC
 	 */
 	void addUCGrade(Uc* uc, float grade);
 	/**
-	 * @brief Removes from the map a Uc and the grade the Student had
-	 * @param name Name of the Uc
-	 * @return Returns wether it could remove or not
+	 * @brief Removes from the map a UC and the grade the Student had
+	 * @param name Name of the UC
+	 * @return Returns whether it could remove or not
 	 */
 	bool removeFromMap(string name);
 	/**
-	 * @brief Changes the grade of a Uc in the map
-	 * @param name Name of the Uc with the new grade
-	 * @param grade New grade for the Uc
+	 * @brief Changes the grade of a UC in the map
+	 * @param name Name of the UC with the new grade
+	 * @param grade New grade for the UC
 	 */
 	void changeGrade(string name, float grade);
 	/**
-	 * Shows a Uc and its grade
-	 * @param name Name of the Uc meant to show
+	 * Shows a UC and its grade
+	 * @param name Name of the UC meant to show
 	 */
 	void showUCGrade(string name);
 	/**
-	 * @brief Shows the map with the Ucs and grades of a given Student
+	 * @brief Shows the map with the UCs and grades of a given Student
 	 */
 	void showAllGrades();
 	/**
@@ -246,14 +276,15 @@ public:
 	* @brief Edits Student info menu
 	*/
     void editInfo(College &college);
-	/**
-	* @brief Prints student info on os
-	* @param os
-	* @return os
-	*/
+    /**
+     * @brief Prints student info on os
+     * @param os
+     * @param student
+     * @return
+     */
     friend ostream& operator<< (ostream& os, Student &student);
 	/**
-	* @brief writes student info to os
+	* @brief Writes student info to os
 	* @param os
 	*/
     void write(ostream& os);
@@ -270,7 +301,7 @@ public:
 	/**
 	* @brief Returns student year
 	*/
-    int getYear(){return year;}
+    int getYear(){return year; }
 	/**
 	* @brief Sets course string to string parameter(used when reading files)
 	* @param name Name of course
@@ -285,7 +316,7 @@ public:
 	*/
     void InsertYear();
 	/**
-	* @brief Inserts Uc from user input
+	* @brief Inserts UC from user input
 	*/
 	void InsertUC();
 };
@@ -295,7 +326,7 @@ public:
 class Employee : public People{
 	/**@brief Salary of a given Employee*/
 	float salary;
-	/**Nif of a given Employee*/
+	/** @brief NIF of a given Employee*/
 	unsigned int nif;
 public:
 	/**
@@ -306,10 +337,12 @@ public:
 	 * @param phone Phone number of the Employee
 	 * @param cod Code of the Employee
 	 * @param salary Salary of the Employee
-	 * @param nif Nif of a Employee
+	 * @param nif NIF of a Employee
 	 */
 	Employee(string name, string address, date birthday, unsigned int phone, string cod, float salary, unsigned int nif);
-
+	/**
+	 * @brief Employee default constructor
+	 */
     Employee() = default;
 	/**
 	* @brief  adds employee to college
@@ -332,13 +365,13 @@ public:
 	 */
 	void setSalary(float salary);
 	/**
-	 * @brief Gets the Nif of a given Employee
-	 * @return Unsigned int containing the Nif of the given Employee
+	 * @brief Gets the NIF of a given Employee
+	 * @return Unsigned int containing the NIF of the given Employee
 	 */
 	unsigned int getNIF();
 	/**
-	 * @brief Changes the Nif of a given Employee
-	 * @param nif New nif of a given Employee
+	 * @brief Changes the NIF of a given Employee
+	 * @param nif New NIF of a given Employee
 	 */
 	void setNIF(unsigned int nif);
 	/**
@@ -355,20 +388,17 @@ public:
 	*/
     void InsertSalary();
 	/**
-	* @brief Inserts nif from user input
+	* @brief Inserts NIF from user input
 	*/
     void InsertNif();
 };
 
-enum Cat {Default, Aux, Reg, CourseDir, DepDir};
-
-string CatString(Cat &cat);
 
 /**@brief Teacher Class, inherits all the public functions from Employee*/
 class Teacher : public Employee{
 	/** @brief Category of the teacher*/
     enum Cat category;
-	/**@brief vector with the Ucs taught by the Teacher */
+	/**@brief vector with the UCs taught by the Teacher */
 	vector <Uc*> subjects;  //subjects taught by the teacher
 public:
 	/**
@@ -379,14 +409,18 @@ public:
 	 * @param phone Phone number of the Teacher
 	 * @param cod Code of the Teacher
 	 * @param salary Salary of the Teacher
-	 * @param nif Nif of the teacher
+	 * @param nif NIF of the teacher
 	 * @param category Category of the Teacher
 	 * @param subjects Subjects taught by the Teacher
 	 */
 	Teacher(string name, string address, date birthday, unsigned int phone, string cod, float salary, unsigned int nif, Cat category, vector <Uc *> subjects);
-
+	 /**
+	  * @brief Teacher default constructor
+	  */
     Teacher() = default;
-
+    /**
+     * @brief Teacher destructor
+     */
     ~Teacher();
 	/**
 	* @brief Adds Person to college
@@ -404,14 +438,14 @@ public:
 	enum Cat getCategory();
 	/**
 	 * @brief Changes the category of a given Teacher
-	 * @param category New category of the Teacher
+	 * @param cat New category of the Teacher
 	 */
 	void setCategory(Cat cat);
 	/**
-	 * @brief Gets the Ucs that are taught by the given Teacher
-	 * @return Vector with the Ucs taught by the Teacher
+	 * @brief Gets the UCs that are taught by the given Teacher
+	 * @return Vector with the UCs taught by the Teacher
 	 */
-	vector<Uc*> getSubjects();
+	vector<Uc*>& getSubjects();
 	/**
 	 * @brief Adds a subject to the vector of subjects taught by the Teacher
 	 * @param uc New subject taught by the Teacher
@@ -438,22 +472,22 @@ public:
 	*/
     void UpdateCat(Cat cat);
 	/**
-	* @brief Enters edit info menu for teacehr
+	* @brief Enters edit info menu for teacher
 	* @param college
 	*/
     void editInfo(College &college);
 	/**
-	* @brief Menu for choosing teacher's Ucs
+	* @brief Menu for choosing teacher's UCs
 	* @param college
 	*/
     void ChooseTeacherUCs(College &college);
 	/**
-	* @brief Inserts uc from user input
+	* @brief Inserts UC from user input
 	*/
     bool InsertTeacherUc(College &college);
 	/**
-	* @brief Remvoes uc from teacher uc vector
-	* @param n Position of Uc in vector
+	* @brief Removes UC from teacher UC vector
+	* @param n Position of UC in vector
 	*/
     void RemoveTeacherUc(int n);
 };
@@ -472,11 +506,13 @@ public:
 	 * @param phone Phone number of the Staff member
 	 * @param cod Code of the Staff member
 	 * @param salary Salary of the Staff member
-	 * @param nif Nif of the Staff member
+	 * @param nif NIF of the Staff member
 	 * @param work_area Work area of the Staff member
 	 */
 	Staff(string name, string adress, date birthday, unsigned int phone, string cod, float salary, unsigned int nif, string work_area);
-
+	/**
+	 * @brief Staff default constructor
+	 */
     Staff() = default;
 	/**
 	* @brief Adds person to college
@@ -501,10 +537,12 @@ public:
 	 * @brief Counts number of staff members
 	 */
     static int staff_count;
-	/**
-	* @brief Prints staff info on os
-	* @param os
-	*/
+    /**
+     * @brief Prints staff info on os
+     * @param os
+     * @param staff
+     * @return
+     */
     friend ostream& operator<< (ostream& os, Staff &staff);
 	/**
 	* @brief Writes staff info on os

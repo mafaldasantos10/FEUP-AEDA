@@ -163,7 +163,7 @@ void Student::addPerson(College &college)
     People::addPerson(college);
     string uc_name;
     
-    float grade;
+    //float grade;
     string code = "0" + to_string(current_year) + to_string(Student::student_count);  //student id is assigned
     setCode(code);
 
@@ -322,7 +322,7 @@ bool Student::removeFromMap(string name)
 		subjects.erase(uc);
 		return true;
 	}
-	else cout << "Uc with name -" << name << "- was not found" << endl;
+	else cout << "UC with name -" << name << "- was not found!" << endl;
 	return false;
 }
 
@@ -506,15 +506,15 @@ void Teacher::RemoveTeacherUc(int n){
         cout << "Couldn't Remove Teacher from Uc's Teacher list" << endl;
         return;
     }
-    if(!remove(subjects,subjects.at(n)->getName())) cout << "Couldn't Remove Uc from Teacher's list" << endl;
-    else cout << "Uc successfully removed!" << endl;
+    if(!remove(subjects,subjects.at(n)->getName())) cout << "Couldn't Remove UC from Teacher's list" << endl;
+    else cout << "UC successfully removed!" << endl;
 }
 
 void Teacher::ChooseTeacherUCs(College &college){
     while(1){
-        Uc* uc;
+        //Uc* uc = new Uc;
         string uc_name;
-		cout << "\nChoose Teacher's Uc(click on them to remove): " << endl;
+		cout << "\nChoose Teacher's UC (click on them to remove): " << endl;
         Print_Vec(subjects);
         int n = subjects.size();
         cout << n << ":   ADD UC" << endl;
@@ -524,7 +524,7 @@ void Teacher::ChooseTeacherUCs(College &college){
         else if(i == n-1) while(!InsertTeacherUc(college));
         else{
             string answer;
-            cout << "Are you sure you want to Remove this Uc from Teacher?(Y - yes/N - no)" << endl;
+            cout << "Are you sure you want to Remove this UC from Teacher?(Y - yes/N - no)" << endl;
             cin >> answer;
             while(cin.fail() || (answer != "Y" && answer != "N")){
                 cout << "Invalid answer, try again: " << flush;
@@ -576,9 +576,11 @@ void Teacher::editInfo(College &college) {
 			case 4:
 				cout << "Insert new salary: " << flush;
 				InsertSalary();
+				break;
 			case 5:
 				cout << "Insert new NIF: " << flush;
 				InsertNif();
+				break;
 			case 6:
 				ChooseTeacherUCs(college);
 				break;
@@ -620,7 +622,7 @@ void Teacher::setCategory(Cat cat)
     category = cat;
 }
 
-vector<Uc*> Teacher::getSubjects()
+vector<Uc*>& Teacher::getSubjects()
 {
 	return subjects;
 }
@@ -727,9 +729,11 @@ void Staff::editInfo(College &college) {
 		case 4:
 			cout << "Insert new salary: " << flush;
 			InsertSalary();
+			break;
 		case 5:
 			cout << "Insert new NIF: " << flush;
 			InsertNif();
+			break;
 		case 6:
 			cout << "Insert new WorkArea: " << flush;
 			InsertWorkArea();
@@ -758,11 +762,11 @@ ostream& operator<< (ostream& os, Student &student){
 string CatString(Cat &cat){
     switch(cat){
         case Aux:
-            return "Auxiliar Professor";
+            return "Auxiliary Professor";
         case Reg:
             return "Regent";
         case DepDir:
-            return "Deoartment Director";
+            return "Department Director";
         case CourseDir:
             return "Course Director";
         default:
