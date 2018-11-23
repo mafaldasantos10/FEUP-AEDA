@@ -258,7 +258,7 @@ public:
 	 * @param name Name of the UC with the new grade
 	 * @param grade New grade for the UC
 	 */
-	void changeGrade(string name, float grade);
+	bool changeGrade(Uc* uc, float grade);
 	/**
 	 * Shows a UC and its grade
 	 * @param name Name of the UC meant to show

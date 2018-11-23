@@ -102,6 +102,8 @@ void People::InsertPhone() {
         cin.ignore(100, '\n');
         cin >> phone;
     }
+    cin.clear();
+    cin.ignore(100, '\n');
 }
 
 void People::InsertBirthday(){
@@ -213,7 +215,7 @@ void Student::InsertUC()
 
 		cout << "\nInsert Student's UC grade(-1 if not-evaluated): " << flush;
 		cin >> grade;
-		while (cin.fail() || grade > 20 || grade < -1)
+		while (cin.fail() || grade > 20 || (grade < 0 && grade != -1))
 		{
 			cout << "Invalid grade, try again: " << endl;
 			cin.clear();
@@ -326,24 +328,15 @@ bool Student::removeFromMap(string name)
 	return false;
 }
 
-void Student::changeGrade(string name, float grade)
+bool Student::changeGrade(Uc* uc, float grade)
 {
-	Uc* uc;
-
-	for (unsigned int i = 0; i < course->getUCs().size(); i++)
-	{
-		if (course->getUCs().at(i)->getName() == name)
-		{
-			uc = course->getUCs().at(i);
-			break;
-		}
-	}
-
-	for (auto it = subjects.find(uc); it != subjects.end(); it++)
+    auto it = subjects.find(uc);
+	if (it != subjects.end())
 	{
 		it->second = grade;
-		break;
+        return true;
 	}
+    else return false;
 }
 
 void Student::showUCGrade(string name)

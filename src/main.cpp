@@ -18,13 +18,13 @@ using namespace std;
 //VARIABLES
 int access = 0; //Global variable to determine type of user
 string user_id;
-
+string college_file_name = "!";
 
 ////CURRENT YEAR//// (used for ids)
 //time_t theTime = time(NULL);
 //struct tm *aTime = localtime(&theTime);
 //int current_year = aTime->tm_year + 1900; // Year is # years since 1900
-int current_year = 2018;
+int current_year = 2018;  //Visual studio gives off error in above functions, however CLion runs fine, thus they were commented
 
 /// PROTOTYPES ///
 date* changeDate(string data);
@@ -395,14 +395,13 @@ date* changeDate(string data)
 date* readDate() {
 	date* d;
 	string data;
-	cin.clear();
-	cin.ignore(100, '\n');
 	while (1) {
 		cout << "\nInsert Birthday(dd/mm/yyyy): " << flush;
 		getline(cin, data);
 		d = changeDate(data);
 		if (d != nullptr) break;
 	}
+
 	return d;
 }
 
@@ -429,6 +428,7 @@ int Main_Menu() {
 //////////////////////
 
 void New_College(College &college) {
+    college_file_name = "!";
 	string college_name, admin;
 	cout << "Insert your College Name: " << flush;
 	getline(cin, college_name);
@@ -658,13 +658,15 @@ void Grades_Menu(People &person, College &college) {
 	while (1) {
 		st->showAllGrades();
 		int n = st->getGrades()->size();
+        cout << endl;
 		if (access != 2) n--;
-		if (access == 2) cout << n << ":   ADD UC" << endl;
+        if (access == 2) cout << n << ":   CHANGE UC GRADE" << endl;
+		if (access == 2) cout << ++n << ":   ADD UC" << endl;
 		if (access == 2) cout << ++n << ":   REMOVE UC" << endl;
 		cout << ++n << ":   PREVIOUS" << endl;
 		int i = Nav(0, n);
 		if (i == n) return;
-		else if (i == n - 1) {
+		else if (i == n - 1 && access == 2) {
 			string uc_name;
 			cout << "Insert the Uc you would like to remove: " << flush;
 			do {
@@ -673,7 +675,31 @@ void Grades_Menu(People &person, College &college) {
 				if (uc_name == "!") break;
 			} while (!st->removeFromMap(uc_name));
 		}
-		else if (i == n - 2) st->InsertUC();
+		else if (i == n - 2 && access == 2) st->InsertUC();
+        else if (i == n - 3 && access == 2) {
+            while(1){
+                cout << "\nInsert number of UC whose grade you want to change( " << st->getGrades()->size() << " - cancel): " << flush;
+                int i = Nav(0,st->getGrades()->size());
+                if(i == st->getGrades()->size()) break;
+                else{
+                    float grade;
+                    cout << "\nInsert Student's UC grade(-1 if not-evaluated): " << flush;
+                    cin >> grade;
+                    while (cin.fail() || grade > 20 || (grade < 0 && grade != -1))
+                    {
+                        cout << "\nInvalid grade, try again: " << endl;
+                        cin.clear();
+                        cin.ignore(100, '\n');
+                        cin >> grade;
+                    }
+                    cin.clear();
+                    cin.ignore(100, '\n');
+                    auto it = st->getGrades()->begin();
+                    advance(it,i);
+                    if(!st->changeGrade(it->first,grade)) cout << "\n Unexpected Error! grade not changed..." << endl;
+                }
+            }
+        }
 		else {
 			auto it = st->getGrades()->begin();
 			advance(it, i);
@@ -941,7 +967,10 @@ string Choose_Colleges() {
 	cout << ++x << ":   PREVIOUS MENU" << endl;
 	input = Nav(0, x);
 	if (input == x) return "BACK";
-	else return colleges.at(input);
+	else{
+        college_file_name = colleges.at(input);
+        return colleges.at(input);
+    }
 }
 
 //////////////////////
@@ -959,6 +988,7 @@ void Save_College(College &college) {
 		}
 		else break;
 	}
+    if(college_file_name != "!") file_name = college_file_name;
 	ofstream save_file(file_name);
 	//------COLLEGE INFO------
 	save_file << "COLLEGE:" << endl;
