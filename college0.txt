@@ -1,0 +1,42 @@
+COLLEGE:
+FLUP|123qwerty
+
+STUDENTS:
+Maria Josefa|Rua de Braga nº1134|921367811|020181|5/12/1993|Historia da Lingua|3|
+Joao Leitao|Rua dos Borregos nº12|923511789|020182|5/11/1999|Historia da Lingua|1|
+Miguel Monsão|Avenida de Monsão nº1|911234671|020183|8/3/1998|Historia da Lingua|2|
+Joaquim Fernandes|Rua da Areosa|993123478|020184|7/7/1999|Historia|2|
+Maria Alvim|Rua dos Esquilos|993878666|020185|7/7/1999|Historia|1|
+Ines Macedo|Rua dos Samaritanos nº2|915657784|020186|6/12/1998|Economia|4|
+
+TEACHER:
+Mario Centeno|Rua das Finanças nº123|911311411|120181|21/10/1965|5000.000000|123456789|0|
+Manuela Visconde|Rua Nobre de Gaia nº77|923411590|120182|19/4/1970|1200.000000|123312323|0|
+Roberto Manuel Simoes|Rua dos Simoes nº78|932475681|120183|17/4/1982|1679.000000|123428389|0|
+Fernando Alves|Rua do Aviario nº74|912345614|120184|19/4/1970|1500.000000|123987423|0|
+Catarina Salgado|Rua do Mar nº9|92477980|120184|4/4/1975|1100.000000|123782123|0|
+
+STAFF:
+João Souto|Rua do Campo Alegre nº12|921765891|220181|24/9/1980|700.000000|456321789|Papelaria|
+Joaquina Simoes|Rua dos Simoes nº78|921378654|220182|3/12/1981|600.000000|123123456|Cantina|
+
+DEP:
+Linguas|Rua dos falabaratos nº 123|1234|912345671|!|
+COURSE:
+Historia da Lingua|Language History|1456|L|Manuela Visconde|
+UC:
+Francês|1|5|4|!|[Maria Josefa,-1][Joao Leitao,14][Miguel Monsão,18]|[Mario Centeno][Manuela Visconde]|
+Brasileiro|1|4|1|!|[Joao Leitao,19][Miguel Monsão,-1]|[Manuela Visconde]|
+Latim|2|7|6|!|[Maria Josefa,15][Miguel Monsão,13]|[Mario Centeno]|
+COURSE:
+Historia|History|1455|MI|Fernando Alves|
+UC:
+Historia das Artes|2|4|5|!|[Joaquim Fernandes,11]|[Mario Centeno][Roberto Manuel Simoes]|
+Ingles|1|4|1|!|[Joaquim Fernandes,15][Maria Alvim,-1]|[Manuela Visconde][Fernando Alves]|
+
+DEP:
+Economia|Rua|1234|999222333|Roberto Manuel Simoes|
+COURSE:
+Economia|Economy|1232|MI|Catarina Salgado|
+UC:
+Contabilidade|2|5|6|!|[Ines Macedo,10]|[Catarina Salgado]|
