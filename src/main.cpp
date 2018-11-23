@@ -29,295 +29,320 @@ int current_year = aTime->tm_year + 1900; // Year is # years since 1900
 /// PROTOTYPES ///
 date* changeDate(string data);
 enum Cat CatEnum(string s);
-
+void studentsCourses(College &c);
 
 ///READ FILE
 void readFile(College &c, string file)
 {
-	ifstream fin;
-	date* d;
+    ifstream fin;
+    date* d;
 
-	fin.open(file);
-	while(!fin.is_open())
-	{
-		cerr << "Input file not found, try again!" << endl;
-		cin >> file;
-		fin.open(file);
-	}
+    fin.open(file);
+    while (!fin.is_open())
+    {
+        cerr << "Input file not found, try again!" << endl;
+        cin >> file;
+        fin.open(file);
+    }
 
-	string next; //line from the file
+    string next; //line from the file
 
-	while(!fin.eof())
-	{
-		getline(fin, next);
+    while (!fin.eof())
+    {
+        getline(fin, next);
 
-			if(next.length() == 0)
-			{
-				continue;
-			}
+        if (next.length() == 0)
+        {
+            continue;
+        }
 
-			if(next == "COLLEGE:")
-			{
-				getline(fin, next);
+        if (next == "COLLEGE:")
+        {
+            getline(fin, next);
 
-				int i = next.find("|");
+            int i = next.find("|");
 
+            c.setName(next.substr(0, i));
+            next.erase(0, i + 1);
 
-				c.setName(next.substr(0, i));
-				next.erase(0, i+1);
+            c.setAdmin(next.substr(0, next.length()));
+        }
 
-				c.setAdmin(next.substr(0, next.length()));
-			}
+        if (next == "STUDENTS:")
+        {
+            getline(fin, next);
 
-			if(next == "STUDENTS:")
-			{
-				getline(fin, next);
+            while (next.length() != 0)
+            {
+                Student* s = new Student();
 
-				while(next.length() != 0)
-				{
-					Student* s = new Student ();
+                s->setName(next.substr(0, next.find("|")));
+                next.erase(0, next.find("|") + 1);
 
-					s->setName(next.substr(0,  next.find("|")));
-					next.erase(0,  next.find("|")+1);
+                s->setAddress(next.substr(0, next.find("|")));
+                next.erase(0, next.find("|") + 1);
 
-					s->setAddress(next.substr(0,  next.find("|")));
-					next.erase(0,  next.find("|")+1);
+                s->setPhone(stoi(next.substr(0, next.find("|"))));
+                next.erase(0, next.find("|") + 1);
 
-					s->setPhone(stoi(next.substr(0,  next.find("|"))));
-					next.erase(0,  next.find("|")+1);
+                s->setCode(next.substr(0, next.find("|")));
+                next.erase(0, next.find("|") + 1);
 
-					s->setCode(next.substr(0,  next.find("|")));
-					next.erase(0,  next.find("|")+1);
+                d = changeDate(next.substr(0, next.find("|")));
+                s->setDate(d);
+                next.erase(0, next.find("|") + 1);
 
-					d = changeDate(next.substr(0, next.find("|")));
-					s->setDate(d);
-					next.erase(0,  next.find("|")+1);
+                s->setCourseString(next.substr(0, next.find("|")));
+                next.erase(0, next.find("|") + 1);
 
-					s->setCourseString(next.substr(0,  next.find("|")));
-					next.erase(0,  next.find("|")+1);
+                s->setYear(stoi(next.substr(0, next.find("|"))));
+                next.clear();
 
-					s->setYear(stoi(next.substr(0,  next.find("|"))));
-					next.clear();
+                c.getStudents().push_back(s);
 
-					c.getStudents().push_back(s); //ver se altera o vector mesmo
+                getline(fin, next);
+            }
+        }
 
-					getline(fin, next);
-				}
+        if (next == "TEACHER:")
+        {
+            getline(fin, next);
 
-			}
-//cout<<next;
-			if(next == "TEACHER:")
-			{
+            while (next.length() != 0)
+            {
+                Teacher* t = new Teacher();
 
-				while(next.length() != 0)
-				{
-					Teacher* t = new Teacher ();
+                t->setName(next.substr(0, next.find("|")));
+                next.erase(0, next.find("|") + 1);
 
-					getline(fin, next);
+                t->setAddress(next.substr(0, next.find("|")));
+                next.erase(0, next.find("|") + 1);
 
-					t->setName(next.substr(0,  next.find("|")));
-					next.erase(0,  next.find("|")+1);
+                t->setPhone(stoi(next.substr(0, next.find("|"))));
+                next.erase(0, next.find("|") + 1);
 
-					t->setAddress(next.substr(0,  next.find("|")));
-					next.erase(0,  next.find("|")+1);
+                t->setCode(next.substr(0, next.find("|")));
+                next.erase(0, next.find("|") + 1);
 
-					t->setPhone(stoi(next.substr(0,  next.find("|"))));
-					next.erase(0,  next.find("|")+1);
+                d = changeDate(next.substr(0, next.find("|")));
+                t->setDate(d);
+                next.erase(0, next.find("|") + 1);
 
-					t->setCode(next.substr(0,  next.find("|")));
-					next.erase(0,  next.find("|")+1);
+                t->setSalary(stof(next.substr(0, next.find("|"))));
+                next.erase(0, next.find("|") + 1);
 
-					d = changeDate(next.substr(0, next.find("|")));
-					t->setDate(d);
-					next.erase(0,  next.find("|")+1);
+                t->setNIF(stoi(next.substr(0, next.find("|"))));
+                next.erase(0, next.find("|") + 1);
 
-					t->setSalary(stof(next.substr(0,  next.find("|"))));
-					next.erase(0,  next.find("|")+1);
+                t->setCategory(CatEnum(next.substr(0, next.find("|"))));
+                next.erase(0, next.find("|") + 1);
 
-					t->setNIF(stoi(next.substr(0,  next.find("|"))));
-					next.erase(0,  next.find("|")+1);
+                c.getTeachers().push_back(t);
 
-					t->setCategory(CatEnum(next.substr(0,  next.find("|"))));
-					next.erase(0,  next.find("|")+1);
+                getline(fin, next);
+            }
+        }
 
-					c.getTeachers().push_back(t);
-				}
+        if (next == "STAFF:")
+        {
+            getline(fin, next);
 
-			}
+            while (next.length() != 0)
+            {
+                Staff* sf = new Staff();
 
-		  if(next == "STAFF:")
-			{
-			  	 while(next.length() != 0)
-			  	 {
-					Staff* sf = new Staff ();
+                sf->setName(next.substr(0, next.find("|")));
+                next.erase(0, next.find("|") + 1);
 
-					getline(fin, next);
+                sf->setAddress(next.substr(0, next.find("|")));
+                next.erase(0, next.find("|") + 1);
 
-					sf->setName(next.substr(0,  next.find("|")));
-					next.erase(0,  next.find("|")+1);
+                sf->setPhone(stoi(next.substr(0, next.find("|"))));
+                next.erase(0, next.find("|") + 1);
 
-					sf->setAddress(next.substr(0,  next.find("|")));
-					next.erase(0,  next.find("|")+1);
+                sf->setCode(next.substr(0, next.find("|")));
+                next.erase(0, next.find("|") + 1);
 
-					sf->setPhone(stoi(next.substr(0,  next.find("|"))));
-					next.erase(0,  next.find("|")+1);
+                d = changeDate(next.substr(0, next.find("|")));
+                sf->setDate(d);
+                next.erase(0, next.find("|") + 1);
 
-					sf->setCode(next.substr(0,  next.find("|")));
-					next.erase(0,  next.find("|")+1);
+                sf->setSalary(stof(next.substr(0, next.find("|"))));
+                next.erase(0, next.find("|") + 1);
 
-					d = changeDate(next.substr(0, next.find("|")));
-					sf->setDate(d);
-					next.erase(0,  next.find("|")+1);
+                sf->setNIF(stoi(next.substr(0, next.find("|"))));
+                next.erase(0, next.find("|") + 1);
 
-					sf->setSalary(stof(next.substr(0,  next.find("|"))));
-					next.erase(0,  next.find("|")+1);
+                sf->setWorkArea(next.substr(0, next.find("|")));
+                next.erase(0, next.find("|") + 1);
 
-					sf->setNIF(stoi(next.substr(0,  next.find("|"))));
-					next.erase(0,  next.find("|")+1);
+                c.getStaff().push_back(sf);
 
-					sf->setWorkArea(next.substr(0,  next.find("|")));
-					next.erase(0,  next.find("|")+1);
+                getline(fin, next);
+            }
+        }
 
-					c.getStaff().push_back(sf);
-				}
-			}
+        if (next == "DEP:")
+        {
+            getline(fin, next);
 
-		  if(next == "DEP:")
-		  {
-			  	getline(fin, next);
+            Teacher* dir = new Teacher();
+            Department* d = new Department();
 
-			    Teacher* dir = new Teacher ();
-		 		Department* d = new Department ();
+            d->setName(next.substr(0, next.find("|")));
+            next.erase(0, next.find("|") + 1);
 
-		  		d->setName(next.substr(0, next.find("|")));
-		  		next.erase(0, next.find("|")+1);
+            d->setAddress(next.substr(0, next.find("|")));
+            next.erase(0, next.find("|") + 1);
 
-		  		d->setAddress(next.substr(0, next.find("|")));
-		  		next.erase(0, next.find("|")+1);
+            d->setCode(stoi(next.substr(0, next.find("|"))));
+            next.erase(0, next.find("|") + 1);
 
-		  		d->setCode(stoi(next.substr(0, next.find("|"))));
-		  		next.erase(0, next.find("|")+1);
+            d->setPhone(stoi(next.substr(0, next.find("|"))));
+            next.erase(0, next.find("|") + 1);
 
-		  		d->setPhone(stoi(next.substr(0, next.find("|"))));
-		  		next.erase(0, next.find("|")+1);
+            if ((next.substr(0, next.find("|"))) != "!")
+            {
+                try
+                {
+                    dir = SearchVec(c.getTeachers(), (next.substr(0, next.find("|"))));
+                }
+                catch (NoNameFound &e) { cout << "Name not found!"; }
 
-		  		if((next.substr(0, next.find("|"))) != "!")
-		  		{
-		  			try
-		  			{
-		  				dir = SearchVec( c.getTeachers(),(next.substr(0, next.find("|"))));
-		  			}catch(NoNameFound &e){cout << "Name not found!";}
+                d->setDirector(dir);
+            }
 
-		  			d->setDirector(dir);
-		  		}
+            c.getDepartments().push_back(d);
 
-		  		c.getDepartments().push_back(d);
+            getline(fin, next);
 
-		  		getline(fin, next);
+            while (next.length() != 0)
+            {
+                if (next == "COURSE:")
+                {
+                    Teacher* dirc = new Teacher();
+                    Course* cs = new Course();
 
-		  		while(next.length() != 0)
-		  		{
-			  		if(next == "COURSE:")
-			  		{
-			  			cout<<"course here"<<endl;
-			  			Teacher* dirc = new Teacher ();
-			  			Course* cs = new Course ();
+                    getline(fin, next);
 
-			  			getline(fin, next);
+                    cs->setPtName(next.substr(0, next.find("|")));
+                    next.erase(0, next.find("|") + 1);
 
-			  			cs->setPtName(next.substr(0, next.find("|")));
-			  			next.erase(0, next.find("|")+1);
+                    cs->setEngName(next.substr(0, next.find("|")));
+                    next.erase(0, next.find("|") + 1);
 
-			  			cs->setEngName(next.substr(0, next.find("|")));
-			  			next.erase(0, next.find("|")+1);
+                    cs->setCode(stoi(next.substr(0, next.find("|"))));
+                    next.erase(0, next.find("|") + 1);
 
-			  			cs->setCode(stoi(next.substr(0, next.find("|"))));
-			  			next.erase(0, next.find("|")+1);
+                    cs->setType(next.substr(0, next.find("|")));
+                    next.erase(0, next.find("|") + 1);
 
-			  			cs->setType(next.substr(0, next.find("|")));
-			  			next.erase(0, next.find("|")+1);
+                    if ((next.substr(0, next.find("|"))) != "!")
+                    {
+                        try {
+                            dirc = SearchVec(c.getTeachers(), (next.substr(0, next.find("|"))));
+                        }
+                        catch (NoNameFound &e) { cout << "No name Found!"; }
 
-			  			if((next.substr(0, next.find("|"))) != "!")
-			  			{
-			  				try{
-			  					dirc = SearchVec( c.getTeachers(), (next.substr(0, next.find("|"))));
-			  				}catch(NoNameFound &e){cout << "No name Found!";}
+                        cs->setDirector(dirc);
+                    }
 
-			  				cs->setDirector(dirc);
-			  			}
+                    d->getCourses().push_back(cs);
+                    getline(fin, next);
 
-			  			d->getCourses().push_back(cs);
-			  			getline(fin, next);
 
+                    if (next == "UC:")
+                    {
+                        getline(fin, next);
+                        while (1)
+                        {
+                            if (next == "COURSE:" || next.length() == 0)
+                            {
+                                break;
+                            }
 
-			  			if(next == "UC:")
-			  			{
-			  				getline(fin, next);
-			  				while(1)
-			  				{
+                            Teacher* regent = new Teacher();
+                            Uc* uc = new Uc();
+                            Student* student = new Student();
+                            Teacher* teacher = new Teacher();
 
-			  					Teacher* regent = new Teacher ();
-			  					Uc* uc = new Uc ();
+                            uc->setName(next.substr(0, next.find("|")));
+                            next.erase(0, next.find("|") + 1);
 
-			  					cout << next << endl;
+                            uc->setYear(stoi(next.substr(0, next.find("|"))));
+                            next.erase(0, next.find("|") + 1);
 
-			  					if(next == "COURSE:" || next.length() == 0)
-			  					{
-			  						break;
-			  					}
+                            uc->setECTS(stoi(next.substr(0, next.find("|"))));
+                            next.erase(0, next.find("|") + 1);
 
-			  					uc->setName(next.substr(0,  next.find("|")));
-			  					next.erase(0,  next.find("|")+1);
+                            uc->setWorkload(stoi(next.substr(0, next.find("|"))));
+                            next.erase(0, next.find("|") + 1);
 
-			  					uc->setYear(stoi(next.substr(0,  next.find("|"))));
-			  					next.erase(0,  next.find("|")+1);
+                            if ((next.substr(0, next.find("|"))) != "!")
+                            {
+                                regent = SearchVec(c.getTeachers(), next.substr(0, next.find("|")));
+                                uc->getTeachers().push_back(regent);
+                            }
+                            next.erase(0, next.find("|") + 1);
 
-			  					uc->setECTS(stoi(next.substr(0,  next.find("|"))));
-			  					next.erase(0,  next.find("|")+1);
-			  					cout<<uc->getECTS()<<endl;
-			  					uc->setWorkload(stoi(next.substr(0,  next.find("|"))));
-			  					next.erase(0,  next.find("|")+1);
+                            while (next.at(0) != '|')
+                            {
+                                string name = next.substr(1, next.find(",") - 1);
+                                student = SearchVec(c.getStudents(), name);
+                                uc->getStudents().push_back(student);
 
-			  					cout << next << endl;
+                                for (unsigned int j = 0; j < c.getStudents().size(); j++)
+                                {
+                                    if (c.getStudents().at(j)->getName() == name)
+                                    {
+                                        float grade = stof(next.substr(next.find(",") + 1, next.find("]")));
+                                        c.getStudents().at(j)->addUCGrade(uc, grade);
+                                        break;
+                                    }
+                                }
+                                next.erase(0, next.find("]") + 1);
 
-			  					if((next.substr(0, next.find("|"))) != "!")
-			  					{
-			  						cout << "pois" << endl;
-			  						regent = SearchVec( c.getTeachers(), (next.substr(0, next.find("|"))));
-			  						uc->getTeachers().push_back(regent);
-			  					}
-			  					cout<<"hey"<<endl;
-			  					//cout << uc->getTeachers().at(0)->getName() << endl;
+                            }
+                            next.erase(0, next.find("|") + 1);
 
-								cout << cs->getUCs().size() << endl;
-								cout << c.getUCs().size() << endl;
-								cout << c.getCourses().size() << endl;
-								cout << c.getDepartments().size() << endl;
+                            while (next.length() != 1)
+                            {
+                                teacher = SearchVec(c.getTeachers(), next.substr(1, next.find("]")-1));
+                                uc->getTeachers().push_back(teacher);
+                                next.erase(0, next.find("]") + 1);
+                            }
 
-			  					cs->getUCs().push_back(uc); //matando o programa
-			  					
-								cout<<"Para aqui"<<endl;
+                            next.clear();
 
-								cout << cs->getUCs().size() << endl;
-								cout << c.getUCs().size() << endl;
-								cout << c.getCourses().size() << endl;
+                            cs->getUCs().push_back(uc);
 
-								next.clear();
+                            getline(fin, next);
+                        }
+                    }
+                }
+            }
+        }
 
-			  					getline(fin, next);
-
-			  					cout << next << endl;
-
-			  				}cout<<"1 fim"<<endl;
-			  			}cout<<"2 fim"<<endl;
-			  		}cout<<"3 fim"<<endl;
-		  		}cout<<"4 fim"<<endl;
-		}cout<<"5 fim"<<endl;
-	}
-
-	cout << "Load Finished!" << endl;
+        studentsCourses(c);
+    }
+    cout << endl << "--------------" << endl;
+    cout << "Load Finished!" << endl;
+    cout << "--------------" << endl << endl;
 }
 
+void studentsCourses(College &c)
+{
+    for (unsigned int i = 0; i < c.getStudents().size(); i++)
+    {
+        for (unsigned int j = 0; j < c.getCourses().size(); j++)
+        {
+            if (c.getStudents().at(i)->getCourseString() == c.getCourses().at(j)->getName())
+            {
+                c.getStudents().at(i)->setCourse(c.getCourses().at(j));
+            }
+        }
+    }
+}
 
 ////GENERAL FUNCTIONS//// (used thoughout project, mostly for input verification)
 int Nav(int bottom, int top){ //tests for valid input keys and returns the inputted char

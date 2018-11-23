@@ -178,6 +178,8 @@ public:
 
     Student() = default;
 
+    void setCourse(Course* cs) { course = cs; }
+
     ~Student(){delete course;}
     /**
      * @brief Adds Student to college
