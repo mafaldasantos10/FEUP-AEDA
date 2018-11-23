@@ -605,4 +605,12 @@ T* SearchVec(vector<T*> vec, string name){
     throw NoNameFound(name);
 }
 
+template<class T>
+T* SearchID(vector<T*> vec, string id){
+    for(size_t i = 0; i < vec.size(); i++){
+        if(vec.at(i)->getCode() == id) return vec.at(i);
+    }
+    throw NoCodeFound(stoi(id));
+}
+
 #endif /*COLLEGE_H_*/

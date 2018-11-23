@@ -456,6 +456,7 @@ void Department::editInfo(College &college){
                     }
                 }
                 depDirector = director;
+                depDirector->UpdateCat(DepDir);
                 break;
             case 5:
                 return;
@@ -733,6 +734,7 @@ void Course::editInfo(College& college){
                     }
                 }
                 courseDirector = director;
+                courseDirector->UpdateCat(CourseDir);
                 break;
             case 5:
                 return;
@@ -1081,6 +1083,7 @@ void Uc::editInfo(College &college){
                             cout << "Invalid name, try again: "<< flush;
                             continue;
                         }
+                        Regent->UpdateCat(Reg);
                         break;
                     }
                 }

@@ -20,6 +20,7 @@ class Course;
 class Uc;
 int Nav(int bottom, int top);
 bool hasNoNumber(std::string s);
+extern int access;
 //////////////////////
 
 using namespace std;
@@ -202,8 +203,9 @@ public:
 	/**
 	 * @brief Removes from the map a Uc and the grade the Student had
 	 * @param name Name of the Uc
+	 * @return Returns wether it could remove or not
 	 */
-	void removeFromMap(string name);
+	bool removeFromMap(string name);
 	/**
 	 * @brief Changes the grade of a Uc in the map
 	 * @param name Name of the Uc with the new grade
@@ -237,6 +239,8 @@ public:
     void setCourseString(string name){course_string = name;}
     string getCourseString(){return course_string;}
     void InsertYear();
+
+    void InsertUC();
 };
 
 

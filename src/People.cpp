@@ -171,8 +171,16 @@ void Student::addPerson(College &college) {
 
     cout << "\nInsert Student's Year: " << flush;
     InsertYear();
-	Uc* uc = new Uc ();
+	InsertUC();
+    student_count++;
+    college.addStudent(this);
+}
+
+void Student::InsertUC(){
+    Uc* uc = nullptr;
     bool end = false;
+    string uc_name;
+    float grade;
     while(1){
         while(1){
             cout << "\nInsert Student's UC(? - list/ ! - done): " << flush;
@@ -213,17 +221,19 @@ void Student::addPerson(College &college) {
         addUCGrade(uc, grade);
         uc->addStudent(this);
     }
-    student_count++;
-    college.addStudent(this);
 }
 
 void Student::editInfo(College &college){
+    int n;
+    if(access == 2) n = 6;
+    else n = 4;
     while(1){
         People::editInfo(college);
-        cout << "4:   COURSE" << endl;
-        cout << "5:   YEAR" << endl;
-        cout << "6:   PREVIOUS" << endl;
-        switch(Nav(0,6)){
+        if(access == 2) cout << "4:   COURSE" << endl;
+        if(access == 2) cout << "5:   YEAR" << endl;
+        cout << n << ":   PREVIOUS" << endl;
+        int i = Nav(0,n);
+        switch(i) {
             case 0:
                 cout << "Insert new Name: " << flush;
                 InsertName();
@@ -239,22 +249,23 @@ void Student::editInfo(College &college){
             case 3:
                 InsertBirthday();
                 break;
-            case 4:
-                cout << "Choose new Course: " << endl;
-                try{
-                    ChooseCourse(college);
-                }
-                catch(NoCourses &err){
-                    cout << "There are no courses available!" << endl;
-                    continue;
-                }
+            default:
                 break;
-            case 5:
-                cout << "Insert new Student Year: " << flush;
-                InsertYear();
-                break;
-            case 6:
-                return;
+        }
+        if(i == n) return;
+        else if(i == 4) {
+            cout << "Choose new Course: " << endl;
+            try {
+                ChooseCourse(college);
+            }
+            catch (NoCourses &err) {
+                cout << "There are no courses available!" << endl;
+                continue;
+            }
+        }
+        else if(i == 5) {
+            cout << "Insert new Student Year: " << flush;
+            InsertYear();
         }
     }
 }
@@ -289,9 +300,9 @@ void Student::addUCGrade(Uc* uc, float grade)
 	subjects.insert(pair <Uc*, float> (uc, grade));
 }
 
-void Student::removeFromMap(string name)
+bool Student::removeFromMap(string name)
 {
-	Uc* uc;
+	Uc* uc = nullptr;
 
 	for(unsigned int i = 0; i < course->getUCs().size(); i++)
 	{
@@ -302,11 +313,13 @@ void Student::removeFromMap(string name)
 		}
 	}
 
-	for (auto it = subjects.find(uc); it != subjects.end(); it++)
+	if (auto it = subjects.find(uc) != subjects.end())
 	{
 		subjects.erase(uc);
-		break;
+		return true;
 	}
+    else cout << "Uc with name -" << name << "- was not found" << endl;
+    return false;
 }
 
 void Student::changeGrade(string name, int grade)
@@ -344,11 +357,7 @@ void Student::showUCGrade(string name)
 
 	cout << "  MODULE\t\tGRADE\n";
     string s;
-<<<<<<< Updated upstream
-	int i = 0;
-=======
     int i = 0;
->>>>>>> Stashed changes
 	for (auto it = subjects.find(uc); it != subjects.end(); it++)
 	{
         if(it->second == -1) s = "NO GRADE!";
@@ -360,18 +369,14 @@ void Student::showUCGrade(string name)
 
 void Student::showAllGrades()
 {
-    cout << "  MODULE\t\tGRADE\n";
+    cout << "\tMODULE\t\tGRADE\n";
     string s;
-<<<<<<< Updated upstream
-	int i = 0;
-=======
     int i = 0;
->>>>>>> Stashed changes
     for (auto it = subjects.begin(); it != subjects.end(); it++)
     {
-        if(it->second == -1) s = "NO GRADE!";
+        if(it->second == -1) s = "!NO GRADE!";
         else s = to_string(it->second);
-        cout << i << ":   " << it->first->getName() << "\t" << s << endl;
+        cout << i << ":   " << it->first->getName() << "\t\t" << s << endl;
         i++;
     }
 }
@@ -505,7 +510,7 @@ void Teacher::ChooseTeacherUCs(College &college){
     while(1){
         Uc* uc;
         string uc_name;
-        cout << "\nChoose Teacher's Uc: " << endl;
+        cout << "\nChoose Teacher's Uc(click on them to remove): " << endl;
         Print_Vec(subjects);
         int n = subjects.size();
         cout << n << ":   ADD UC" << endl;
@@ -534,12 +539,16 @@ void Teacher::ChooseTeacherUCs(College &college){
 }
 
 void Teacher::editInfo(College &college) {
+    int n;
+    if(access == 2) n = 7;
+    else n = 5;
     while(1) {
         People::editInfo(college);
-        Employee::editInfo(college);
-        cout << "6:   SUBJECTS" << endl;
-        cout << "7:   PREVIOUS" << endl;
-        switch (Nav(0, 7)) {
+        if(access == 2) Employee::editInfo(college);
+        cout << (n-1) << ":   SUBJECTS" << endl;
+        cout << n << ":   PREVIOUS" << endl;
+        int i = Nav(0,n);
+        switch (i) {
             case 0:
                 cout << "Insert new Name: " << flush;
                 InsertName();
@@ -555,17 +564,32 @@ void Teacher::editInfo(College &college) {
             case 3:
                 InsertBirthday();
                 break;
-            case 4:
-                cout << "Insert new salary: " << flush;
-                InsertSalary();
-            case 5:
-                cout << "Insert new NIF: " << flush;
-                InsertNif();
-            case 6:
-                ChooseTeacherUCs(college);
+            default:
                 break;
-            case 7:
-                return;
+        }
+        if(access == 2) {
+            switch (i) {
+                case 4:
+                    cout << "Insert new salary: " << flush;
+                    InsertSalary();
+                case 5:
+                    cout << "Insert new NIF: " << flush;
+                    InsertNif();
+                case 6:
+                    ChooseTeacherUCs(college);
+                    break;
+                case 7:
+                    return;
+            }
+        }
+        else{
+            switch (i) {
+                case 4:
+                    Print_Vec(subjects);
+                    break;
+                case 5:
+                    return;
+            }
         }
     }
 }
@@ -670,12 +694,17 @@ void Staff::InsertWorkArea(){
 }
 
 void Staff::editInfo(College &college){
+    int n;
+    if(access == 2) n = 7;
+    else n = 4;
     while(1) {
         People::editInfo(college);
-        Employee::editInfo(college);
-        cout << "6:   WORK AREA" << endl;
-        cout << "7:   PREVIOUS" << endl;
-        switch (Nav(0, 7)) {
+        if(access == 2) Employee::editInfo(college);
+        if(access == 2) cout << "6:   WORK AREA" << endl;
+        cout << n << ":   PREVIOUS" << endl;
+        int i = Nav(0,n);
+        if (i == n) return;
+        switch (i) {
             case 0:
                 cout << "Insert new Name: " << flush;
                 InsertName();
@@ -701,8 +730,6 @@ void Staff::editInfo(College &college){
                 cout << "Insert new WorkArea: " << flush;
                 InsertWorkArea();
                 break;
-            case 7:
-                return;
         }
     }
 }
