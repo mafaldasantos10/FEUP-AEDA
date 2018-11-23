@@ -67,28 +67,47 @@ public:
     College();
     ~College();
     /**
-     *
+     * @brief Gets Teacher vector by reference
      * @return
      */
     vector<Teacher *>& getTeachers();
-
+	/**
+	* @brief Removes Teacher fomm College
+	* @param teacher Pointer to teacher
+	*/
     void removeTeacher(Teacher* teacher);
-
+	/**
+	* @brief Gets Student vector by reference
+	*/
     vector<Student *>& getStudents();
-
+	/**
+	* @brief Removes Student fomm College
+	* @param student Pointer to student
+	*/
     void removeStudent(Student* student);
-
+	/**
+	* @brief Gets Staff vector by reference
+	*/
     vector<Staff *>& getStaff();
-
+	/**
+	* @brief Removes Staff fomm College
+	* @param staff Pointer to staff
+	*/
     void removeStaff(Staff* staff);
     /**
-     *
+     * @brief Adds teacher to College
      * @param teacher
      */
     void addTeacher(Teacher* teacher);
-
+	/**
+	* @brief Adds student to College
+	* @param student
+	*/
     void addStudent(Student* student);
-
+	/**
+	* @brief Adds Staff to College
+	* @param staff
+	*/
     void addStaff(Staff* staff);
     /**
      * @brief Gets the name of a given College
@@ -147,7 +166,11 @@ public:
      * @param name Name of the Department of a given College
      */
     void searchDepartment(string name);
-
+	/**
+	* @brief Prints college info
+	* @param os
+	* @param college
+	*/
     friend ostream& operator<< (ostream& os, const College &college);
 };
 
@@ -190,8 +213,8 @@ public:
      */
     void showInfo();
     /**
-     * @brief
-     * @return
+     * @brief Opens a Menu to edit class info
+     * @param college
      */
     void editInfo(College& college);
     /**
@@ -262,7 +285,11 @@ public:
      * @param name Name of the Course of the Department
      */
     void searchCourse(string name);
-
+	/**
+	* @brief Prints department info
+	* @param os
+	* @param dep Department
+	*/
     friend ostream& operator<< (ostream& os, const Department &dep);
 };
 
@@ -363,13 +390,20 @@ public:
      */
     void searchUc(string name);
     /**
-     *
-     * @return
+	* @brief Opens a Menu to edit class info
+	* @param college
      */
     void editInfo(College &college);
-
+	/**
+	* @brief Changes course director to new teacher
+	* @param dir Pointer to teacher
+	*/
     void setDirector(Teacher* dir){courseDirector = dir;}
-
+	/**
+	* @brief Prints course info
+	* @param os
+	* @param course
+	*/
     friend ostream& operator<< (ostream& os, const Course &course);
 };
 
@@ -489,11 +523,20 @@ public:
     bool operator<(Uc uc2);
 
     friend ostream& operator<< (ostream& os, Uc &uc);
-
+	/**
+	* @brief Opens a Menu to edit class info
+	* @param college
+	*/
     void editInfo(College &college);
-
+	/**
+	* @brief Adds Student to UC
+	* @param student
+	*/
     void addStudent(Student* student);
-
+	/**
+	* @brief Adds Teacher to UC
+	* @param teacher
+	*/
     void addTeacher(Teacher* teacher);
 };
 
@@ -603,6 +646,14 @@ T* SearchVec(vector<T*> vec, string name){
         if(vec.at(i)->getName() == name) return vec.at(i);
     }
     throw NoNameFound(name);
+}
+
+template<class T>
+T* SearchID(vector<T*> vec, string id) {
+	for (size_t i = 0; i < vec.size(); i++) {
+		if (vec.at(i)->getCode() == id) return vec.at(i);
+	}
+	throw NoCodeFound(stoi(id));
 }
 
 #endif /*COLLEGE_H_*/

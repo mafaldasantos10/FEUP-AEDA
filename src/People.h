@@ -20,6 +20,7 @@ class Course;
 class Uc;
 int Nav(int bottom, int top);
 bool hasNoNumber(std::string s);
+extern int access;
 //////////////////////
 
 using namespace std;
@@ -63,9 +64,11 @@ public:
     People() = default;
 
     ~People(){delete birthday;}
-
+	/**
+	* @brief Virtual function to add a Perso to college
+	* @param college
+	*/
     virtual void addPerson(College &college);
-
 	/**
 	 * @brief Virtual function that will be used for particular informations of its derivatives
 	 */
@@ -124,23 +127,35 @@ public:
      * @return Struct containing the birthday of the person
      */
     date* getDate();
-
-    /**
-     * @brief Virtual class destructor
-     */
-	//virtual ~People();
+	/**
+	* @brief Virtual function to write info on os
+	* @param os
+	*/
     virtual void write(ostream& os);
-
+	/**
+	* @brief Sets birthday to given date
+	* @param d1 Given date
+	*/
     void setDate(date* d1){ birthday = d1;}
-
+	/**
+	* @brief Inserts name from user input
+	*/
     void InsertName();
-
+	/**
+	* @brief Address name from user input
+	*/
     void InsertAddress();
-
+	/**
+	* @brief Phone Number name from user input
+	*/
     void InsertPhone();
-
+	/**
+	* @brief Inserts Birthday from user input
+	*/
     void InsertBirthday();
 };
+
+
 /**@brief Student class,  inherits the public function from the class People*/
 class Student : public People{
     string course_string; //Used when reading file to store info of inexistent course
@@ -165,14 +180,16 @@ public:
 
     Student() = default;
 
-    ~Student(){delete course;}
-
-    void addPerson(College &college);
-
+    ~Student(){/*delete course;*/}
 	/**
-	 * @brief
-	 * @return
-	 */
+	* @brief Adds Student to college
+	* @param college
+	*/
+    void addPerson(College &college);
+	/**
+	* @brief prints a menu entry on screen
+	* @return special info access menu number
+	*/
     int Special_Info();
     /**
      * @brief Shows all the information of a given Student
@@ -203,14 +220,15 @@ public:
 	/**
 	 * @brief Removes from the map a Uc and the grade the Student had
 	 * @param name Name of the Uc
+	 * @return Returns wether it could remove or not
 	 */
-	void removeFromMap(string name);
+	bool removeFromMap(string name);
 	/**
 	 * @brief Changes the grade of a Uc in the map
 	 * @param name Name of the Uc with the new grade
 	 * @param grade New grade for the Uc
 	 */
-	void changeGrade(string name, int grade);
+	void changeGrade(string name, float grade);
 	/**
 	 * Shows a Uc and its grade
 	 * @param name Name of the Uc meant to show
@@ -224,20 +242,52 @@ public:
 	 * @brief counter used to know how many students have been created
 	 */
     static int student_count;
-
+	/**
+	* @brief Edits Student info menu
+	*/
     void editInfo(College &college);
-
+	/**
+	* @brief Prints student info on os
+	* @param os
+	* @return os
+	*/
     friend ostream& operator<< (ostream& os, Student &student);
-
+	/**
+	* @brief writes student info to os
+	* @param os
+	*/
     void write(ostream& os);
-
+	/**
+	* @brief Menu to choose course from college courses
+	* @param college
+	*/
     void ChooseCourse(College &college);
-
+	/**
+	* @brief sets student year to newYear
+	* @param newYear
+	*/
     void setYear(int newYear){ year = newYear; }
+	/**
+	* @brief Returns student year
+	*/
     int getYear(){return year;}
+	/**
+	* @brief Sets course string to string parameter(used when reading files)
+	* @param name Name of course
+	*/
     void setCourseString(string name){course_string = name;}
+	/**
+	* @brief returns course_string
+	*/
     string getCourseString(){return course_string;}
+	/**
+	* @brief Inserts year from user input
+	*/
     void InsertYear();
+	/**
+	* @brief Inserts Uc from user input
+	*/
+	void InsertUC();
 };
 
 
@@ -261,13 +311,15 @@ public:
 	Employee(string name, string address, date birthday, unsigned int phone, string cod, float salary, unsigned int nif);
 
     Employee() = default;
-
-    void addPerson(College &college);
-
 	/**
-	 * @brief
-	 * @return
-	 */
+	* @brief  adds employee to college
+	* @param college
+	*/
+    void addPerson(College &college);
+	/**
+	* @brief Prints special info on screen
+	* @return returns index to access menu
+	*/
 	int Special_Info();
 	/**
 	 * @brief Gets the Salary of the given Employee
@@ -289,13 +341,22 @@ public:
 	 * @param nif New nif of a given Employee
 	 */
 	void setNIF(unsigned int nif);
-
+	/**
+	* @brief writes employee info to os
+	* @param os
+	*/
     void write(ostream& os);
-
+	/**
+	* @brief open edit info menu for employee
+	*/
     void editInfo(College &college);
-
+	/**
+	* @brief Inserts salary from user input
+	*/
     void InsertSalary();
-
+	/**
+	* @brief Inserts nif from user input
+	*/
     void InsertNif();
 };
 
@@ -327,13 +388,15 @@ public:
     Teacher() = default;
 
     ~Teacher();
-
+	/**
+	* @brief Adds Person to college
+	* @param college
+	*/
     void addPerson(College &college);
 	/**
 	 * @brief shows all information of a given Teacher
 	 */
     void showInfo();
-
     /**
      * Gets the Category of a given Teacher
      * @return String containing the category of the Teacher
@@ -354,24 +417,44 @@ public:
 	 * @param uc New subject taught by the Teacher
 	 */
 	void addSubject(Uc* uc); //for now it just adds a given UC
-
 	/**
 	 * @brief counts teachers created
 	 */
     static int teacher_count;
-
+	/**
+	* @brief Prints teacher info on os
+	* @param os
+	* @param teacher
+	*/
     friend ostream& operator<< (ostream& os, Teacher &teacher);
-
+	/**
+	* @brief Writes teacher info to os
+	* @param os
+	*/
     void write(ostream& os);
-
+	/**
+	* @brief Updates teacher category
+	* @param cat Category enumerator
+	*/
     void UpdateCat(Cat cat);
-
+	/**
+	* @brief Enters edit info menu for teacehr
+	* @param college
+	*/
     void editInfo(College &college);
-
+	/**
+	* @brief Menu for choosing teacher's Ucs
+	* @param college
+	*/
     void ChooseTeacherUCs(College &college);
-
+	/**
+	* @brief Inserts uc from user input
+	*/
     bool InsertTeacherUc(College &college);
-
+	/**
+	* @brief Remvoes uc from teacher uc vector
+	* @param n Position of Uc in vector
+	*/
     void RemoveTeacherUc(int n);
 };
 
@@ -395,14 +478,15 @@ public:
 	Staff(string name, string adress, date birthday, unsigned int phone, string cod, float salary, unsigned int nif, string work_area);
 
     Staff() = default;
-
+	/**
+	* @brief Adds person to college
+	* @param college
+	*/
     void addPerson(College &college);
-
 	/**
 	 * @brief shows all the informations of a given Staff member
 	 */
     void showInfo();
-
     /**
      * @brief Gets the work area of a given Staff member
      * @return String with the work area of the Staff member
@@ -413,18 +497,27 @@ public:
 	 * @param work_area New Work area of the Staff member
 	 */
 	void setWorkArea(string work_area);
-
 	/**
 	 * @brief Counts number of staff members
 	 */
     static int staff_count;
-
+	/**
+	* @brief Prints staff info on os
+	* @param os
+	*/
     friend ostream& operator<< (ostream& os, Staff &staff);
-
+	/**
+	* @brief Writes staff info on os
+	* @param os
+	*/
     void write(ostream& os);
-
+	/**
+	* @brief Edits Staff info in menu
+	*/
     void editInfo(College &college);
-
+	/**
+	* @brief Inserts work area from user input
+	*/
     void InsertWorkArea();
 };
 

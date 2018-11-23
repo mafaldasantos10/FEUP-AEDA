@@ -158,7 +158,8 @@ void Student::InsertYear() {
     cin.ignore(100, '\n');
 }
 
-void Student::addPerson(College &college) {
+void Student::addPerson(College &college) 
+{
     People::addPerson(college);
     string uc_name;
     
@@ -171,92 +172,106 @@ void Student::addPerson(College &college) {
 
     cout << "\nInsert Student's Year: " << flush;
     InsertYear();
-	Uc* uc = new Uc ();
-    bool end = false;
-    while(1){
-        while(1){
-            cout << "\nInsert Student's UC(? - list/ ! - done): " << flush;
-            getline(cin, uc_name);
-            if(uc_name == "!"){
-                end = true;
-                break;
-            }
-            else if(uc_name == "?") Print_Vec(course->getUCs());
-            else {
-                try{
-                    uc = (SearchVec(course->getUCs(),uc_name));
-                }
-                catch(NoNameFound &err){
-                    cout << err.errorMessage() << " " << "Try again:" << endl;
-                    continue;
-                }
-                if(subjects.find(uc) != subjects.end()){
-                    cout << "Student already enrolled in this course, try again: " << endl;
-                    continue;
-                }
-                break;
-            }
-        }
-        if(end) break;
-
-        cout << "\nInsert Student's UC grade(-1 if not-evaluated): " << flush;
-        cin >> grade;
-        while(cin.fail() || grade > 20 || grade < -1)
-        {
-            cout << "Invalid grade, try again: "<< endl;
-            cin.clear();
-            cin.ignore(100, '\n');
-            cin >> grade;
-        }
-        cin.clear();
-        cin.ignore(100, '\n');
-        addUCGrade(uc, grade);
-        uc->addStudent(this);
-    }
-    student_count++;
-    college.addStudent(this);
+	InsertUC();
+	student_count++;
+	college.addStudent(this);
 }
 
-void Student::editInfo(College &college){
-    while(1){
-        People::editInfo(college);
-        cout << "4:   COURSE" << endl;
-        cout << "5:   YEAR" << endl;
-        cout << "6:   PREVIOUS" << endl;
-        switch(Nav(0,6)){
-            case 0:
-                cout << "Insert new Name: " << flush;
-                InsertName();
-                break;
-            case 1:
-                cout << "Insert new Address: " << flush;
-                InsertAddress();
-                break;
-            case 2:
-                cout << "Insert new Phone Number: " << flush;
-                InsertPhone();
-                break;
-            case 3:
-                InsertBirthday();
-                break;
-            case 4:
-                cout << "Choose new Course: " << endl;
-                try{
-                    ChooseCourse(college);
-                }
-                catch(NoCourses &err){
-                    cout << "There are no courses available!" << endl;
-                    continue;
-                }
-                break;
-            case 5:
-                cout << "Insert new Student Year: " << flush;
-                InsertYear();
-                break;
-            case 6:
-                return;
-        }
-    }
+void Student::InsertUC()
+{
+	//Uc* uc = nullptr;
+	Uc* uc = new Uc();
+	bool end = false;
+	string uc_name;
+	float grade;
+
+	while (1) {
+		while (1) {
+			cout << "\nInsert Student's UC(? - list/ ! - done): " << flush;
+			getline(cin, uc_name);
+			if (uc_name == "!") {
+				end = true;
+				break;
+			}
+			else if (uc_name == "?") Print_Vec(course->getUCs());
+			else {
+				try {
+					uc = (SearchVec(course->getUCs(), uc_name));
+				}
+				catch (NoNameFound &err) {
+					cout << err.errorMessage() << " " << "Try again:" << endl;
+					continue;
+				}
+				if (subjects.find(uc) != subjects.end()) {
+					cout << "Student already enrolled in this course, try again: " << endl;
+					continue;
+				}
+				break;
+			}
+		}
+		if (end) break;
+
+		cout << "\nInsert Student's UC grade(-1 if not-evaluated): " << flush;
+		cin >> grade;
+		while (cin.fail() || grade > 20 || grade < -1)
+		{
+			cout << "Invalid grade, try again: " << endl;
+			cin.clear();
+			cin.ignore(100, '\n');
+			cin >> grade;
+		}
+		cin.clear();
+		cin.ignore(100, '\n');
+		addUCGrade(uc, grade);
+		uc->addStudent(this);
+	}
+}
+
+void Student::editInfo(College &college) {
+	int n;
+	if (access == 2) n = 6;
+	else n = 4;
+	while (1) {
+		People::editInfo(college);
+		if (access == 2) cout << "4:   COURSE" << endl;
+		if (access == 2) cout << "5:   YEAR" << endl;
+		cout << n << ":   PREVIOUS" << endl;
+		int i = Nav(0, n);
+		switch (i) {
+		case 0:
+			cout << "Insert new Name: " << flush;
+			InsertName();
+			break;
+		case 1:
+			cout << "Insert new Address: " << flush;
+			InsertAddress();
+			break;
+		case 2:
+			cout << "Insert new Phone Number: " << flush;
+			InsertPhone();
+			break;
+		case 3:
+			InsertBirthday();
+			break;
+		default:
+			break;
+		}
+		if (i == n) return;
+		else if (i == 4) {
+			cout << "Choose new Course: " << endl;
+			try {
+				ChooseCourse(college);
+			}
+			catch (NoCourses &err) {
+				cout << "There are no courses available!" << endl;
+				continue;
+			}
+		}
+		else if (i == 5) {
+			cout << "Insert new Student Year: " << flush;
+			InsertYear();
+		}
+	}
 }
 
 Course* Student::getCourse()
@@ -289,33 +304,35 @@ void Student::addUCGrade(Uc* uc, float grade)
 	subjects.insert(pair <Uc*, float> (uc, grade));
 }
 
-void Student::removeFromMap(string name)
+bool Student::removeFromMap(string name)
 {
-	Uc* uc;
+	Uc* uc = nullptr;
 
-	for(unsigned int i = 0; i < course->getUCs().size(); i++)
+	for (unsigned int i = 0; i < course->getUCs().size(); i++)
 	{
-		if(course->getUCs().at(i)->getName() == name)
+		if (course->getUCs().at(i)->getName() == name)
 		{
 			uc = course->getUCs().at(i);
 			break;
 		}
 	}
 
-	for (auto it = subjects.find(uc); it != subjects.end(); it++)
+	if (auto it = subjects.find(uc) != subjects.end())
 	{
 		subjects.erase(uc);
-		break;
+		return true;
 	}
+	else cout << "Uc with name -" << name << "- was not found" << endl;
+	return false;
 }
 
-void Student::changeGrade(string name, int grade)
+void Student::changeGrade(string name, float grade)
 {
 	Uc* uc;
 
-	for(unsigned int i = 0; i < course->getUCs().size(); i++)
+	for (unsigned int i = 0; i < course->getUCs().size(); i++)
 	{
-		if(course->getUCs().at(i)->getName() == name)
+		if (course->getUCs().at(i)->getName() == name)
 		{
 			uc = course->getUCs().at(i);
 			break;
@@ -324,8 +341,8 @@ void Student::changeGrade(string name, int grade)
 
 	for (auto it = subjects.find(uc); it != subjects.end(); it++)
 	{
-		  it->second = grade;
-		  break;
+		it->second = grade;
+		break;
 	}
 }
 
@@ -333,9 +350,9 @@ void Student::showUCGrade(string name)
 {
 	Uc* uc;
 
-	for(unsigned int i = 0; i < course->getUCs().size(); i++)
+	for (unsigned int i = 0; i < course->getUCs().size(); i++)
 	{
-		if(course->getUCs().at(i)->getName() == name)
+		if (course->getUCs().at(i)->getName() == name)
 		{
 			uc = course->getUCs().at(i);
 			break;
@@ -343,33 +360,29 @@ void Student::showUCGrade(string name)
 	}
 
 	cout << "  MODULE\t\tGRADE\n";
-    string s;
-
+	string s;
 	int i = 0;
-
 	for (auto it = subjects.find(uc); it != subjects.end(); it++)
 	{
-        if(it->second == -1) s = "NO GRADE!";
-        else s = to_string(it->second);
+		if (it->second == -1) s = "NO GRADE!";
+		else s = to_string(it->second);
 		cout << i << ":   " << it->first->getName() << "\t" << s << endl;
-        i++;
+		i++;
 	}
 }
 
 void Student::showAllGrades()
 {
-    cout << "  MODULE\t\tGRADE\n";
-    string s;
-
+	cout << "\tMODULE\t\tGRADE\n";
+	string s;
 	int i = 0;
-
-    for (auto it = subjects.begin(); it != subjects.end(); it++)
-    {
-        if(it->second == -1) s = "NO GRADE!";
-        else s = to_string(it->second);
-        cout << i << ":   " << it->first->getName() << "\t" << s << endl;
-        i++;
-    }
+	for (auto it = subjects.begin(); it != subjects.end(); it++)
+	{
+		if (it->second == -1) s = "!NO GRADE!";
+		else s = to_string(it->second);
+		cout << i << ":   " << it->first->getName() << "\t\t" << s << endl;
+		i++;
+	}
 }
 
 void Student::write(ostream &os) {
@@ -501,7 +514,7 @@ void Teacher::ChooseTeacherUCs(College &college){
     while(1){
         Uc* uc;
         string uc_name;
-        cout << "\nChoose Teacher's Uc: " << endl;
+		cout << "\nChoose Teacher's Uc(click on them to remove): " << endl;
         Print_Vec(subjects);
         int n = subjects.size();
         cout << n << ":   ADD UC" << endl;
@@ -530,40 +543,59 @@ void Teacher::ChooseTeacherUCs(College &college){
 }
 
 void Teacher::editInfo(College &college) {
-    while(1) {
-        People::editInfo(college);
-        Employee::editInfo(college);
-        cout << "6:   SUBJECTS" << endl;
-        cout << "7:   PREVIOUS" << endl;
-        switch (Nav(0, 7)) {
-            case 0:
-                cout << "Insert new Name: " << flush;
-                InsertName();
-                break;
-            case 1:
-                cout << "Insert new Address: " << flush;
-                InsertAddress();
-                break;
-            case 2:
-                cout << "Insert new Phone Number: " << flush;
-                InsertPhone();
-                break;
-            case 3:
-                InsertBirthday();
-                break;
-            case 4:
-                cout << "Insert new salary: " << flush;
-                InsertSalary();
-            case 5:
-                cout << "Insert new NIF: " << flush;
-                InsertNif();
-            case 6:
-                ChooseTeacherUCs(college);
-                break;
-            case 7:
-                return;
-        }
-    }
+	int n;
+	if (access == 2) n = 7;
+	else n = 5;
+	while (1) {
+		People::editInfo(college);
+		if (access == 2) Employee::editInfo(college);
+		cout << (n - 1) << ":   SUBJECTS" << endl;
+		cout << n << ":   PREVIOUS" << endl;
+		int i = Nav(0, n);
+		switch (i) {
+		case 0:
+			cout << "Insert new Name: " << flush;
+			InsertName();
+			break;
+		case 1:
+			cout << "Insert new Address: " << flush;
+			InsertAddress();
+			break;
+		case 2:
+			cout << "Insert new Phone Number: " << flush;
+			InsertPhone();
+			break;
+		case 3:
+			InsertBirthday();
+			break;
+		default:
+			break;
+		}
+		if (access == 2) {
+			switch (i) {
+			case 4:
+				cout << "Insert new salary: " << flush;
+				InsertSalary();
+			case 5:
+				cout << "Insert new NIF: " << flush;
+				InsertNif();
+			case 6:
+				ChooseTeacherUCs(college);
+				break;
+			case 7:
+				return;
+			}
+		}
+		else {
+			switch (i) {
+			case 4:
+				Print_Vec(subjects);
+				break;
+			case 5:
+				return;
+			}
+		}
+	}
 }
 
 void Teacher::addPerson(College &college){
@@ -665,42 +697,45 @@ void Staff::InsertWorkArea(){
     }
 }
 
-void Staff::editInfo(College &college){
-    while(1) {
-        People::editInfo(college);
-        Employee::editInfo(college);
-        cout << "6:   WORK AREA" << endl;
-        cout << "7:   PREVIOUS" << endl;
-        switch (Nav(0, 7)) {
-            case 0:
-                cout << "Insert new Name: " << flush;
-                InsertName();
-                break;
-            case 1:
-                cout << "Insert new Address: " << flush;
-                InsertAddress();
-                break;
-            case 2:
-                cout << "Insert new Phone Number: " << flush;
-                InsertPhone();
-                break;
-            case 3:
-                InsertBirthday();
-                break;
-            case 4:
-                cout << "Insert new salary: " << flush;
-                InsertSalary();
-            case 5:
-                cout << "Insert new NIF: " << flush;
-                InsertNif();
-            case 6:
-                cout << "Insert new WorkArea: " << flush;
-                InsertWorkArea();
-                break;
-            case 7:
-                return;
-        }
-    }
+void Staff::editInfo(College &college) {
+	int n;
+	if (access == 2) n = 7;
+	else n = 4;
+	while (1) {
+		People::editInfo(college);
+		if (access == 2) Employee::editInfo(college);
+		if (access == 2) cout << "6:   WORK AREA" << endl;
+		cout << n << ":   PREVIOUS" << endl;
+		int i = Nav(0, n);
+		if (i == n) return;
+		switch (i) {
+		case 0:
+			cout << "Insert new Name: " << flush;
+			InsertName();
+			break;
+		case 1:
+			cout << "Insert new Address: " << flush;
+			InsertAddress();
+			break;
+		case 2:
+			cout << "Insert new Phone Number: " << flush;
+			InsertPhone();
+			break;
+		case 3:
+			InsertBirthday();
+			break;
+		case 4:
+			cout << "Insert new salary: " << flush;
+			InsertSalary();
+		case 5:
+			cout << "Insert new NIF: " << flush;
+			InsertNif();
+		case 6:
+			cout << "Insert new WorkArea: " << flush;
+			InsertWorkArea();
+			break;
+		}
+	}
 }
 
 ////FRIEND FUNCTIONS////
