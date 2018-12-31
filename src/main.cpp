@@ -1041,14 +1041,74 @@ bool Exit_College(College &college) {
 
 //////////////////////
 
+/* MENU INSTRUCTIONS:
+ * Para acrescentarem opções no vosso menu a unica coisa que têm de fazer é:
+ * -acrescentar o cout com o numero da opção
+ * -no switch (Nav(0,0)) Mudar o ultimo 0 para o novo ultimo numero de opções
+ * -fazer um case para essa opção e enviar para a função de lá
+ * (Não façam o codigo da cena que querem fazer msm dentro do switch q fica uma jabardice,
+ * criem uma função nova)
+ * Qualquer cena é só ligar 915 813 945
+ */
+void Hash_Table_Menu(College &college){
+    while(1){
+        cout << "WIP!" << endl;
+        cout << "0:   PREVIOUS MENU" << endl;
+        switch(Nav(0,0)){
+            case 0:
+                return;
+        }
+    }
+}
+
+//////////////////////
+
+void Queue_Menu(College &college){
+    while(1){
+        cout << "WIP!" << endl;
+        cout << "0:   PREVIOUS MENU" << endl;
+        switch(Nav(0,0)){
+            case 0:
+                return;
+        }
+    }
+}
+
+//////////////////////
+
+/* MENU INSTRUCTIONS:
+ * Para acrescentarem opções no vosso menu a unica coisa que têm de fazer é:
+ * -acrescentar o cout com o numero da opção
+ * -no switch (Nav(0,0)) Mudar o ultimo 0 para o novo ultimo numero de opções
+ * -fazer um case para essa opção e enviar para a função de lá
+ * (Não façam o codigo da cena que querem fazer msm dentro do switch q fica uma jabardice,
+ * criem uma função nova)
+ * Qualquer cena é só ligar 918 471 544
+ */
+void BST_Menu(College &college){
+    while(1){
+        cout << "WIP!" << endl;
+        cout << "0:   PREVIOUS MENU" << endl;
+        switch(Nav(0,0)){
+            case 0:
+                return;
+        }
+    }
+}
+
+//////////////////////
+
 void Admin_Menu(College &college) {
 	while (1) {
 		college.showInfo();
 		cout << "0:   DEPARTMENTS" << endl;
 		cout << "1:   COURSES" << endl;
 		cout << "2:   PEOPLE" << endl;
-		cout << "3:   EXIT COLLEGE" << endl;
-		switch (Nav(0, 3)) {
+        cout << "3:   HAST TABLE" << endl;
+        cout << "4:   BINARY SEARCH TREE" << endl;
+        cout << "5:   QUEUE" << endl;
+		cout << "6:   EXIT COLLEGE" << endl;
+		switch (Nav(0, 6)) {
 		case 0:
 			Departments_Menu(college);
 			break;
@@ -1058,9 +1118,18 @@ void Admin_Menu(College &college) {
 		case 2:
 			People_Menu(college);
 			break;
-		case 3:
+		case 6:
 			if (Exit_College(college)) return;
 			else break;
+        case 3:
+            Hash_Table_Menu(college);
+            break;
+        case 4:
+            BST_Menu(college);
+            break;
+        case 5:
+            Queue_Menu(college);
+            break;
 		}
 	}
 }
