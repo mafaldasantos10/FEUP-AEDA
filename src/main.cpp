@@ -139,6 +139,7 @@ void readFile(College &c, string file)
 				next.erase(0, next.find("|") + 1);
 
 				c.getTeachers().push_back(t);
+				c.addEmployee(t);
 
 				getline(fin, next);
 			}
@@ -178,6 +179,7 @@ void readFile(College &c, string file)
 				next.erase(0, next.find("|") + 1);
 
 				c.getStaff().push_back(sf);
+				c.addEmployee(sf);
 
 				getline(fin, next);
 			}
@@ -1041,6 +1043,31 @@ bool Exit_College(College &college) {
 
 //////////////////////
 
+void List_Employees(College &college) {
+	
+	int s, i;
+	while (1)
+	{
+		s = college.getEmployees().size();
+
+		for(unsigned int j = 0; j < s; j++)
+		{
+		        cout << j << ":   " << college.getEmployees().at(j).getName() << endl;
+		}
+
+		cout << s << ":   SEARCH STAFF" << endl;
+		cout << ++s << ":   PREVIOUS MENU" << endl;
+
+		i = Nav(0, s);
+		if (i == s) return;
+
+		else Person_Menu(*(college.getEmployees().at(i).getEmployee()), college);
+	}
+}
+
+
+//////////////////////
+
 /* MENU INSTRUCTIONS:
  * Para acrescentarem opções no vosso menu a unica coisa que têm de fazer é:
  * -acrescentar o cout com o numero da opção
@@ -1052,11 +1079,14 @@ bool Exit_College(College &college) {
  */
 void Hash_Table_Menu(College &college){
     while(1){
-        cout << "WIP!" << endl;
-        cout << "0:   PREVIOUS MENU" << endl;
-        switch(Nav(0,0)){
+        cout << "0:   EMPLOYEES" << endl;
+		cout << "1:   PREVIOUS MENU" << endl;
+        switch(Nav(0,1)){
             case 0:
-                return;
+				List_Employees(college);
+				break;
+            case 1:
+				return;
         }
     }
 }

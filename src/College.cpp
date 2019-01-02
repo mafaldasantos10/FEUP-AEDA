@@ -23,12 +23,14 @@ bool hasNoNumber(string s)
 
 //COLLEGE//
 //////////////////////
-College::College(string name)
+College::College(string name): studentsTree(Student("","",date(0, 0, 0),0,"",""))
 {
 	colName = name;
 }
 
-College::College() {
+College::College(): studentsTree(Student("","",date(0, 0, 0),0,"",""))
+{
+
 }
 
 string College::getName() const
@@ -43,6 +45,37 @@ College::~College()
 	dest_remove(staff);
 	dest_remove(vecDep);
 }
+
+
+
+vector<EmployeePtr> College::getEmployees() const
+{
+	vector<EmployeePtr> ptrs;
+	HashTabEmployeetPtr::const_iterator it1 = this->employeeTable.begin();
+	HashTabEmployeetPtr::const_iterator it2 = this->employeeTable.end();
+
+	for(; it1 != it2; it1++)
+	{
+			ptrs.push_back(*it1);
+	}
+
+	return ptrs;
+}
+
+void College::setEmployees(vector<EmployeePtr>& newEmployees)
+{
+	for(unsigned int i = 0; i < newEmployees.size(); i++)
+	{
+		employeeTable.insert(newEmployees.at(i));
+	}
+}
+
+void College::addEmployee(Employee* employee)
+{
+	employeeTable.insert(employee);
+}
+
+
 
 void College::setName(string name)
 {
@@ -350,6 +383,90 @@ ostream& operator<< (ostream& os, const College &college){
     os << college.colName << "|" << college.admin << endl;
     return os;
 }
+
+BST<Student> College::getStudentsTree() {
+	return this->studentsTree;
+}
+
+void College::showStudentAndCourse()
+{
+	BSTItrIn<Student> it(studentsTree);
+
+	cout<<"Name"<<"                  "<<"Course"<<endl;
+
+	while(it.isAtEnd())
+	{
+		cout<<it.retrieve().getName()<<"    "<<it.retrieve().getCourseName()<<endl;
+	}
+}
+
+void College::showStudents()
+{
+	BSTItrIn<Student> it(studentsTree);
+
+		while(it.isAtEnd())
+		{
+			cout<<it.retrieve().getName()<<endl;
+		}
+}
+
+void College::addNewStudent(Student* st1)
+{
+	BSTItrIn<Student> it(studentsTree);
+
+	while(it.isAtEnd())
+	{
+		if(st1->getCode() == it.retrieve().getCode())
+		{
+			cout<<"That student already exists!"<<endl;
+			return;
+		}
+	}
+
+	studentsTree.insert(*st1);
+}
+
+void College::removeStudentBST(Student* st1)
+{
+	BSTItrIn<Student> it(studentsTree);
+
+		while(it.isAtEnd())
+		{
+			if(st1->getCode() == it.retrieve().getCode())
+			{
+				studentsTree.remove(it.retrieve());
+				return;
+			}
+		}
+
+		throw NoCodeFound(stoi(st1->getCode()));
+}
+
+
+Student College::SearchBST(string cod)
+{
+	BSTItrIn<Student> it(studentsTree);
+		while(it.isAtEnd())
+		{
+			if(cod == it.retrieve().getCode())
+			{
+
+				return it.retrieve();
+			}
+		}
+
+    throw NoCodeFound(stoi(cod));
+}
+
+/*
+void College::editStudent(Student st)
+{
+	Student newS = st;
+	newS.editInfo(College);
+
+
+
+}*/
 
 //DEPARTMENT//
 //////////////////////
@@ -792,7 +909,7 @@ void Course::setType(string type)
 	csType = type;
 }
 
-string Course::getName()
+string Course::getName() const
 {
 	return csPtName;
 }

@@ -36,7 +36,7 @@ void People::addPerson(College &college) {
     birthday = readDate(); //Tests if date is written correctly
 }
 
-string People::getName(){
+string People::getName() const{
     return name;
 }
 
@@ -134,7 +134,7 @@ void People::write(ostream &os) {
 
 //////STUDENT//////
 
-Student::Student(string name, string address, date birthday, unsigned int phone, string cod, string course, map <Uc*, float> subjects)
+Student::Student(string name, string address, date birthday, unsigned int phone, string cod, string course)
 : People(name, address, birthday, phone, cod){
 	course_string = course;
 	year = 0;
@@ -289,7 +289,7 @@ map <Uc*, float>* Student::getGrades() {
     return &subjects;
 }
 
-string Student::getCourseName()
+string Student::getCourseName() const
 {
 	return course->getEngName();
 }
@@ -381,6 +381,26 @@ void Student::showAllGrades()
 void Student::write(ostream &os) {
     People::write(os);
     os << course->getName() << "|" << year << "|" << endl;
+}
+
+bool Student::operator<(const Student &student) const
+{
+	if(course->getName() <= student.getCourseName())
+	{
+		if(course->getName() == student.getCourseName())
+		{
+			if(getName() >student.getName())
+			{
+				return true;
+			}
+		}
+		else
+		{
+			return true;
+		}
+	}
+
+	return false;
 }
 
 //////EMPLOYEE//////
@@ -734,6 +754,32 @@ void Staff::editInfo(College &college) {
 		}
 	}
 }
+
+
+/**
+ * Class EmployeePtr
+ */
+
+EmployeePtr::EmployeePtr(Employee* employee)
+{
+	this->employee = employee;
+}
+
+Employee* EmployeePtr::getEmployee()
+{
+	return this->employee;
+}
+
+string EmployeePtr::getCode() const
+{
+	return this->employee->getCode();
+}
+
+string EmployeePtr::getName() const
+{
+	return this->employee->getName();
+}
+
 
 ////FRIEND FUNCTIONS////
 

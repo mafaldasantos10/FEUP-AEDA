@@ -25,6 +25,9 @@ using namespace std;
 class College;
 class Course;
 class Uc;
+class EmployeePtr;
+
+
 int Nav(int bottom, int top);
 /**
  * @brief Checks if the string inputed has a number when it is not supposed to
@@ -113,7 +116,7 @@ public:
      * @brief Gets the name of the Person
      * @return String containing the name of the Person
      */
-    string getName();
+    string getName() const;
     /**
      * @brief Gets the address of a given Person
      * @return String containing the address of the Person
@@ -198,7 +201,7 @@ public:
 	 * @param course Course the Student is in
 	 * @param subjects Subjects the Student is taking
 	 */
-	Student(string name, string address, date birthday, unsigned int phone, string cod, string course, map <Uc*, float> subjects);
+	Student(string name, string address, date birthday, unsigned int phone, string cod, string course);
 	/**
 	 * @brief Default Student constructor
 	 */
@@ -235,7 +238,7 @@ public:
      * @brief Gets the name of the Course the Student is in
      * @return String with the name of the course
      */
-	string getCourseName();
+	string getCourseName() const;
 	/**
 	 * @brief Changes the Course
 	 * @param cs Course to change to
@@ -319,6 +322,8 @@ public:
 	* @brief Inserts UC from user input
 	*/
 	void InsertUC();
+
+	bool operator<(const Student &student) const;
 };
 
 
@@ -348,6 +353,8 @@ public:
 	* @brief  adds employee to college
 	* @param college
 	*/
+    friend class EmployeePtr;
+
     void addPerson(College &college);
 	/**
 	* @brief Prints special info on screen
@@ -391,6 +398,18 @@ public:
 	* @brief Inserts NIF from user input
 	*/
     void InsertNif();
+};
+
+
+class EmployeePtr
+{
+	Employee* employee;
+public:
+	EmployeePtr(Employee* employee);
+	Employee* getEmployee();
+	string getCode() const;
+	string getName() const;
+	//gets & sets
 };
 
 

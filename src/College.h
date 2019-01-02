@@ -11,7 +11,9 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <unordered_set>
 #include "People.h"
+#include "BST.h"
 
 
 using namespace std;
@@ -27,6 +29,29 @@ class Student;
 class Teacher;
 class Staff;
 //////////////////////
+
+
+struct EmployeePtrHash
+{
+	int operator() (const EmployeePtr& employee) const
+	{
+		int v = 0;
+
+		for (unsigned int i = 0; i < employee.getCode().size(); i++)
+		{
+			v = 37 * v + employee.getCode().at(i);
+		}
+
+		return v;
+	}
+
+	bool operator() (const EmployeePtr& employee1, const EmployeePtr& employee2) const
+	{
+		return employee1.getCode() == employee2.getCode();
+	}
+};
+
+typedef unordered_set<EmployeePtr, EmployeePtrHash, EmployeePtrHash> HashTabEmployeetPtr;
 
 
 /**
@@ -61,6 +86,9 @@ class College{
     vector<Teacher *> teachers;
     /** @brief Vector of Vectors of pointers to each Staff of the College */
     vector<Staff *> staff;
+    HashTabEmployeetPtr employeeTable;
+    /**@brief Binary tree of pointers to each student*/
+    BST<Student > studentsTree;
 public:
     /**
      * @brief College Constructor
@@ -79,6 +107,12 @@ public:
      * @brief Gets Teacher vector by reference
      * @return Returns the vector of Teachers by reference
      */
+
+	// Part II  - Hash Table
+	vector<EmployeePtr> getEmployees() const;
+	void setEmployees(vector<EmployeePtr>& newEmployees);
+	void addEmployee(Employee* employee);
+
     vector<Teacher *>& getTeachers();
 	/**
 	* @brief Removes Teacher from College
@@ -186,6 +220,20 @@ public:
 	* @param college College to be used
 	*/
     friend ostream& operator<< (ostream& os, const College &college);
+
+    BST<Student> getStudentsTree();
+
+    void showStudentAndCourse();
+
+    void showStudents();
+
+    void addNewStudent(Student* st1);
+
+    void removeStudentBST(Student* st1);
+
+    Student SearchBST(string cod);
+
+    void editStudent(Student st);
 };
 
 /** @brief Department Class */
@@ -367,7 +415,7 @@ public:
      * @brief Gets the Portuguese name of a given Course
      * @return String containing the Portuguese name of the Course
      */
-    string getName();
+    string getName() const;
     /**
      * @brief Changes the Portuguese name of a given Course
      * @param ptName New Portuguese name of the Course
