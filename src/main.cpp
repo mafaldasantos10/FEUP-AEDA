@@ -138,6 +138,7 @@ void readFile(College &c, string file)
 				t->setCategory(CatEnum(next.substr(0, next.find("|"))));
 				next.erase(0, next.find("|") + 1);
 
+				t->setWorking(1);
 				c.getTeachers().push_back(t);
 				c.addEmployee(t);
 
@@ -178,6 +179,7 @@ void readFile(College &c, string file)
 				sf->setWorkArea(next.substr(0, next.find("|")));
 				next.erase(0, next.find("|") + 1);
 
+				sf->setWorking(1);
 				c.getStaff().push_back(sf);
 				c.addEmployee(sf);
 
@@ -336,6 +338,86 @@ void readFile(College &c, string file)
 					}
 				}
 			}
+		}
+
+		if (next == "FORMER TEACHER:")
+		{
+			getline(fin, next);
+
+			while (next.length() != 0)
+				{
+					Teacher* t = new Teacher();
+
+					t->setName(next.substr(0, next.find("|")));
+					next.erase(0, next.find("|") + 1);
+
+					t->setAddress(next.substr(0, next.find("|")));
+					next.erase(0, next.find("|") + 1);
+
+					t->setPhone(stoi(next.substr(0, next.find("|"))));
+					next.erase(0, next.find("|") + 1);
+
+					t->setCode(next.substr(0, next.find("|")));
+					next.erase(0, next.find("|") + 1);
+
+					d = changeDate(next.substr(0, next.find("|")));
+					t->setDate(d);
+					next.erase(0, next.find("|") + 1);
+
+					t->setSalary(stof(next.substr(0, next.find("|"))));
+					next.erase(0, next.find("|") + 1);
+
+					t->setNIF(stoi(next.substr(0, next.find("|"))));
+					next.erase(0, next.find("|") + 1);
+
+					t->setCategory(CatEnum(next.substr(0, next.find("|"))));
+					next.erase(0, next.find("|") + 1);
+
+					t->setWorking(0);
+					c.addEmployee(t);
+
+					getline(fin, next);
+				}
+		}
+
+		if (next == "FORMER STAFF:")
+		{
+			getline(fin, next);
+
+			while (next.length() != 0)
+				{
+					Staff* sf = new Staff();
+
+					sf->setName(next.substr(0, next.find("|")));
+					next.erase(0, next.find("|") + 1);
+
+					sf->setAddress(next.substr(0, next.find("|")));
+					next.erase(0, next.find("|") + 1);
+
+					sf->setPhone(stoi(next.substr(0, next.find("|"))));
+					next.erase(0, next.find("|") + 1);
+
+					sf->setCode(next.substr(0, next.find("|")));
+					next.erase(0, next.find("|") + 1);
+
+					d = changeDate(next.substr(0, next.find("|")));
+					sf->setDate(d);
+					next.erase(0, next.find("|") + 1);
+
+					sf->setSalary(stof(next.substr(0, next.find("|"))));
+					next.erase(0, next.find("|") + 1);
+
+					sf->setNIF(stoi(next.substr(0, next.find("|"))));
+					next.erase(0, next.find("|") + 1);
+
+					sf->setWorkArea(next.substr(0, next.find("|")));
+					next.erase(0, next.find("|") + 1);
+
+					sf->setWorking(0);
+					c.addEmployee(sf);
+
+					getline(fin, next);
+				}
 		}
 
 		studentsCourses(c);
@@ -1013,12 +1095,37 @@ void Save_College(College &college) {
 		save_file << *college.getStaff().at(i);
 	}
 	save_file << endl;
-	//------ DEP/COURSE/UC INFO------
+	//------DEP/COURSE/UC INFO------
 	for (unsigned int i = 0; i < college.getDepartments().size(); i++) {
 		save_file << "DEP:" << endl;
 		save_file << *college.getDepartments().at(i);
 		save_file << endl;
 	}
+	//------FORMER TEACHER------
+	save_file << "FORMER TEACHER:" << endl;
+	for (unsigned int j = 0; j < college.getEmployees().size(); j++)
+	{
+		if (!college.getEmployees().at(j).getWorkingState() &&
+			college.getEmployees().at(j).getCode().at(0) == '1')
+		{
+			Employee* e = college.getEmployees().at(j).getEmployee();
+			save_file << e << endl;
+		}
+	}
+	save_file << endl;
+	//------FORMER STAFF------
+	save_file << "FORMER STAFF:" << endl;
+	for (unsigned int j = 0; j < college.getEmployees().size(); j++)
+	{
+		if (!college.getEmployees().at(j).getWorkingState() &&
+			college.getEmployees().at(j).getCode().at(0) == '2')
+		{
+			Employee* e = college.getEmployees().at(j).getEmployee();
+			save_file << &e << endl;
+		}
+	}
+	save_file << endl;
+	
 	save_file.close();
 }
 
@@ -1041,18 +1148,54 @@ bool Exit_College(College &college) {
 	}
 }
 
+
+
+
 //////////////////////
 
-void List_Employees(College &college) {
-	
-	int s, i;
+int my_search_vec(vector<EmployeePtr> vec, string name) {
+	for (size_t i = 0; i < vec.size(); i++) {
+		if (vec.at(i).getName() == name) 
+			return i;
+	}
+	throw NoNameFound(name);
+}
+
+pair<int, int> my_search(vector<EmployeePtr> vec) {
+	string name;
+	pair<int, int> i (-1,-1);
+	while (1) {
+		cout << "Insert the name you want to search for(! to cancel): " << flush;
+		getline(cin, name);
+		if (name == "!") return i;
+		try {
+			i.first = my_search_vec(vec, name);
+			i.second = vec.at(i.first).getCode().at(0);
+		}
+		catch (NoNameFound &err) {
+			cout << err.errorMessage() << endl;
+			continue;
+		}
+		break;
+	}
+	return i;
+}
+
+void List_Current_Employees(College &college)
+{
+	int s = 0, i;
+	vector<EmployeePtr> temp;
+
 	while (1)
 	{
-		s = college.getEmployees().size();
-
-		for(unsigned int j = 0; j < s; j++)
+		for (unsigned int j = 0; j < college.getEmployees().size(); j++)
 		{
-		        cout << j << ":   " << college.getEmployees().at(j).getName() << endl;
+			if (college.getEmployees().at(j).getWorkingState())
+			{
+				cout << s << ":   " << college.getEmployees().at(j).getName() << endl;
+				s++;
+				temp.push_back(college.getEmployees().at(j));
+			}
 		}
 
 		cout << s << ":   SEARCH STAFF" << endl;
@@ -1061,7 +1204,65 @@ void List_Employees(College &college) {
 		i = Nav(0, s);
 		if (i == s) return;
 
-		else Person_Menu(*(college.getEmployees().at(i).getEmployee()), college);
+		else if (i == s - 1)
+		{
+			pair<int, int> j = my_search(temp);
+			if (j.first != -1) Person_Menu(*(temp.at(j.first).getEmployee()), college);
+		}
+
+		else Person_Menu(*(temp.at(i).getEmployee()), college);
+
+		s = 0; /* not sure why i have to reset this*/
+	}
+}
+
+void List_Former_Employees(College &college)
+{
+	int s = 0, i;
+	vector<EmployeePtr> temp;
+
+	while (1)
+	{
+		for (unsigned int j = 0; j < college.getEmployees().size(); j++)
+		{
+			if (!college.getEmployees().at(j).getWorkingState())
+			{
+				cout << s << ":   " << college.getEmployees().at(j).getName() << endl;
+				s++;
+				temp.push_back(college.getEmployees().at(j));
+			}
+		}
+
+		cout << s << ":   SEARCH EMPLOYEES" << endl;
+		cout << ++s << ":   HIRE EMPLOYEE" << endl;
+		cout << ++s << ":   PREVIOUS MENU" << endl;
+
+		i = Nav(0, s);
+		if (i == s) return;
+
+		else if (i == s - 2)
+		{
+			pair<int, int> j = my_search(temp);
+			if (j.first != -1) Person_Menu(*(temp.at(j.first).getEmployee()), college);
+		}
+
+		else if (i == s - 1)
+		{
+			pair<int, int> j = my_search(temp);
+			if (j.first != -1)
+			{
+				/*if (j.second == 2)
+				{
+					temp.at(j.first).getEmployee()->setWorking(true);
+					Staff sf (*temp.at(j.first).getEmployee());
+					college.addStaff(sf);
+				}*/
+			}
+		}
+
+		else Person_Menu(*(temp.at(i).getEmployee()), college);
+
+		s = 0; /* not sure why i have to reset this */
 	}
 }
 
@@ -1079,13 +1280,17 @@ void List_Employees(College &college) {
  */
 void Hash_Table_Menu(College &college){
     while(1){
-        cout << "0:   EMPLOYEES" << endl;
-		cout << "1:   PREVIOUS MENU" << endl;
-        switch(Nav(0,1)){
+        cout << "0:   CURRENT EMPLOYEES" << endl;
+		cout << "1:   FORMER EMPLOYEES" << endl;
+		cout << "2:   PREVIOUS MENU" << endl;
+        switch(Nav(0,2)){
             case 0:
-				List_Employees(college);
+				List_Current_Employees(college);
 				break;
-            case 1:
+			case 1:
+				List_Former_Employees(college);
+				break;
+            case 2:
 				return;
         }
     }

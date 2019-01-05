@@ -36,7 +36,7 @@ void People::addPerson(College &college) {
     birthday = readDate(); //Tests if date is written correctly
 }
 
-string People::getName() const{
+string People::getName(){
     return name;
 }
 
@@ -134,7 +134,7 @@ void People::write(ostream &os) {
 
 //////STUDENT//////
 
-Student::Student(string name, string address, date birthday, unsigned int phone, string cod, string course)
+Student::Student(string name, string address, date birthday, unsigned int phone, string cod, string course, map <Uc*, float> subjects)
 : People(name, address, birthday, phone, cod){
 	course_string = course;
 	year = 0;
@@ -280,6 +280,7 @@ Course* Student::getCourse()
 {
 	return course;
 }
+
  int Student::Special_Info(){
     cout << "0:   SHOW GRADES" << endl;
      return 1;
@@ -289,7 +290,7 @@ map <Uc*, float>* Student::getGrades() {
     return &subjects;
 }
 
-string Student::getCourseName() const
+string Student::getCourseName()
 {
 	return course->getEngName();
 }
@@ -383,35 +384,17 @@ void Student::write(ostream &os) {
     os << course->getName() << "|" << year << "|" << endl;
 }
 
-bool Student::operator<(const Student &student) const
-{
-	if(course->getName() <= student.getCourseName())
-	{
-		if(course->getName() == student.getCourseName())
-		{
-			if(getName() >student.getName())
-			{
-				return true;
-			}
-		}
-		else
-		{
-			return true;
-		}
-	}
-
-	return false;
-}
-
 //////EMPLOYEE//////
 
-Employee::Employee(string name, string address, date birthday, unsigned int phone, string cod, float salary, unsigned int nif)
+Employee::Employee(string name, string address, date birthday, unsigned int phone, string cod, float salary, unsigned int nif, bool working)
 : People(name, address, birthday, phone, cod){
 	this->salary = salary;
 	this->nif = nif;
+	this->working = working;
 }
 
 void Employee::addPerson(College &college){
+	setWorking(true);
     cout << "\nInsert Employee's Salary: " << flush;
     InsertSalary();
     cout << "\nInsert Employee's NIF: " << flush;
@@ -441,6 +424,16 @@ unsigned int Employee::getNIF()
 void Employee::setNIF(unsigned int nif)
 {
 	this->nif = nif;
+}
+
+bool Employee::getWorking()
+{
+	return working;
+}
+
+void Employee::setWorking(bool working)
+{
+	this->working = working;
 }
 
 void Employee::write(ostream& os){
@@ -478,8 +471,8 @@ void Employee::InsertNif() {
 
 //////TEACHER//////
 
-Teacher::Teacher(string name, string address, date birthday, unsigned int phone, string cod, float salary, unsigned int nif, Cat category, vector<Uc *> subjects)
-: Employee(name, address, birthday, phone, cod, salary, nif){
+Teacher::Teacher(string name, string address, date birthday, unsigned int phone, string cod, float salary, unsigned int nif, bool working, Cat category, vector<Uc *> subjects)
+: Employee(name, address, birthday, phone, cod, salary, nif, working){
 	this->category = category;
 	this->subjects = subjects;
 }
@@ -665,8 +658,8 @@ void Teacher::write(ostream &os) {
 
 //////STAFF//////
 
-Staff::Staff(string name, string address, date birthday, unsigned int phone, string cod, float salary, unsigned int nif, string work_area)
-: Employee(name, address, birthday, phone, cod, salary, nif){
+Staff::Staff(string name, string address, date birthday, unsigned int phone, string cod, float salary, unsigned int nif, bool working, string work_area)
+: Employee(name, address, birthday, phone, cod, salary, nif, working){
 	this->work_area = work_area;
 }
 
@@ -767,7 +760,7 @@ EmployeePtr::EmployeePtr(Employee* employee)
 
 Employee* EmployeePtr::getEmployee()
 {
-	return this->employee;
+	return employee;
 }
 
 string EmployeePtr::getCode() const
@@ -778,6 +771,16 @@ string EmployeePtr::getCode() const
 string EmployeePtr::getName() const
 {
 	return this->employee->getName();
+}
+
+bool EmployeePtr::getWorkingState() const
+{
+	return this->employee->getWorking();
+}
+
+void EmployeePtr::setWorkingState(bool working)
+{
+	employee->setWorking(working);
 }
 
 

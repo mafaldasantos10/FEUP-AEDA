@@ -116,7 +116,7 @@ public:
      * @brief Gets the name of the Person
      * @return String containing the name of the Person
      */
-    string getName() const;
+    string getName();
     /**
      * @brief Gets the address of a given Person
      * @return String containing the address of the Person
@@ -201,7 +201,7 @@ public:
 	 * @param course Course the Student is in
 	 * @param subjects Subjects the Student is taking
 	 */
-	Student(string name, string address, date birthday, unsigned int phone, string cod, string course);
+	Student(string name, string address, date birthday, unsigned int phone, string cod, string course, map <Uc*, float> subjects);
 	/**
 	 * @brief Default Student constructor
 	 */
@@ -238,7 +238,7 @@ public:
      * @brief Gets the name of the Course the Student is in
      * @return String with the name of the course
      */
-	string getCourseName() const;
+	string getCourseName();
 	/**
 	 * @brief Changes the Course
 	 * @param cs Course to change to
@@ -322,8 +322,6 @@ public:
 	* @brief Inserts UC from user input
 	*/
 	void InsertUC();
-
-	bool operator<(const Student &student) const;
 };
 
 
@@ -333,6 +331,7 @@ class Employee : public People{
 	float salary;
 	/** @brief NIF of a given Employee*/
 	unsigned int nif;
+	bool working;
 public:
 	/**
 	 * @brief constructor of Employee
@@ -344,7 +343,7 @@ public:
 	 * @param salary Salary of the Employee
 	 * @param nif NIF of a Employee
 	 */
-	Employee(string name, string address, date birthday, unsigned int phone, string cod, float salary, unsigned int nif);
+	Employee(string name, string address, date birthday, unsigned int phone, string cod, float salary, unsigned int nif, bool working);
 	/**
 	 * @brief Employee default constructor
 	 */
@@ -381,6 +380,10 @@ public:
 	 * @param nif New NIF of a given Employee
 	 */
 	void setNIF(unsigned int nif);
+
+	bool getWorking();
+	void setWorking(bool working);
+
 	/**
 	* @brief writes employee info to os
 	* @param os
@@ -409,6 +412,8 @@ public:
 	Employee* getEmployee();
 	string getCode() const;
 	string getName() const;
+	bool getWorkingState() const;
+	void setWorkingState(bool working);
 	//gets & sets
 };
 
@@ -432,7 +437,7 @@ public:
 	 * @param category Category of the Teacher
 	 * @param subjects Subjects taught by the Teacher
 	 */
-	Teacher(string name, string address, date birthday, unsigned int phone, string cod, float salary, unsigned int nif, Cat category, vector <Uc *> subjects);
+	Teacher(string name, string address, date birthday, unsigned int phone, string cod, float salary, unsigned int nif, bool working, Cat category, vector <Uc *> subjects);
 	 /**
 	  * @brief Teacher default constructor
 	  */
@@ -528,7 +533,7 @@ public:
 	 * @param nif NIF of the Staff member
 	 * @param work_area Work area of the Staff member
 	 */
-	Staff(string name, string adress, date birthday, unsigned int phone, string cod, float salary, unsigned int nif, string work_area);
+	Staff(string name, string adress, date birthday, unsigned int phone, string cod, float salary, unsigned int nif, bool working, string work_area);
 	/**
 	 * @brief Staff default constructor
 	 */

@@ -13,7 +13,6 @@
 #include <map>
 #include <unordered_set>
 #include "People.h"
-#include "BST.h"
 
 
 using namespace std;
@@ -87,8 +86,6 @@ class College{
     /** @brief Vector of Vectors of pointers to each Staff of the College */
     vector<Staff *> staff;
     HashTabEmployeetPtr employeeTable;
-    /**@brief Binary tree of pointers to each student*/
-    BST<Student > studentsTree;
 public:
     /**
      * @brief College Constructor
@@ -220,20 +217,6 @@ public:
 	* @param college College to be used
 	*/
     friend ostream& operator<< (ostream& os, const College &college);
-
-    BST<Student> getStudentsTree();
-
-    void showStudentAndCourse();
-
-    void showStudents();
-
-    void addNewStudent(Student* st1);
-
-    void removeStudentBST(Student* st1);
-
-    Student SearchBST(string cod);
-
-    void editStudent(Student st);
 };
 
 /** @brief Department Class */
@@ -415,7 +398,7 @@ public:
      * @brief Gets the Portuguese name of a given Course
      * @return String containing the Portuguese name of the Course
      */
-    string getName() const;
+    string getName();
     /**
      * @brief Changes the Portuguese name of a given Course
      * @param ptName New Portuguese name of the Course
