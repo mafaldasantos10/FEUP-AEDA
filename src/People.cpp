@@ -415,7 +415,7 @@ void Student::write(ostream &os) {
     os << course->getName() << "|" << year << "|" << endl;
 }
 
-bool Student::operator< (const Student & st){
+bool Student::Queue_Compare(const Student & st){
     if(bolsa != st.bolsa) return (bolsa > st.bolsa);
     else if(average != st.average) return (average < st.average);
     else if(year != st.year) return (year < st.year);

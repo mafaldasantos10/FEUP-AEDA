@@ -337,7 +337,7 @@ public:
      * @param st Other student
      * @return
      */
-    bool operator< (const Student & st);
+    bool Queue_Compare(const Student & st);
     /**
      * @brief This function calculates de average grade of each student
      */

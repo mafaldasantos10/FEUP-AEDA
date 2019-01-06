@@ -58,7 +58,7 @@ class Compare_St_Queue
 public:
     bool operator() (Student* st1, Student* st2)
     {
-        return (*st1 < *st2);
+        return (*st1).Queue_Compare(*st2);
     }
 };
 
