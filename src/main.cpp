@@ -24,7 +24,7 @@ string college_file_name = "!";
 //time_t theTime = time(NULL);
 //struct tm *aTime = localtime(&theTime);
 //int current_year = aTime->tm_year + 1900; // Year is # years since 1900
-int current_year = 2018;  //Visual studio gives off error in above functions, however CLion runs fine, thus they were commented
+int current_year = 2019;  //Visual studio gives off error in above functions, however CLion runs fine, thus they were commented
 
 /// PROTOTYPES ///
 date* changeDate(string data);
@@ -100,6 +100,8 @@ void readFile(College &c, string file)
 				next.clear();
 
 				c.getStudents().push_back(s);
+
+                c.Add_To_Queue(s);
 
 				getline(fin, next);
 			}
@@ -302,6 +304,8 @@ void readFile(College &c, string file)
 									{
 										float grade = stof(next.substr(next.find(",") + 1, next.find("]")));
 										c.getStudents().at(j)->addUCGrade(uc, grade);
+                                        c.getStudents().at(j)->Calculate_Average();
+                                        c.Rearrange_Queue(c.getStudents().at(j));
 										break;
 									}
 								}
@@ -758,15 +762,22 @@ void Grades_Menu(People &person, College &college) {
 				getline(cin, uc_name);
 				if (uc_name == "!") break;
 			} while (!st->removeFromMap(uc_name));
+            st->Calculate_Average();
+            college.Rearrange_Queue(st);
 		}
-		else if (i == n - 2 && access == 2) st->InsertUC();
+		else if (i == n - 2 && access == 2)
+        {
+            st->InsertUC();
+            st->Calculate_Average();
+            college.Rearrange_Queue(st);
+        }
         else if (i == n - 3 && access == 2) {
             while(1){
                 cout << "\nInsert number of UC whose grade you want to change( " << st->getGrades()->size() << " - cancel): " << flush;
                 int i = Nav(0,st->getGrades()->size());
                 if(i == st->getGrades()->size()) break;
                 else{
-                    float grade;
+                    double grade;
                     cout << "\nInsert Student's UC grade(-1 if not-evaluated): " << flush;
                     cin >> grade;
                     while (cin.fail() || grade > 20 || (grade < 0 && grade != -1))
@@ -783,6 +794,8 @@ void Grades_Menu(People &person, College &college) {
                     if(!st->changeGrade(it->first,grade)) cout << "\n Unexpected Error! grade not changed..." << endl;
                 }
             }
+            st->Calculate_Average();
+            college.Rearrange_Queue(st);
         }
 		else {
 			auto it = st->getGrades()->begin();
@@ -1109,7 +1122,7 @@ void Save_College(College &college) {
 			college.getEmployees().at(j).getCode().at(0) == '1')
 		{
 			Employee* e = college.getEmployees().at(j).getEmployee();
-			save_file << e << endl;
+			//save_file << *e << endl;
 		}
 	}
 	save_file << endl;
@@ -1121,7 +1134,7 @@ void Save_College(College &college) {
 			college.getEmployees().at(j).getCode().at(0) == '2')
 		{
 			Employee* e = college.getEmployees().at(j).getEmployee();
-			save_file << &e << endl;
+            //save_file << *e << endl;
 		}
 	}
 	save_file << endl;
@@ -1298,12 +1311,67 @@ void Hash_Table_Menu(College &college){
 
 //////////////////////
 
+void Give_Scholarship(College &college){
+    cout << "How many scholarships do you want to give out? (0 - cancel)" << endl;
+    unsigned int number = 0;
+    do{
+        cin >> number;
+        cin.ignore(100,'\n');
+        cin.clear();
+    } while(number < 0);
+    if(number == 0) return;
+    else cout << "How much money will each Scholarship be worth?" << endl;
+    unsigned int value = 0;
+    do{
+        cin >> value;
+        cin.ignore(100,'\n');
+        cin.clear();
+    } while(value < 0);
+    Student* st;
+    for(size_t i = 0; i < number; i++){
+        st = college.Get_Top_Student();
+        st->Add_Funds(value);
+        college.Rearrange_Queue(st);
+    }
+}
+
+//////////////////////
+
+void Collect_Payment(College &college){
+    cout << "How much will be charged? (0 - cancel)" << endl;
+    unsigned int value = 0;
+    do{
+        cin >> value;
+        cin.ignore(100,'\n');
+        cin.clear();
+    } while(value < 0);
+    if(value == 0) return;
+    for(unsigned int i = 0; i < college.getStudents().size(); i++){
+        college.getStudents()[i]->Pay_Semester(value);
+        college.Rearrange_Queue(college.getStudents()[i]);
+    }
+}
+
 void Queue_Menu(College &college){
+    Student* st;
     while(1){
-        cout << "WIP!" << endl;
-        cout << "0:   PREVIOUS MENU" << endl;
-        switch(Nav(0,0)){
+        college.showInfo();
+        cout << "0:   GET TOP STUDENT" << endl;
+        cout << "1:   GIVE SCHOLARSHIP" << endl;
+        cout << "2:   COLLECT SEMESTER PAYMENT" << endl;
+        cout << "3:   PREVIOUS MENU" << endl;
+        switch(Nav(0,3)){
             case 0:
+                st = college.Get_Top_Student();
+                if(st != nullptr) Person_Menu(*st,college);
+                break;
+            case 1:
+                Give_Scholarship(college);
+                break;
+            case 2:
+                Collect_Payment(college);
+                break;
+            case 3:
                 return;
         }
     }

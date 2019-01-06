@@ -57,6 +57,12 @@ struct date {
         year = y;
         format = to_string(day) + "/" + to_string(month) + "/" + to_string(year);
     }
+
+    bool operator< (date bd){ //newest date is smallest
+        if(year != bd.year) return (year > bd.year);
+        else if(month != bd.month) return (month > bd.month);
+        else return (day > bd.day);
+    }
 };
 //////////////////////
 
@@ -151,7 +157,7 @@ public:
      * @brief Gets the birthday of a given Person
      * @return Struct containing the birthday of the person
      */
-    date* getDate();
+    date* getDate() const;
 	/**
 	* @brief Virtual function to write info on os
 	* @param os
@@ -190,6 +196,10 @@ class Student : public People{
 	int year;  //year enrolled in
 	/** @brief Map that hold the UCs and its grades of a given Student */
 	map <Uc*, float> subjects; //In this map the Key is the subject and the float value corresponds to the grade of the student on that particular subject;
+    /**@brief Money student has been attributed */
+    unsigned int bolsa;
+    /**@brief Final Student's grade */
+    unsigned int average;
 public:
 	/**
 	 * @brief Student Constructor
@@ -201,7 +211,7 @@ public:
 	 * @param course Course the Student is in
 	 * @param subjects Subjects the Student is taking
 	 */
-	Student(string name, string address, date birthday, unsigned int phone, string cod, string course, map <Uc*, float> subjects);
+	Student(string name, string address, date birthday, unsigned int phone, string cod, string course);
 	/**
 	 * @brief Default Student constructor
 	 */
@@ -322,6 +332,24 @@ public:
 	* @brief Inserts UC from user input
 	*/
 	void InsertUC();
+    /**
+     * @brief This function is used to compare students in the priority_queue
+     * @param st Other student
+     * @return
+     */
+    bool operator< (const Student & st);
+    /**
+     * @brief This function calculates de average grade of each student
+     */
+    void Calculate_Average();
+    /**
+     * @brief This function calculates de average grade of each student
+     */
+    void Add_Funds(unsigned int value);
+    /**
+     * @brief This function calculates de average grade of each student
+     */
+    void Pay_Semester(unsigned int value);
 };
 
 

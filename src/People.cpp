@@ -75,7 +75,7 @@ void People::setCode(string newCod)
 	code=newCod;
 }
 
-date* People::getDate()
+date* People::getDate() const
 {
 	return birthday;
 }
@@ -134,7 +134,7 @@ void People::write(ostream &os) {
 
 //////STUDENT//////
 
-Student::Student(string name, string address, date birthday, unsigned int phone, string cod, string course, map <Uc*, float> subjects)
+Student::Student(string name, string address, date birthday, unsigned int phone, string cod, string course)
 : People(name, address, birthday, phone, cod){
 	course_string = course;
 	year = 0;
@@ -169,12 +169,14 @@ void Student::addPerson(College &college)
     string code = "0" + to_string(current_year) + to_string(Student::student_count);  //student id is assigned
     setCode(code);
 
-    cout << "\nChoose Student's Course:" << endl;  //Needs exception in case there are no Courses Created
+    cout << "\nChoose Student's Course:" << endl;
     ChooseCourse(college);
 
     cout << "\nInsert Student's Year: " << flush;
     InsertYear();
 	InsertUC();
+    Calculate_Average();
+    bolsa = 0;
 	student_count++;
 	college.addStudent(this);
 }
@@ -182,12 +184,12 @@ void Student::addPerson(College &college)
 void Student::InsertUC()
 {
 	//Uc* uc = nullptr;
-	Uc* uc = new Uc();
 	bool end = false;
 	string uc_name;
 	float grade;
 
 	while (1) {
+        Uc* uc = new Uc();
 		while (1) {
 			cout << "\nInsert Student's UC(? - list/ ! - done): " << flush;
 			getline(cin, uc_name);
@@ -276,6 +278,29 @@ void Student::editInfo(College &college) {
 	}
 }
 
+void Student::Calculate_Average(){
+    unsigned int total = 0, number = 0;
+    for(auto it = subjects.begin(); it != subjects.end(); it++)
+    {
+        if(it->second >= 0)
+        {
+            total += it->second;
+            number++;
+        }
+    }
+    if(number == 0) return;
+    average = round(total/number);
+}
+
+void Student::Add_Funds(unsigned int value){
+    bolsa += value;
+}
+
+void Student::Pay_Semester(unsigned int value){
+    if((int) (bolsa - value) > 0) bolsa -= value;
+    else bolsa = 0;
+}
+
 Course* Student::getCourse()
 {
 	return course;
@@ -297,8 +322,13 @@ string Student::getCourseName()
 
 void Student::showInfo(){
     People::showInfo();
+    string average_grade;
+    if(subjects.empty()) average_grade = "!None Available!";
+    else average_grade = to_string(average);
 	cout << "| Course: " << getCourseName() << endl;
     cout << "| Year: " << year << endl;
+    cout << "| Average: " << average_grade << endl;
+    cout << "| Scholarship: " << bolsa << endl;
 	cout << "|-----------------------------------------" << endl;
 }
 
@@ -367,6 +397,7 @@ void Student::showUCGrade(string name)
 
 void Student::showAllGrades()
 {
+    showInfo();
 	cout << "\tMODULE\t\tGRADE\n";
 	string s;
 	int i = 0;
@@ -382,6 +413,13 @@ void Student::showAllGrades()
 void Student::write(ostream &os) {
     People::write(os);
     os << course->getName() << "|" << year << "|" << endl;
+}
+
+bool Student::operator< (const Student & st){
+    if(bolsa != st.bolsa) return (bolsa > st.bolsa);
+    else if(average != st.average) return (average < st.average);
+    else if(year != st.year) return (year < st.year);
+    else return (getDate() > st.getDate());
 }
 
 //////EMPLOYEE//////

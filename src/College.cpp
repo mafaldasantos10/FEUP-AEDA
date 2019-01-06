@@ -44,9 +44,53 @@ College::~College()
 	dest_remove(vecDep);
 }
 
+void College::Add_To_Queue(Student* st)
+{
+    students_queue.push(st);
+}
 
+void College::Rearrange_Queue(Student* st)
+{
+    vector<Student*> tmp;
+    for(size_t i = 0; i < students_queue.size(); i++)
+    {
+        tmp.push_back(students_queue.top());
+        if(students_queue.top() == st)
+        {
+            students_queue.pop();
+            break;
+        }
+        else students_queue.pop();
+    }
 
-vector<EmployeePtr> College::getEmployees() const
+    for(size_t i = 0; i < tmp.size(); i++)
+    {
+        students_queue.push(tmp[i]);
+    }
+}
+
+void College::Remove_From_Queue(Student* st){
+    vector<Student*> tmp;
+    for(size_t i = 0; i < students_queue.size(); i++)
+    {
+        if(students_queue.top() == st)
+        {
+            students_queue.pop();
+            break;
+        }
+        else{
+            tmp.push_back(students_queue.top());
+            students_queue.pop();
+        }
+    }
+
+    for(size_t i = 0; i < tmp.size(); i++)
+    {
+        students_queue.push(tmp[i]);
+    }
+}
+
+vector<EmployeePtr> &College::getEmployees() const
 {
 	vector<EmployeePtr> ptrs;
 	HashTabEmployeetPtr::const_iterator it1 = this->employeeTable.begin();
@@ -118,6 +162,7 @@ void College::addTeacher(Teacher *teacher)
 void College::addStudent(Student *student)
 {
     students.push_back(student);
+    students_queue.push(student);
 }
 
 void College::addStaff(Staff *staff)
@@ -161,13 +206,20 @@ vector<Uc*> College::getUCs(){
 void College::removeStudent(Student* student) {
 
 	 for(unsigned int i = 0; i<students.size(); i++)
-	   {
-		   if(students.at(i) == student)
-		   {
-			   delete students.at(i);
-			   students.erase(students.begin() + i);
-		   }
-	   }
+     {
+		   if(students.at(i) == student) {
+               Remove_From_Queue(student);
+               delete students.at(i);
+               students.erase(students.begin() + i);
+     }   }
+}
+
+Student* College::Get_Top_Student(){
+    if(students_queue.empty()){
+        cout << "\n!THERE ARE NO STUDENTS!" << endl;
+        return nullptr;
+    }
+    return students_queue.top();
 }
 
 void College::removeTeacher(Teacher* teacher){
@@ -793,6 +845,7 @@ void Course::editInfo(College& college){
 
 unsigned int Course::showSyllabus()
 {
+    if(vecUC.empty()) return 0;
 	sortUc();
     bool first= false, second = false, third = false, fourth = false , fifth = false;
     for(unsigned int i = 0; i < vecUC.size(); i++){

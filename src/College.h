@@ -12,6 +12,7 @@
 #include <vector>
 #include <map>
 #include <unordered_set>
+#include <queue>
 #include "People.h"
 
 
@@ -52,6 +53,15 @@ struct EmployeePtrHash
 
 typedef unordered_set<EmployeePtr, EmployeePtrHash, EmployeePtrHash> HashTabEmployeetPtr;
 
+class Compare_St_Queue
+{
+public:
+    bool operator() (Student* st1, Student* st2)
+    {
+        return (*st1 < *st2);
+    }
+};
+
 
 /**
  * @brief Tests for valid input keys and returns the inputed char
@@ -86,6 +96,7 @@ class College{
     /** @brief Vector of Vectors of pointers to each Staff of the College */
     vector<Staff *> staff;
     HashTabEmployeetPtr employeeTable;
+    priority_queue<Student *, std::vector<Student *>, Compare_St_Queue> students_queue;
 public:
     /**
      * @brief College Constructor
@@ -106,9 +117,15 @@ public:
      */
 
 	// Part II  - Hash Table
-	vector<EmployeePtr> getEmployees() const;
+	vector<EmployeePtr> &getEmployees() const;
 	void setEmployees(vector<EmployeePtr>& newEmployees);
 	void addEmployee(Employee* employee);
+
+    //Part II   - Priority Queue
+    void Add_To_Queue(Student* st);
+    void Rearrange_Queue(Student* st);
+    void Remove_From_Queue(Student* st);
+    Student* Get_Top_Student();
 
     vector<Teacher *>& getTeachers();
 	/**
