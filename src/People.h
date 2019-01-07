@@ -87,6 +87,7 @@ public:
 	 * @param cod code of the Person
 	 */
 	People(string name, string address, date& birthday, unsigned int phone,string cod);
+	//People(string name, string address, unsigned int phone,string cod);
 	/**
 	 * @brief Default People constructor
 	 */
@@ -122,7 +123,7 @@ public:
      * @brief Gets the name of the Person
      * @return String containing the name of the Person
      */
-    string getName();
+    string getName() const;
     /**
      * @brief Gets the address of a given Person
      * @return String containing the address of the Person
@@ -212,6 +213,7 @@ public:
 	 * @param subjects Subjects the Student is taking
 	 */
 	Student(string name, string address, date birthday, unsigned int phone, string cod, string course);
+	//Student(string name, string address, unsigned int phone, string cod, string course);
 	/**
 	 * @brief Default Student constructor
 	 */
@@ -248,7 +250,7 @@ public:
      * @brief Gets the name of the Course the Student is in
      * @return String with the name of the course
      */
-	string getCourseName();
+	string getCourseName() const;
 	/**
 	 * @brief Changes the Course
 	 * @param cs Course to change to
@@ -323,7 +325,7 @@ public:
 	/**
 	* @brief returns course_string
 	*/
-    string getCourseString(){return course_string;}
+    string getCourseString() {return course_string;}
 	/**
 	* @brief Inserts year from user input
 	*/
@@ -350,6 +352,8 @@ public:
      * @brief This function calculates de average grade of each student
      */
     void Pay_Semester(unsigned int value);
+
+    bool operator<(const Student &student) const;
 };
 
 

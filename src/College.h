@@ -13,6 +13,7 @@
 #include <map>
 #include <unordered_set>
 #include <queue>
+#include "BST.h"
 #include "People.h"
 
 
@@ -96,6 +97,7 @@ class College{
     /** @brief Vector of Vectors of pointers to each Staff of the College */
     vector<Staff *> staff;
     HashTabEmployeetPtr employeeTable;
+    BST<Student> studentsTree;
     priority_queue<Student *, std::vector<Student *>, Compare_St_Queue> students_queue;
 public:
     /**
@@ -234,6 +236,30 @@ public:
 	* @param college College to be used
 	*/
     friend ostream& operator<< (ostream& os, const College &college);
+
+    BST<Student> getStudentsTree();
+
+    void showStudentAndCourse();
+
+    void showStudents();
+
+    void addNewStudent(Student* st1);
+
+    void removeStudentBST(Student* st1);
+
+    Student SearchBST(string cod);
+
+    void setNameBST(string cod, string name);
+
+    void setAddressBST(string cod, string newAddress);
+
+    void setPhone(string cod, int phone);
+
+    void setBirthday(string cod, date* date);
+
+    void setCourse(string cod, Course* cs);
+
+    void setYear(string cod, int year);
 };
 
 /** @brief Department Class */

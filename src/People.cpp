@@ -8,6 +8,7 @@
 #include "People.h"
 #include "College.h"
 #include <map>
+#include <math.h>
 
 int Student::student_count = 1;
 int Teacher::teacher_count = 1;
@@ -22,6 +23,12 @@ People::People(string name, string address, date& birthday, unsigned int phone, 
 	this->phone = phone;
 	this->code = cod;
 }
+/*People::People(string name, string address,unsigned int phone, string cod) {
+	this->name = name;
+	this->address = address;
+	this->phone = phone;
+	this->code = cod;
+}*/
 
 void People::addPerson(College &college) {
     cout << "Insert Name: " << flush;
@@ -36,7 +43,7 @@ void People::addPerson(College &college) {
     birthday = readDate(); //Tests if date is written correctly
 }
 
-string People::getName(){
+string People::getName() const {
     return name;
 }
 
@@ -141,6 +148,12 @@ Student::Student(string name, string address, date birthday, unsigned int phone,
     student_count++;
 }
 
+/*Student::Student(string name, string address, unsigned int phone, string cod, string course) : People(name, address, phone, cod)
+{
+	course_string = course;
+	year = 0;
+    student_count++;
+}*/
 void Student::ChooseCourse(College &college) {
     if(college.getCourses().size() == 0) throw NoCourses();
     Print_Vec(college.getCourses());
@@ -245,17 +258,21 @@ void Student::editInfo(College &college) {
 		case 0:
 			cout << "Insert new Name: " << flush;
 			InsertName();
+			college.setNameBST(getCode(), getName());
 			break;
 		case 1:
 			cout << "Insert new Address: " << flush;
 			InsertAddress();
+			college.setAddressBST(getCode(), getAddress());
 			break;
 		case 2:
 			cout << "Insert new Phone Number: " << flush;
 			InsertPhone();
+			college.setPhone(getCode(),getPhone());
 			break;
 		case 3:
-			InsertBirthday();
+			setDate(readDate());
+			college.setBirthday(getCode(), getDate());
 			break;
 		default:
 			break;
@@ -270,10 +287,12 @@ void Student::editInfo(College &college) {
 				cout << "There are no courses available!" << endl;
 				continue;
 			}
+			college.setCourse(getCode(), getCourse());
 		}
 		else if (i == 5) {
 			cout << "Insert new Student Year: " << flush;
 			InsertYear();
+			college.setYear(getCode(), getYear());
 		}
 	}
 }
@@ -315,7 +334,7 @@ map <Uc*, float>* Student::getGrades() {
     return &subjects;
 }
 
-string Student::getCourseName()
+string Student::getCourseName() const
 {
 	return course->getEngName();
 }
@@ -420,6 +439,26 @@ bool Student::Queue_Compare(const Student & st){
     else if(average != st.average) return (average < st.average);
     else if(year != st.year) return (year < st.year);
     else return (getDate() > st.getDate());
+}
+
+bool Student::operator<(const Student &student) const
+{
+	if (course->getName() <= student.getCourseName())
+	{
+		if (course->getName() == student.getCourseName())
+		{
+			if (getName() >student.getName())
+			{
+				return true;
+			}
+		}
+		else
+		{
+			return true;
+		}
+	}
+
+	return false;
 }
 
 //////EMPLOYEE//////
