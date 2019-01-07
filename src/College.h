@@ -73,7 +73,7 @@ public:
 int Nav(int bottom, int top);
 
 /**
- * @brief Reads the given date in the format XX/XX/XX
+ * @brief Reads the given date in the format dd/mm/yy
  * @return Returns a date Object
  */
 date* readDate();
@@ -119,9 +119,10 @@ public:
      */
 
 	// Part II  - Hash Table
-	vector<EmployeePtr> &getEmployees() const;
+	vector<EmployeePtr> getEmployees() const;
 	void setEmployees(vector<EmployeePtr>& newEmployees);
-	void addEmployee(Employee* employee);
+	void addEmployeeTable(Teacher* teacher);
+	void addEmployeeTable(Staff* staff);
 
     //Part II   - Priority Queue
     void Add_To_Queue(Student* st);

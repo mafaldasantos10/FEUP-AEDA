@@ -90,7 +90,7 @@ void College::Remove_From_Queue(Student* st){
     }
 }
 
-vector<EmployeePtr> &College::getEmployees() const
+vector<EmployeePtr> College::getEmployees() const
 {
 	vector<EmployeePtr> ptrs;
 	HashTabEmployeetPtr::const_iterator it1 = this->employeeTable.begin();
@@ -98,7 +98,7 @@ vector<EmployeePtr> &College::getEmployees() const
 
 	for(; it1 != it2; it1++)
 	{
-			ptrs.push_back(*it1);
+		ptrs.push_back(*it1);
 	}
 
 	return ptrs;
@@ -112,9 +112,14 @@ void College::setEmployees(vector<EmployeePtr>& newEmployees)
 	}
 }
 
-void College::addEmployee(Employee* employee)
+void College::addEmployeeTable(Teacher* teacher)
 {
-	employeeTable.insert(employee);
+	employeeTable.insert(teacher);
+}
+
+void College::addEmployeeTable(Staff* staff)
+{
+	employeeTable.insert(staff);
 }
 
 
@@ -155,7 +160,7 @@ vector<Staff *>& College::getStaff()
 
 void College::addTeacher(Teacher *teacher)
 {
-	addEmployee(teacher);
+	addEmployeeTable(teacher);
     teachers.push_back(teacher);
 }
 
@@ -167,7 +172,7 @@ void College::addStudent(Student *student)
 
 void College::addStaff(Staff *staff)
 {
-	addEmployee(staff);
+	addEmployeeTable(staff);
     this->staff.push_back(staff);
 }
 

@@ -142,7 +142,7 @@ void readFile(College &c, string file)
 
 				t->setWorking(1);
 				c.getTeachers().push_back(t);
-				c.addEmployee(t);
+				c.addEmployeeTable(t);
 
 				getline(fin, next);
 			}
@@ -183,7 +183,7 @@ void readFile(College &c, string file)
 
 				sf->setWorking(1);
 				c.getStaff().push_back(sf);
-				c.addEmployee(sf);
+				c.addEmployeeTable(sf);
 
 				getline(fin, next);
 			}
@@ -378,7 +378,7 @@ void readFile(College &c, string file)
 					next.erase(0, next.find("|") + 1);
 
 					t->setWorking(0);
-					c.addEmployee(t);
+					c.addEmployeeTable(t);
 
 					getline(fin, next);
 				}
@@ -418,7 +418,7 @@ void readFile(College &c, string file)
 					next.erase(0, next.find("|") + 1);
 
 					sf->setWorking(0);
-					c.addEmployee(sf);
+					c.addEmployeeTable(sf);
 
 					getline(fin, next);
 				}
@@ -1121,8 +1121,7 @@ void Save_College(College &college) {
 		if (!college.getEmployees().at(j).getWorkingState() &&
 			college.getEmployees().at(j).getCode().at(0) == '1')
 		{
-			Employee* e = college.getEmployees().at(j).getEmployee();
-			//save_file << *e << endl;
+			save_file << *(college.getEmployees().at(j).getEmployee());
 		}
 	}
 	save_file << endl;
@@ -1133,11 +1132,9 @@ void Save_College(College &college) {
 		if (!college.getEmployees().at(j).getWorkingState() &&
 			college.getEmployees().at(j).getCode().at(0) == '2')
 		{
-			Employee* e = college.getEmployees().at(j).getEmployee();
-            //save_file << *e << endl;
+			save_file << *(college.getEmployees().at(j).getEmployee(0));
 		}
 	}
-	save_file << endl;
 	
 	save_file.close();
 }
@@ -1165,6 +1162,7 @@ bool Exit_College(College &college) {
 
 
 //////////////////////
+
 
 int my_search_vec(vector<EmployeePtr> vec, string name) {
 	for (size_t i = 0; i < vec.size(); i++) {
@@ -1199,6 +1197,8 @@ void List_Current_Employees(College &college)
 	int s = 0, i;
 	vector<EmployeePtr> temp;
 
+	cout << college.getEmployees().size() << endl;
+
 	while (1)
 	{
 		for (unsigned int j = 0; j < college.getEmployees().size(); j++)
@@ -1220,10 +1220,21 @@ void List_Current_Employees(College &college)
 		else if (i == s - 1)
 		{
 			pair<int, int> j = my_search(temp);
-			if (j.first != -1) Person_Menu(*(temp.at(j.first).getEmployee()), college);
+			if (j.first != -1)
+			{
+				if (j.second == '2')
+					Person_Menu(*(temp.at(j.first).getEmployee(0)), college);
+				else
+					Person_Menu(*(temp.at(j.first).getEmployee()), college);
+			}
 		}
-
-		else Person_Menu(*(temp.at(i).getEmployee()), college);
+		else
+		{
+			if (temp.at(i).getCode().at(0) == '2')
+				Person_Menu(*(temp.at(i).getEmployee(0)), college);
+			else
+				Person_Menu(*(temp.at(i).getEmployee()), college);
+		}
 
 		s = 0; /* not sure why i have to reset this*/
 	}
@@ -1256,7 +1267,13 @@ void List_Former_Employees(College &college)
 		else if (i == s - 2)
 		{
 			pair<int, int> j = my_search(temp);
-			if (j.first != -1) Person_Menu(*(temp.at(j.first).getEmployee()), college);
+			if (j.first != -1)
+			{
+				if (j.second == '2')
+					Person_Menu(*(temp.at(j.first).getEmployee(0)), college);
+				else
+					Person_Menu(*(temp.at(j.first).getEmployee()), college);
+			}
 		}
 
 		else if (i == s - 1)
@@ -1264,16 +1281,32 @@ void List_Former_Employees(College &college)
 			pair<int, int> j = my_search(temp);
 			if (j.first != -1)
 			{
-				/*if (j.second == 2)
+				if (j.second == '2')
 				{
-					temp.at(j.first).getEmployee()->setWorking(true);
-					Staff sf (*temp.at(j.first).getEmployee());
+					Staff* sf = temp.at(j.first).getEmployee(0);
+					sf->setWorking(true);
 					college.addStaff(sf);
-				}*/
+
+					cout << endl << "- " << sf->getName() << "- hired successfuly!" << endl;
+				}
+				else
+				{
+					Teacher* t = temp.at(j.first).getEmployee();
+					t->setWorking(true);
+					college.addTeacher(temp.at(j.first).getEmployee());
+
+					cout << endl << "- " << t->getName() << "- hired successfuly!" << endl << endl;
+				}
 			}
 		}
 
-		else Person_Menu(*(temp.at(i).getEmployee()), college);
+		else
+		{
+			if (temp.at(i).getCode().at(0) == '2')
+				Person_Menu(*(temp.at(i).getEmployee(0)), college);
+			else
+				Person_Menu(*(temp.at(i).getEmployee()), college);
+		}
 
 		s = 0; /* not sure why i have to reset this */
 	}
@@ -1407,7 +1440,7 @@ void Admin_Menu(College &college) {
 		cout << "0:   DEPARTMENTS" << endl;
 		cout << "1:   COURSES" << endl;
 		cout << "2:   PEOPLE" << endl;
-        cout << "3:   HAST TABLE" << endl;
+        cout << "3:   EMPLOYEES" << endl;
         cout << "4:   BINARY SEARCH TREE" << endl;
         cout << "5:   QUEUE" << endl;
 		cout << "6:   EXIT COLLEGE" << endl;

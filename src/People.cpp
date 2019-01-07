@@ -830,34 +830,58 @@ void Staff::editInfo(College &college) {
  * Class EmployeePtr
  */
 
-EmployeePtr::EmployeePtr(Employee* employee)
+EmployeePtr::EmployeePtr(Teacher* teacher_table)
 {
-	this->employee = employee;
+	this->teacher_table = teacher_table;
+	type = 0;
 }
 
-Employee* EmployeePtr::getEmployee()
+EmployeePtr::EmployeePtr(Staff* staff_table)
 {
-	return employee;
+	this->staff_table = staff_table;
+	type = 1;
+}
+
+Teacher* EmployeePtr::getEmployee()
+{
+	return this->teacher_table;
+}
+
+Staff* EmployeePtr::getEmployee(int i)
+{
+	return this->staff_table;
 }
 
 string EmployeePtr::getCode() const
 {
-	return this->employee->getCode();
+	if (!this->type)
+		return this->teacher_table->getCode();
+	else
+		return this->staff_table->getCode();
 }
 
 string EmployeePtr::getName() const
 {
-	return this->employee->getName();
+	if (!this->type)
+		return this->teacher_table->getName();
+	else
+		return this->staff_table->getName();
 }
 
 bool EmployeePtr::getWorkingState() const
 {
-	return this->employee->getWorking();
+	if (!this->type)
+		return this->teacher_table->getWorking();
+	else
+		return this->staff_table->getWorking();
 }
 
 void EmployeePtr::setWorkingState(bool working)
 {
-	employee->setWorking(working);
+	if (!this->type)
+		this->teacher_table->setWorking(working);
+	else
+		this->staff_table->setWorking(working);
 }
 
 

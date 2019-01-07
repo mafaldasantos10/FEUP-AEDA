@@ -436,20 +436,6 @@ public:
 };
 
 
-class EmployeePtr
-{
-	Employee* employee;
-public:
-	EmployeePtr(Employee* employee);
-	Employee* getEmployee();
-	string getCode() const;
-	string getName() const;
-	bool getWorkingState() const;
-	void setWorkingState(bool working);
-	//gets & sets
-};
-
-
 /**@brief Teacher Class, inherits all the public functions from Employee*/
 class Teacher : public Employee{
 	/** @brief Category of the teacher*/
@@ -482,6 +468,7 @@ public:
 	* @brief Adds Person to college
 	* @param college
 	*/
+	friend class EmployeePtr;
     void addPerson(College &college);
 	/**
 	 * @brief shows all information of a given Teacher
@@ -574,6 +561,7 @@ public:
 	* @brief Adds person to college
 	* @param college
 	*/
+	friend class EmployeePtr;
     void addPerson(College &college);
 	/**
 	 * @brief shows all the informations of a given Staff member
@@ -613,6 +601,23 @@ public:
 	* @brief Inserts work area from user input
 	*/
     void InsertWorkArea();
+};
+
+
+class EmployeePtr
+{
+	Staff* staff_table;
+	Teacher* teacher_table;
+	int type; /* 0 for teacher, 1 for staff */
+public:
+	EmployeePtr(Teacher* teacher_table);
+	EmployeePtr(Staff* staff_table);
+	Teacher* getEmployee(); /* for teachers */
+	Staff* getEmployee(int i); /* for staff */
+	string getCode() const;
+	string getName() const;
+	bool getWorkingState() const;
+	void setWorkingState(bool working);
 };
 
 #endif /* PEOPLE_H_ */
