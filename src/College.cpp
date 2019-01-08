@@ -23,13 +23,13 @@ bool hasNoNumber(string s)
 
 //COLLEGE//
 //////////////////////
-College::College(string name): studentsTree(&Student())
+College::College(string name): studentsTree(nullptr)
 {
 	colName = name;
 }
 
 
-College::College(): studentsTree(&Student()) {}
+College::College(): studentsTree(nullptr) {}
 
 string College::getName() const
 {
@@ -538,6 +538,8 @@ void College::addNewStudent(Student* st1)
 	}
 
 	studentsTree.insert(st1);
+
+    Add_To_Queue(st1);
 }
 
 void College::removeStudentBST(Student* st1)
@@ -549,6 +551,7 @@ void College::removeStudentBST(Student* st1)
 		if (st1->getCode() == it.retrieve()->getCode())
 		{
 			studentsTree.remove(it.retrieve());
+            Remove_From_Queue(st1);
 			return;
 		}
 		it.advance();
