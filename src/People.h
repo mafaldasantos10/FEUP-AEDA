@@ -337,7 +337,7 @@ public:
     /**
      * @brief This function is used to compare students in the priority_queue
      * @param st Other student
-     * @return
+     * @return true if student is less than the other
      */
     bool Queue_Compare(const Student & st);
     /**

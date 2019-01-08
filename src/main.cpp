@@ -1454,28 +1454,6 @@ void Queue_Menu(College &college){
 
 //////////////////////
 
-/* MENU INSTRUCTIONS:
- * Para acrescentarem opções no vosso menu a unica coisa que têm de fazer é:
- * -acrescentar o cout com o numero da opção
- * -no switch (Nav(0,0)) Mudar o ultimo 0 para o novo ultimo numero de opções
- * -fazer um case para essa opção e enviar para a função de lá
- * (Não façam o codigo da cena que querem fazer msm dentro do switch q fica uma jabardice,
- * criem uma função nova)
- * Qualquer cena é só ligar 918 471 544
- */
-void BST_Menu(College &college){
-    while(1){
-        cout << "WIP!" << endl;
-        cout << "0:   PREVIOUS MENU" << endl;
-        switch(Nav(0,0)){
-            case 0:
-                return;
-        }
-    }
-}
-
-//////////////////////
-
 void Admin_Menu(College &college) {
 	while (1) {
 		college.showInfo();
@@ -1483,9 +1461,8 @@ void Admin_Menu(College &college) {
 		cout << "1:   COURSES" << endl;
 		cout << "2:   PEOPLE" << endl;
         cout << "3:   EMPLOYEES" << endl;
-        cout << "4:   BINARY SEARCH TREE" << endl;
-        cout << "5:   QUEUE" << endl;
-		cout << "6:   EXIT COLLEGE" << endl;
+        cout << "4:   SCHOLARSHIPS" << endl;
+		cout << "5:   EXIT COLLEGE" << endl;
 		switch (Nav(0, 6)) {
 		case 0:
 			Departments_Menu(college);
@@ -1496,16 +1473,13 @@ void Admin_Menu(College &college) {
 		case 2:
 			People_Menu(college);
 			break;
-		case 6:
+		case 5:
 			if (Exit_College(college)) return;
 			else break;
         case 3:
             Hash_Table_Menu(college);
             break;
         case 4:
-            BST_Menu(college);
-            break;
-        case 5:
             Queue_Menu(college);
             break;
 		}
