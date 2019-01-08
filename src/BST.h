@@ -201,8 +201,8 @@ remove( const Comparable & x, BinaryNode<Comparable> * & t ) const
     return;   // Item not found; do nothing
   if( *x < *t->element )
     remove( x, t->left );
-  else if( t->element < x )
-    remove( *x, *t->right );
+  else if( *t->element < *x )
+    remove( x, t->right );
   else if( t->left != NULL && t->right != NULL ) // Two children
     {
       t->element = findMin( t->right )->element;
