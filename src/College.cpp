@@ -23,13 +23,13 @@ bool hasNoNumber(string s)
 
 //COLLEGE//
 //////////////////////
-College::College(string name): studentsTree(nullptr)
+College::College(string name): studentsTree(new Student())
 {
 	colName = name;
 }
 
 
-College::College(): studentsTree(nullptr) {}
+College::College(): studentsTree(new Student()) {}
 
 string College::getName() const
 {
