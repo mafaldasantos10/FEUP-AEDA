@@ -142,12 +142,8 @@ public:
 	 * @brief Gets Student vector by reference
      * @return Returns the vector of Students by reference
      */
-    vector<Student *>& getStudents();
-	/**
-	* @brief Removes Student from College
-	* @param student Pointer to student
-	*/
-    void removeStudent(Student* student);
+    vector<Student *>& getRead();
+
 	/**
 	* @brief Gets Staff vector by reference
 	* @return Returns the vector of Staff by reference
@@ -163,11 +159,7 @@ public:
      * @param teacher Pointer to Teacher
      */
     void addTeacher(Teacher* teacher);
-	/**
-	* @brief Adds student to College
-	* @param student Pointer to Student
-	*/
-    void addStudent(Student* student);
+
 	/**
 	* @brief Adds Staff to College
 	* @param staff Pointer to Staff
@@ -250,7 +242,7 @@ public:
 
     void addNewStudent(Student* st1);
 
-    void removeStudentBST(Student* st1);
+    void removeStudentBST(string code);
 
     Student* SearchBST(string name);
 

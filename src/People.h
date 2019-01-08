@@ -221,7 +221,7 @@ public:
 	/**
 	 * @brief People destructor
 	 */
-    ~Student(){/*delete course;*/}
+    ~Student(){}
 	/**
 	* @brief Adds Student to college
 	* @param college
@@ -337,7 +337,7 @@ public:
     /**
      * @brief This function is used to compare students in the priority_queue
      * @param st Other student
-     * @return true if student is less than the other
+     * @return
      */
     bool Queue_Compare(const Student & st);
     /**

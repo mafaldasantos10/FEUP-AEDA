@@ -180,6 +180,7 @@ void Student::addPerson(College &college)
     
     //float grade;
     string code = "0" + to_string(current_year) + to_string(Student::student_count);  //student id is assigned
+	cout << "COUNT" <<Student::student_count << endl;
     setCode(code);
 
     cout << "\nChoose Student's Course:" << endl;
@@ -191,6 +192,7 @@ void Student::addPerson(College &college)
     Calculate_Average();
     bolsa = 0;
 	student_count++;
+	cout << "COUNT" << Student::student_count << endl;
 	college.addNewStudent(this);
 }
 
@@ -444,22 +446,12 @@ bool Student::Queue_Compare(const Student & st){
 
 bool Student::operator<(const Student &student) const
 {
-	if (course->getName() <= student.getCourseName())
+	if (course->getName() == student.getCourseName())
 	{
-		if (course->getName() == student.getCourseName())
-		{
-			if (getName() >student.getName())
-			{
-				return true;
-			}
-		}
-		else
-		{
-			return true;
-		}
+		return getName() < student.getName();
 	}
 
-	return false;
+	return course->getName() < student.getCourseName();
 }
 
 //////EMPLOYEE//////

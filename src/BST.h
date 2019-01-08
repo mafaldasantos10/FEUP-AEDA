@@ -185,9 +185,9 @@ insert( const Comparable & x, BinaryNode<Comparable> * & t ) const
 {
   if( t == NULL )
     t = new BinaryNode<Comparable>( x, NULL, NULL );
-  else if( x < t->element )
+  else if( *x < *t->element )
     insert( x, t->left );
-  else if( t->element < x )
+  else if( *t->element < *x )
     insert( x, t->right );
   else
     ;  // Duplicate; do nothing
@@ -197,23 +197,23 @@ template <class Comparable>
 void BST<Comparable>::
 remove( const Comparable & x, BinaryNode<Comparable> * & t ) const
 {
-  if( t == NULL )
-    return;   // Item not found; do nothing
-  if( x < t->element )
-    remove( x, t->left );
-  else if( t->element < x )
-    remove( x, t->right );
-  else if( t->left != NULL && t->right != NULL ) // Two children
-    {
-      t->element = findMin( t->right )->element;
-      remove( t->element, t->right );
-    }
-  else
-    {
-      BinaryNode<Comparable> *oldNode = t;
-      t = ( t->left != NULL ) ? t->left : t->right;
-      delete oldNode;
-    }
+	if (t == NULL)
+		return;   // Item not found; do nothing
+	if (*x < *t->element)
+		remove(x, t->left);
+	else if (*t->element < *x)
+		remove(x, t->right);
+	else if (t->left != NULL && t->right != NULL) // Two children
+	{
+		t->element = findMin(t->right)->element;
+		remove(t->element, t->right);
+	}
+	else
+	{
+		BinaryNode<Comparable> *oldNode = t;
+		t = (t->left != NULL) ? t->left : t->right;
+		delete oldNode;
+	}
 }
 
 template <class Comparable>

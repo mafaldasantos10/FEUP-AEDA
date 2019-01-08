@@ -23,13 +23,13 @@ bool hasNoNumber(string s)
 
 //COLLEGE//
 //////////////////////
-College::College(string name): studentsTree(nullptr)
+College::College(string name): studentsTree(new Student())
 {
 	colName = name;
 }
 
 
-College::College(): studentsTree(nullptr) {}
+College::College(): studentsTree(new Student()) {}
 
 string College::getName() const
 {
@@ -147,7 +147,7 @@ vector<Teacher *>& College::getTeachers()
     return teachers;
 }
 
-vector<Student *>& College::getStudents()
+vector<Student *>& College::getRead()
 {
     return readst;
 }
@@ -163,11 +163,6 @@ void College::addTeacher(Teacher *teacher)
     teachers.push_back(teacher);
 }
 
-void College::addStudent(Student *student)
-{
-    readst.push_back(student);
-    students_queue.push(student);
-}
 
 void College::addStaff(Staff *staff)
 {
@@ -207,16 +202,6 @@ vector<Uc*> College::getUCs(){
     return vec;
 }
 
-void College::removeStudent(Student* student) {
-
-	 for(unsigned int i = 0; i<readst.size(); i++)
-     {
-		   if(readst.at(i) == student) {
-               Remove_From_Queue(student);
-               delete readst.at(i);
-               readst.erase(readst.begin() + i);
-     }   }
-}
 
 Student* College::Get_Top_Student(){
     if(students_queue.empty()){
@@ -501,6 +486,8 @@ void College::showStudentAndCourse()
 
 void College::showStudents()
 {
+	cout << sizeBST() << endl;
+
 	BSTItrIn<Student*> it(studentsTree);
 	int i = 0;
 	while (!it.isAtEnd())
@@ -529,35 +516,54 @@ void College::addNewStudent(Student* st1)
 
 	while (!it.isAtEnd())
 	{
-		if (st1->getCode() == it.retrieve()->getCode())
+		if (st1->getName() == it.retrieve()->getName())
 		{
 			cout << "That student already exists!" << endl;
 			return;
 		}
 		it.advance();
 	}
-
+	Add_To_Queue(st1);
 	studentsTree.insert(st1);
 
-    Add_To_Queue(st1);
 }
 
-void College::removeStudentBST(Student* st1)
+void College::removeStudentBST(string code)
 {
+	bool in = false;
 	BSTItrIn<Student*> it(studentsTree);
-
+	cout << code << endl;
 	while (!it.isAtEnd())
 	{
-		if (st1->getCode() == it.retrieve()->getCode())
+		if (code == it.retrieve()->getCode())
 		{
 			studentsTree.remove(it.retrieve());
-            Remove_From_Queue(st1);
-			return;
+			Remove_From_Queue(it.retrieve());
+			in = true;
+			break;
 		}
 		it.advance();
 	}
+	if (!in)
+	{
+		throw NoCodeFound(stoi(code));
+	}
 
-	throw NoCodeFound(stoi(st1->getCode()));
+	/*vector<Student*> vec = BSTtoVEC();
+	studentsTree.makeEmpty();
+	for(unsigned int i=0; i< vec.size(); i++)
+	{
+		if(vec.at(i)->getCode() == code)
+		{
+			vec.erase(vec.begin() + i);
+			break;
+		}
+		
+	}
+	for (unsigned int i = 0; i < vec.size(); i++)
+	{
+		studentsTree.insert(vec.at(i));
+	}*/
 }
 
 

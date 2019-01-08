@@ -99,7 +99,7 @@ void readFile(College &c, string file)
 				s->setYear(stoi(next.substr(0, next.find("|"))));
 				next.clear();
 
-				c.getStudents().push_back(s);
+				c.getRead().push_back(s);
 
                 c.Add_To_Queue(s);
 
@@ -295,17 +295,17 @@ void readFile(College &c, string file)
 							while (next.at(0) != '|')
 							{
 								string name = next.substr(1, next.find(",") - 1);
-								student = SearchVec(c.getStudents(), name);
+								student = SearchVec(c.getRead(), name);
 								uc->getStudents().push_back(student);
 
-								for (unsigned int j = 0; j < c.getStudents().size(); j++)
+								for (unsigned int j = 0; j < c.getRead().size(); j++)
 								{
-									if (c.getStudents().at(j)->getName() == name)
+									if (c.getRead().at(j)->getName() == name)
 									{
 										float grade = stof(next.substr(next.find(",") + 1, next.find("]")));
-										c.getStudents().at(j)->addUCGrade(uc, grade);
-                                        c.getStudents().at(j)->Calculate_Average();
-                                        c.Rearrange_Queue(c.getStudents().at(j));
+										c.getRead().at(j)->addUCGrade(uc, grade);
+                                        c.getRead().at(j)->Calculate_Average();
+                                        c.Rearrange_Queue(c.getRead().at(j));
 										break;
 									}
 								}
@@ -427,9 +427,9 @@ void readFile(College &c, string file)
 		studentsCourses(c);
 	}
 
-	for (unsigned int i = 0; i < c.getStudents().size(); i++)
+	for (unsigned int i = 0; i < c.getRead().size(); i++)
 	{
-		c.addNewStudent(c.getStudents().at(i));
+		c.addNewStudent(c.getRead().at(i));
 	}
 
 	cout << endl << "--------------" << endl;
@@ -440,13 +440,13 @@ void readFile(College &c, string file)
 void studentsCourses(College &c)
 {
 
-	for (unsigned int i = 0; i < c.getStudents().size(); i++)
+	for (unsigned int i = 0; i < c.getRead().size(); i++)
 	{
 		for (unsigned int j = 0; j < c.getCourses().size(); j++)
 		{
-			if (c.getStudents().at(i)->getCourseString() == c.getCourses().at(j)->getName())
+			if (c.getRead().at(i)->getCourseString() == c.getCourses().at(j)->getName())
 			{
-				c.getStudents().at(i)->setCourse(c.getCourses().at(j));
+				c.getRead().at(i)->setCourse(c.getCourses().at(j));
 			}
 		}
 	}
@@ -863,7 +863,7 @@ void Remove_Person(College &college) {
 		if (i == 3) return;
 		else if (i == 0) {
 			auto ptr = SearchStudent(college);
-			if (ptr != nullptr) college.removeStudentBST(ptr);
+			if (ptr != nullptr) college.removeStudentBST(ptr->getCode());
 		}
 		else if (i == 1) {
 			auto ptr = Search_Menu(college.getTeachers());
@@ -1421,9 +1421,9 @@ void Collect_Payment(College &college){
         cin.clear();
     } while(value < 0);
     if(value == 0) return;
-    for(unsigned int i = 0; i < college.getStudents().size(); i++){
-        college.getStudents()[i]->Pay_Semester(value);
-        college.Rearrange_Queue(college.getStudents()[i]);
+    for(unsigned int i = 0; i < college.BSTtoVEC().size(); i++){
+        college.BSTtoVEC()[i]->Pay_Semester(value);
+        college.Rearrange_Queue(college.BSTtoVEC()[i]);
     }
 }
 
@@ -1454,6 +1454,28 @@ void Queue_Menu(College &college){
 
 //////////////////////
 
+/* MENU INSTRUCTIONS:
+ * Para acrescentarem opções no vosso menu a unica coisa que têm de fazer é:
+ * -acrescentar o cout com o numero da opção
+ * -no switch (Nav(0,0)) Mudar o ultimo 0 para o novo ultimo numero de opções
+ * -fazer um case para essa opção e enviar para a função de lá
+ * (Não façam o codigo da cena que querem fazer msm dentro do switch q fica uma jabardice,
+ * criem uma função nova)
+ * Qualquer cena é só ligar 918 471 544
+ */
+void BST_Menu(College &college){
+    while(1){
+        cout << "WIP!" << endl;
+        cout << "0:   PREVIOUS MENU" << endl;
+        switch(Nav(0,0)){
+            case 0:
+                return;
+        }
+    }
+}
+
+//////////////////////
+
 void Admin_Menu(College &college) {
 	while (1) {
 		college.showInfo();
@@ -1461,8 +1483,9 @@ void Admin_Menu(College &college) {
 		cout << "1:   COURSES" << endl;
 		cout << "2:   PEOPLE" << endl;
         cout << "3:   EMPLOYEES" << endl;
-        cout << "4:   SCHOLARSHIPS" << endl;
-		cout << "5:   EXIT COLLEGE" << endl;
+        cout << "4:   BINARY SEARCH TREE" << endl;
+        cout << "5:   QUEUE" << endl;
+		cout << "6:   EXIT COLLEGE" << endl;
 		switch (Nav(0, 6)) {
 		case 0:
 			Departments_Menu(college);
@@ -1473,13 +1496,16 @@ void Admin_Menu(College &college) {
 		case 2:
 			People_Menu(college);
 			break;
-		case 5:
+		case 6:
 			if (Exit_College(college)) return;
 			else break;
         case 3:
             Hash_Table_Menu(college);
             break;
         case 4:
+            BST_Menu(college);
+            break;
+        case 5:
             Queue_Menu(college);
             break;
 		}
@@ -1537,7 +1563,7 @@ bool Member_LogIn(College& college) {
 		else if (type == "S") {
 			Student* s;
 			try {
-				s = SearchVec(college.getStudents(), name);
+				s = college.SearchBST(name);
 			}
 			catch (NoNameFound &err) {
 				cout << err.errorMessage() << " Try again!" << endl;
