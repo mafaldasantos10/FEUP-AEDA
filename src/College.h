@@ -91,13 +91,13 @@ class College{
     /** @brief Vector of pointers to each Department of the College */
     vector<Department*> vecDep;
     /** @brief Vector of Vectors of pointers to each Student of the College */
-    vector<Student *> students;
+    vector<Student *> readst;
     /** @brief Vector of Vectors of pointers to each Teacher of the College */
     vector<Teacher *> teachers;
     /** @brief Vector of Vectors of pointers to each Staff of the College */
     vector<Staff *> staff;
     HashTabEmployeetPtr employeeTable;
-    BST<Student> studentsTree;
+    BST<Student*> studentsTree;
     priority_queue<Student *, std::vector<Student *>, Compare_St_Queue> students_queue;
 public:
     /**
@@ -136,6 +136,8 @@ public:
 	* @param teacher Pointer to teacher
 	*/
     void removeTeacher(Teacher* teacher);
+
+	void deleteTeachers(string name);
 	/**
 	 * @brief Gets Student vector by reference
      * @return Returns the vector of Students by reference
@@ -238,17 +240,19 @@ public:
 	*/
     friend ostream& operator<< (ostream& os, const College &college);
 
-    BST<Student> getStudentsTree();
+    BST<Student*> getStudentsTree();
 
     void showStudentAndCourse();
 
     void showStudents();
 
+	int sizeBST();
+
     void addNewStudent(Student* st1);
 
     void removeStudentBST(Student* st1);
 
-    Student SearchBST(string cod);
+    Student* SearchBST(string name);
 
     void setNameBST(string cod, string name);
 
@@ -261,6 +265,12 @@ public:
     void setCourse(string cod, Course* cs);
 
     void setYear(string cod, int year);
+
+	bool removeFromMapBST(string ucname, Student* st);
+
+	bool changeGradeBST(Uc* uc, float grade, Student* st);
+
+	vector<Student*> BSTtoVEC();
 };
 
 /** @brief Department Class */
@@ -438,6 +448,9 @@ public:
      * @param type New type of the Course
      */
     void setType(string type);
+
+	Teacher* getDirector() { return courseDirector;}
+
     /**
      * @brief Gets the Portuguese name of a given Course
      * @return String containing the Portuguese name of the Course

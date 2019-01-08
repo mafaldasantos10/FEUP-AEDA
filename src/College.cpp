@@ -23,13 +23,13 @@ bool hasNoNumber(string s)
 
 //COLLEGE//
 //////////////////////
-College::College(string name): studentsTree(Student())
+College::College(string name): studentsTree(&Student())
 {
 	colName = name;
 }
 
 
-College::College(): studentsTree(Student()) {}
+College::College(): studentsTree(&Student()) {}
 
 string College::getName() const
 {
@@ -38,7 +38,6 @@ string College::getName() const
 
 College::~College()
 {
-	dest_remove(students);
 	dest_remove(teachers);
 	dest_remove(staff);
 	dest_remove(vecDep);
@@ -150,7 +149,7 @@ vector<Teacher *>& College::getTeachers()
 
 vector<Student *>& College::getStudents()
 {
-    return students;
+    return readst;
 }
 
 vector<Staff *>& College::getStaff()
@@ -166,7 +165,7 @@ void College::addTeacher(Teacher *teacher)
 
 void College::addStudent(Student *student)
 {
-    students.push_back(student);
+    readst.push_back(student);
     students_queue.push(student);
 }
 
@@ -210,12 +209,12 @@ vector<Uc*> College::getUCs(){
 
 void College::removeStudent(Student* student) {
 
-	 for(unsigned int i = 0; i<students.size(); i++)
+	 for(unsigned int i = 0; i<readst.size(); i++)
      {
-		   if(students.at(i) == student) {
+		   if(readst.at(i) == student) {
                Remove_From_Queue(student);
-               delete students.at(i);
-               students.erase(students.begin() + i);
+               delete readst.at(i);
+               readst.erase(readst.begin() + i);
      }   }
 }
 
@@ -239,10 +238,41 @@ void College::removeTeacher(Teacher* teacher){
 				   getEmployees().at(j).setWorkingState(false);
 		   }
 
-		   //delete teachers.at(i);
+		   deleteTeachers(teacher->getName());
+		   
 		   teachers.erase(teachers.begin() + i);
 	   }
    }
+}
+
+void College::deleteTeachers(string name)
+{
+	for (unsigned int i = 0; i < getCourses().size(); i++)
+	{
+		if (getCourses().at(i)->getDirector() != nullptr)
+		{
+			if (getCourses().at(i)->getDirector()->getName() == name)
+			{
+				getCourses().at(i)->setDirector(nullptr);
+			}
+		}
+
+		for (unsigned int j = 0; j < getCourses().at(i)->getUCs().size(); j++)
+		{
+			remove(getCourses().at(i)->getUCs().at(j)->getTeachers(), name);
+		}
+	}
+
+	for (unsigned int i = 0; i < getDepartments().size(); i++)
+	{
+		if (getDepartments().at(i)->getDirector() != nullptr)
+		{
+			if (getDepartments().at(i)->getDirector()->getName() == name)
+			{
+				getDepartments().at(i)->setDirector(nullptr);
+			}
+		}
+	}
 }
 
 void College::removeStaff(Staff* staffx){
@@ -452,41 +482,54 @@ ostream& operator<< (ostream& os, const College &college){
     return os;
 }
 
-BST<Student> College::getStudentsTree() {
+BST<Student*> College::getStudentsTree() {
 	return this->studentsTree;
 }
 
 void College::showStudentAndCourse()
 {
-	BSTItrIn<Student> it(studentsTree);
+	BSTItrIn<Student*> it(studentsTree);
 
 	cout << "Name" << "                " << "Course" << endl;
 
 	while (!it.isAtEnd())
 	{
-		cout << it.retrieve().getName() << "    " << it.retrieve().getCourseName() << endl;
+		cout << it.retrieve()->getName() << "    " << it.retrieve()->getCourseName() << endl;
 		it.advance();
 	}
 }
 
 void College::showStudents()
 {
-	BSTItrIn<Student> it(studentsTree);
-
+	BSTItrIn<Student*> it(studentsTree);
+	int i = 0;
 	while (!it.isAtEnd())
 	{
-		cout << it.retrieve().getName() << endl;
+		cout << i << ":   " << it.retrieve()->getName() << endl;
+		i++;
 		it.advance();
 	}
 }
 
+int College::sizeBST()
+{
+	BSTItrIn<Student*> it(studentsTree);
+	int i = 0;
+	while (!it.isAtEnd())
+	{
+		i++;
+		it.advance();
+	}
+	return i;
+}
+
 void College::addNewStudent(Student* st1)
 {
-	BSTItrIn<Student> it(studentsTree);
+	BSTItrIn<Student*> it(studentsTree);
 
 	while (!it.isAtEnd())
 	{
-		if (st1->getCode() == it.retrieve().getCode())
+		if (st1->getCode() == it.retrieve()->getCode())
 		{
 			cout << "That student already exists!" << endl;
 			return;
@@ -494,16 +537,16 @@ void College::addNewStudent(Student* st1)
 		it.advance();
 	}
 
-	studentsTree.insert(*st1);
+	studentsTree.insert(st1);
 }
 
 void College::removeStudentBST(Student* st1)
 {
-	BSTItrIn<Student> it(studentsTree);
+	BSTItrIn<Student*> it(studentsTree);
 
 	while (!it.isAtEnd())
 	{
-		if (st1->getCode() == it.retrieve().getCode())
+		if (st1->getCode() == it.retrieve()->getCode())
 		{
 			studentsTree.remove(it.retrieve());
 			return;
@@ -515,32 +558,32 @@ void College::removeStudentBST(Student* st1)
 }
 
 
-Student College::SearchBST(string cod)
+Student* College::SearchBST(string name)
 {
-	BSTItrIn<Student> it(studentsTree);
+	BSTItrIn<Student*> it(studentsTree);
 	while (!it.isAtEnd())
 	{
-		if (cod == it.retrieve().getCode())
+		if (name == it.retrieve()->getName())
 		{
 
 			return it.retrieve();
 		}
 		it.advance();
 	}
-	throw NoCodeFound(stoi(cod));
+	throw NoNameFound(name);
 }
 
 void College::setNameBST(string cod, string name)
 {
-	BSTItrIn<Student> it(studentsTree);
-	Student s1;
+	BSTItrIn<Student*> it(studentsTree);
+	Student* s1;
 	while (!it.isAtEnd())
 	{
-		if (cod == it.retrieve().getCode())
+		if (cod == it.retrieve()->getCode())
 		{
 			s1 = it.retrieve();
 			studentsTree.remove(it.retrieve());
-			s1.setName(name);
+			s1->setName(name);
 			studentsTree.insert(s1);
 			break;
 		}
@@ -550,15 +593,15 @@ void College::setNameBST(string cod, string name)
 
 void College::setAddressBST(string cod, string newAddress)
 {
-	BSTItrIn<Student> it(studentsTree);
-	Student s1;
+	BSTItrIn<Student*> it(studentsTree);
+	Student* s1;
 	while (!it.isAtEnd())
 	{
-		if (cod == it.retrieve().getCode())
+		if (cod == it.retrieve()->getCode())
 		{
 			s1 = it.retrieve();
 			studentsTree.remove(it.retrieve());
-			s1.setAddress(newAddress);
+			s1->setAddress(newAddress);
 			studentsTree.insert(s1);
 			break;
 		}
@@ -568,15 +611,15 @@ void College::setAddressBST(string cod, string newAddress)
 
 void College::setPhone(string cod, int phone)
 {
-	BSTItrIn<Student> it(studentsTree);
-	Student s1;
+	BSTItrIn<Student*> it(studentsTree);
+	Student* s1;
 	while (!it.isAtEnd())
 	{
-		if (cod == it.retrieve().getCode())
+		if (cod == it.retrieve()->getCode())
 		{
 			s1 = it.retrieve();
 			studentsTree.remove(it.retrieve());
-			s1.setPhone(phone);
+			s1->setPhone(phone);
 			studentsTree.insert(s1);
 			break;
 		}
@@ -587,15 +630,15 @@ void College::setPhone(string cod, int phone)
 void College::setBirthday(string cod, date* date)
 {
 
-	BSTItrIn<Student> it(studentsTree);
-	Student s1;
+	BSTItrIn<Student*> it(studentsTree);
+	Student* s1;
 	while (!it.isAtEnd())
 	{
-		if (cod == it.retrieve().getCode())
+		if (cod == it.retrieve()->getCode())
 		{
 			s1 = it.retrieve();
 			studentsTree.remove(it.retrieve());
-			s1.setDate(date);
+			s1->setDate(date);
 			studentsTree.insert(s1);
 			break;
 		}
@@ -606,15 +649,15 @@ void College::setBirthday(string cod, date* date)
 void College::setCourse(string cod, Course* cs)
 {
 
-	BSTItrIn<Student> it(studentsTree);
-	Student s1;
+	BSTItrIn<Student*> it(studentsTree);
+	Student* s1;
 	while (!it.isAtEnd())
 	{
-		if (cod == it.retrieve().getCode())
+		if (cod == it.retrieve()->getCode())
 		{
 			s1 = it.retrieve();
 			studentsTree.remove(it.retrieve());
-			s1.setCourse(cs);
+			s1->setCourse(cs);
 			studentsTree.insert(s1);
 			break;
 		}
@@ -624,20 +667,54 @@ void College::setCourse(string cod, Course* cs)
 
 void College::setYear(string cod, int year)
 {
-	BSTItrIn<Student> it(studentsTree);
-	Student s1;
+	BSTItrIn<Student*> it(studentsTree);
+	Student* s1;
 	while (!it.isAtEnd())
 	{
-		if (cod == it.retrieve().getCode())
+		if (cod == it.retrieve()->getCode())
 		{
 			s1 = it.retrieve();
 			studentsTree.remove(it.retrieve());
-			s1.setYear(year);
+			s1->setYear(year);
 			studentsTree.insert(s1);
 			break;
 		}
 		it.advance();
 	}
+}
+
+bool College::removeFromMapBST(string ucname, Student* st)
+{
+	bool removed = false;
+	Student* s1 = st;
+	studentsTree.remove(st);
+	removed = s1->removeFromMap(ucname);
+	studentsTree.insert(s1);
+	return removed;
+}
+
+bool College::changeGradeBST(Uc* uc, float grade, Student* st)
+{
+	bool changed = false;
+	Student* s1 = st;
+	studentsTree.remove(st);
+	changed = s1->changeGrade(uc, grade);
+	studentsTree.insert(s1);
+	return changed;
+}
+
+vector<Student*> College::BSTtoVEC()
+{
+	vector<Student*> vec;
+
+	BSTItrIn<Student*> it(studentsTree);
+	while (!it.isAtEnd())
+	{
+		vec.push_back(it.retrieve());
+		it.advance();
+	}
+
+	return vec;
 }
 
 

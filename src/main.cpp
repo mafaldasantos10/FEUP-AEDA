@@ -427,6 +427,11 @@ void readFile(College &c, string file)
 		studentsCourses(c);
 	}
 
+	for (unsigned int i = 0; i < c.getStudents().size(); i++)
+	{
+		c.addNewStudent(c.getStudents().at(i));
+	}
+
 	cout << endl << "--------------" << endl;
 	cout << "Load Finished!" << endl;
 	cout << "--------------" << endl << endl;
@@ -434,6 +439,7 @@ void readFile(College &c, string file)
 
 void studentsCourses(College &c)
 {
+
 	for (unsigned int i = 0; i < c.getStudents().size(); i++)
 	{
 		for (unsigned int j = 0; j < c.getCourses().size(); j++)
@@ -553,7 +559,26 @@ T* Search_Menu(vector<T*> vec) {
 	return t;
 }
 
+Student* SearchStudent(College &c) {
+	string name;
+	Student* st;
+	while (1) {
+		cout << "Insert the name you want to search for(! to cancel): " << flush;
+		getline(cin, name);
+		if (name == "!") return nullptr;
+		try {
+			st = c.SearchBST(name);
+		}
+		catch (NoNameFound &err) {
+			cout << err.errorMessage() << endl;
+			continue;
+		}
+		break;
+	}
+	return st;
+}
 void List_Teachers(vector<Teacher*> teachers, College &college);
+void ListStudentsBST(College &college);
 void List_Students(vector<Student*> students, College &college);
 
 
@@ -569,7 +594,7 @@ void Uc_Menu(Uc &uc, College &college) {
 		cout << n << ":   PREVIOUS" << endl;
 		int i = (Nav(0, n));
 		if (i == n) return;
-		else if (i == 0) List_Students(uc.getStudents(), college);
+		else if (i == 0) List_Students(uc.getStudents(),college);
 		else if (i == 1) List_Teachers(uc.getTeachers(), college);
 		else if (i == 2) uc.editInfo(college);
 	}
@@ -761,7 +786,7 @@ void Grades_Menu(People &person, College &college) {
 				cout << "Insert the Uc you would like to remove(! - cancel): " << flush;
 				getline(cin, uc_name);
 				if (uc_name == "!") break;
-			} while (!st->removeFromMap(uc_name));
+			} while (!college.removeFromMapBST(uc_name, st));
             st->Calculate_Average();
             college.Rearrange_Queue(st);
 		}
@@ -791,7 +816,7 @@ void Grades_Menu(People &person, College &college) {
                     cin.ignore(100, '\n');
                     auto it = st->getGrades()->begin();
                     advance(it,i);
-                    if(!st->changeGrade(it->first,grade)) cout << "\n Unexpected Error! grade not changed..." << endl;
+                    if(!college.changeGradeBST(it->first,grade, st)) cout << "\n Unexpected Error! grade not changed..." << endl;
                 }
             }
             st->Calculate_Average();
@@ -837,8 +862,8 @@ void Remove_Person(College &college) {
 		i = Nav(0, 3);
 		if (i == 3) return;
 		else if (i == 0) {
-			auto ptr = Search_Menu(college.getStudents());
-			if (ptr != nullptr) college.removeStudent(ptr);
+			auto ptr = SearchStudent(college);
+			if (ptr != nullptr) college.removeStudentBST(ptr);
 		}
 		else if (i == 1) {
 			auto ptr = Search_Menu(college.getTeachers());
@@ -892,7 +917,6 @@ void List_Teachers(vector<Teacher*> teachers, College &college) {
 
 
 //////////////////////
-
 void List_Students(vector<Student*> students, College &college) {
 	int s, i;
 	while (1) {
@@ -907,6 +931,24 @@ void List_Students(vector<Student*> students, College &college) {
 			if (ptr != nullptr) Person_Menu(*ptr, college);
 		}
 		else if (access != 0) Person_Menu(*students.at(i), college);
+		else cout << "You don't have permission to access Profiles as a guest!" << endl;
+	}
+}
+void ListStudentsBST(College &college) {
+	int s, i;
+	while (1) {
+		s = college.sizeBST();
+		//Print_Vec(students);
+		college.showStudents();
+		cout << s << ":   SEARCH STUDENT" << endl;
+		cout << ++s << ":   PREVIOUS MENU" << endl;
+		i = Nav(0, s);
+		if (i == s) return;
+		else if (i == s - 1) {
+			auto ptr = SearchStudent(college);
+			if (ptr != nullptr) Person_Menu(*ptr, college);
+		}
+		else if (access != 0) Person_Menu(*college.BSTtoVEC().at(i), college);
 		else cout << "You don't have permission to access Profiles as a guest!" << endl;
 	}
 }
@@ -962,7 +1004,7 @@ void People_Menu(College &college) {
 		if (i == n) return;
 		switch (i) {
 		case 0:
-			List_Students(college.getStudents(), college);
+			ListStudentsBST(college);
 			break;
 		case 1:
 			List_Teachers(college.getTeachers(), college);
@@ -1002,7 +1044,7 @@ void Member_Menu(College &college) { //Can only read
 			break;
 		case 3:
 			if (user_id.at(0) == '0') {
-				Student* st = SearchID(college.getStudents(), user_id);
+				Student* st = SearchID(college.BSTtoVEC(), user_id);
 				Person_Menu(*st, college);
 			}
 			else if (user_id.at(0) == '1') {
@@ -1092,8 +1134,8 @@ void Save_College(College &college) {
 	save_file << college << endl;
 	//------STUDENTS INFO------
 	save_file << "STUDENTS:" << endl;
-	for (unsigned int i = 0; i < college.getStudents().size(); i++) {
-		save_file << *college.getStudents().at(i);
+	for (unsigned int i = 0; i < college.BSTtoVEC().size(); i++) {
+		save_file << *college.BSTtoVEC().at(i);
 	}
 	save_file << endl;
 	//------TEACHERS INFO------

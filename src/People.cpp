@@ -191,7 +191,7 @@ void Student::addPerson(College &college)
     Calculate_Average();
     bolsa = 0;
 	student_count++;
-	college.addStudent(this);
+	college.addNewStudent(this);
 }
 
 void Student::InsertUC()
@@ -375,6 +375,7 @@ bool Student::removeFromMap(string name)
 		return true;
 	}
 	else cout << "UC with name -" << name << "- was not found!" << endl;
+
 	return false;
 }
 
