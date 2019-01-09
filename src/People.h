@@ -345,11 +345,13 @@ public:
      */
     void Calculate_Average();
     /**
-     * @brief This function calculates de average grade of each student
+     * @brief This function adds a value to the students scholarship
+     * @param value calue to add
      */
     void Add_Funds(unsigned int value);
     /**
-     * @brief This function calculates de average grade of each student
+     * @brief This function takes money from the students scholarship
+     * @param value how much money will be taken
      */
     void Pay_Semester(unsigned int value);
     /**

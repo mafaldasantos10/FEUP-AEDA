@@ -116,6 +116,7 @@ class College{
     vector<Staff *> staff;
     HashTabEmployeetPtr employeeTable;
     BST<Student_Ptr> studentsTree;
+    /** @brief Priority_Queue that holds the students in order of eligibility for a scholarship */
     priority_queue<Student *, std::vector<Student *>, Compare_St_Queue> students_queue;
 public:
     /**
@@ -154,11 +155,30 @@ public:
 	void addEmployeeTable(Staff* staff);
 
     //Priority Queue
+    /**
+     * @brief Adds a student pointer to the Scholarship priority_queue
+     * @param st student pointer to add
+     */
     void Add_To_Queue(Student* st);
+    /**
+     * @brief Used to rearrange the queue whenever there is a change in a student
+     * @param st student who has changed
+     */
     void Rearrange_Queue(Student* st);
+    /**
+     * @brief Removes a student from the queue
+     * @param st student to remove
+     */
     void Remove_From_Queue(Student* st);
+    /**
+     * @brief Get the student at the top of the priority queue
+     * @return Returns top student
+     */
     Student* Get_Top_Student();
 
+    /**
+     * @return returns teachers vector
+     */
     vector<Teacher *>& getTeachers();
 	/**
 	* @brief Removes Teacher from College
