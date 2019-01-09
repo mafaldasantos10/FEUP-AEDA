@@ -819,7 +819,7 @@ void Grades_Menu(People &person, College &college) {
                     cin.ignore(100, '\n');
                     auto it = st->getGrades()->begin();
                     advance(it,i);
-                    if(!st->changeGrade(it->first,grade)) cout << "\n Unexpected Error! grade not changed..." << endl;
+                    if(!st->changeGrade(it->first,(float) grade)) cout << "\n Unexpected Error! grade not changed..." << endl;
                 }
             }
             st->Calculate_Average();
@@ -1287,7 +1287,8 @@ void List_Current_Employees(College &college)
 
 void List_Former_Employees(College &college)
 {
-	int s = 0, i, salary;
+	int s = 0, i;
+    float salary;
 	vector<EmployeePtr> temp;
 
 	while (1)

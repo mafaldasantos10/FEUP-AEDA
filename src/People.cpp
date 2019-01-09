@@ -303,7 +303,8 @@ void Student::editInfo(College &college) {
 }
 
 void Student::Calculate_Average(){
-    unsigned int total = 0, number = 0;
+    float total = 0;
+    unsigned int number = 0;
     for(auto it = subjects.begin(); it != subjects.end(); it++)
     {
         if(it->second >= 0)
@@ -313,7 +314,7 @@ void Student::Calculate_Average(){
         }
     }
     if(number == 0) return;
-    average = round(total/number);
+    average = (unsigned int) round(total/number);
 }
 
 void Student::Add_Funds(unsigned int value){
