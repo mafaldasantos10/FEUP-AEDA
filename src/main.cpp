@@ -1430,7 +1430,7 @@ void Give_Scholarship(College &college){
         cin.clear();
     } while(value < 0);
     Student* st;
-    for(size_t i = 0; i < number; i++){
+    for(size_t i = 0; i < college.sizeBST(); i++){
         st = college.Get_Top_Student();
         st->Add_Funds(value);
         college.Rearrange_Queue(st);
