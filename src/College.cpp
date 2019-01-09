@@ -103,13 +103,6 @@ vector<EmployeePtr> College::getEmployees() const
 	return ptrs;
 }
 
-void College::setEmployees(vector<EmployeePtr>& newEmployees)
-{
-	for(unsigned int i = 0; i < newEmployees.size(); i++)
-	{
-		employeeTable.insert(newEmployees.at(i));
-	}
-}
 
 void College::addEmployeeTable(Teacher* teacher)
 {
@@ -163,12 +156,6 @@ void College::addTeacher(Teacher *teacher)
     teachers.push_back(teacher);
 }
 
-void College::addStudent(Student *student)
-{
-    readst.push_back(student);
-    students_queue.push(student);
-}
-
 void College::addStaff(Staff *staff)
 {
 	addEmployeeTable(staff);
@@ -207,16 +194,6 @@ vector<Uc*> College::getUCs(){
     return vec;
 }
 
-void College::removeStudent(Student* student) {
-
-	 for(unsigned int i = 0; i<readst.size(); i++)
-     {
-		   if(readst.at(i) == student) {
-               Remove_From_Queue(student);
-               delete readst.at(i);
-               readst.erase(readst.begin() + i);
-     }   }
-}
 
 Student* College::Get_Top_Student(){
     if(students_queue.empty()){
@@ -514,9 +491,6 @@ void College::addNewStudent(Student* st1)
 {
     Student_Ptr st(st1);
 	studentsTree.insert(st);
-
-    cout << st.getST()->getName() << endl;
-
     Add_To_Queue(st1);
 }
 

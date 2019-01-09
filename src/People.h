@@ -623,13 +623,46 @@ class EmployeePtr
 	Teacher* teacher_table;
 	int type; /* 0 for teacher, 1 for staff */
 public:
+	/**
+	 * @brief Teacher* Constructor
+	 * @param teacher_table Pointer to a Teacher
+	 */
 	EmployeePtr(Teacher* teacher_table);
+	/**
+	 * @brief Staff* Constructor
+	 * @param staff_table Pointer to a Staff
+	 */
 	EmployeePtr(Staff* staff_table);
+	/**
+	 * @brief Gets the private member Teacher*
+	 * @return Private member Teacher*
+	 */
 	Teacher* getEmployee(); /* for teachers */
+	/**
+	 * @brief Gets the private member Staff*
+	 * @param i To enable overload
+	 * @return Private member Staff*
+	 */
 	Staff* getEmployee(int i); /* for staff */
+	/**
+	 * @brief Gets the Code of the Employee
+	 * @return Code of the Employee
+	 */
 	string getCode() const;
+	/**
+	 * @brief  Gets the Name of the Employee
+	 * @return Name of the Employee
+	 */
 	string getName() const;
+	/**
+	 * @brief Gets the Working state of the Employee
+	 * @return Working state of the Employee
+	 */
 	bool getWorkingState() const;
+	/**
+	 * @brief Changes the Working state of the Employee
+	 * @param working New Working state of the Employee
+	 */
 	void setWorkingState(bool working);
 };
 

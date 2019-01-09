@@ -1329,7 +1329,7 @@ void List_Former_Employees(College &college)
 					sf->setWorking(true);
 					college.addStaff(sf);
 
-					cout << endl << "- " << sf->getName() << "- hired successfuly!" << endl;
+					cout << endl << "- " << sf->getName() << " - hired successfuly!" << endl << endl;
 				}
 				else
 				{
@@ -1337,7 +1337,7 @@ void List_Former_Employees(College &college)
 					t->setWorking(true);
 					college.addTeacher(temp.at(j.first).getEmployee());
 
-					cout << endl << "- " << t->getName() << "- hired successfuly!" << endl << endl;
+					cout << endl << "- " << t->getName() << " - hired successfuly!" << endl << endl;
 				}
 			}
 		}
@@ -1350,7 +1350,7 @@ void List_Former_Employees(College &college)
 				Person_Menu(*(temp.at(i).getEmployee()), college);
 		}
 
-		s = 0; /* not sure why i have to reset this */
+		s = 0;
 	}
 }
 
@@ -1537,7 +1537,7 @@ bool Member_LogIn(College& college) {
 		else if (type == "S") {
 			Student* s;
 			try {
-				s = SearchVec(college.getStudents(), name);
+				s = SearchVec(college.BSTtoVEC(), name);
 			}
 			catch (NoNameFound &err) {
 				cout << err.errorMessage() << " Try again!" << endl;

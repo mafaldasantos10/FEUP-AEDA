@@ -65,6 +65,7 @@ public:
 
 class Student_Ptr
 {
+
     Student* student_ptr;
 public:
     Student_Ptr(Student* st) : student_ptr(st) {}
@@ -135,13 +136,24 @@ public:
      * @return Returns the vector of Teachers by reference
      */
 
-	// Part II  - Hash Table
+	//Hash Table
+    /**
+     * @brief Gets the vector of EmployeePtr from the HashTable
+     * @return Vector of EmployeePtr
+     */
 	vector<EmployeePtr> getEmployees() const;
-	void setEmployees(vector<EmployeePtr>& newEmployees);
+	/**
+	 * @brief Adds a Teacher to the Hash Table
+	 * @param teacher Teacher to be added
+	 */
 	void addEmployeeTable(Teacher* teacher);
+	/**
+	 * @brief Adds a Staff to the Hash Table
+	 * @param staff Staff to be added
+	 */
 	void addEmployeeTable(Staff* staff);
 
-    //Part II   - Priority Queue
+    //Priority Queue
     void Add_To_Queue(Student* st);
     void Rearrange_Queue(Student* st);
     void Remove_From_Queue(Student* st);
@@ -153,18 +165,16 @@ public:
 	* @param teacher Pointer to teacher
 	*/
     void removeTeacher(Teacher* teacher);
-
+    /**
+     * @brief Deletes a teacher from Departments, Course and Ucs
+     * @param name Name of the Teacher
+     */
 	void deleteTeachers(string name);
 	/**
 	 * @brief Gets Student vector by reference
      * @return Returns the vector of Students by reference
      */
     vector<Student *>& getStudents();
-	/**
-	* @brief Removes Student from College
-	* @param student Pointer to student
-	*/
-    void removeStudent(Student* student);
 	/**
 	* @brief Gets Staff vector by reference
 	* @return Returns the vector of Staff by reference
@@ -183,11 +193,6 @@ public:
 	/**
 	* @brief Adds student to College
 	* @param student Pointer to Student
-	*/
-    void addStudent(Student* student);
-	/**
-	* @brief Adds Staff to College
-	* @param staff Pointer to Staff
 	*/
     void addStaff(Staff* staff);
     /**
@@ -256,23 +261,52 @@ public:
 	* @param college College to be used
 	*/
     friend ostream& operator<< (ostream& os, const College &college);
-
+    /**
+     * @brief Gets the BST of Students
+     * @return BST
+     */
     BST<Student_Ptr> getStudentsTree();
-
+    /**
+     * @brief Shows all the Students in the College
+     */
     void showStudents();
-
+    /**
+     * @brief Returns how many students the college has
+     * @return size of the BST
+     */
 	int sizeBST();
-
+	/**
+	 * @brief Adds a new Student to the BST
+	 * @param st1 Student to be added
+	 */
     void addNewStudent(Student* st1);
-
+    /**
+     * @brief Removes a Student from the BST
+     * @param st1 Pointer for the Student to be removed
+     */
     void removeStudentBST(Student* st1);
-
+    /**
+     * @brief Searches a Student in the BST
+     * @param name Name of the student
+     * @return Pointer to a Student with Name name
+     */
     Student* SearchBST(string name);
-
+    /**
+     * @brief  Changes the name of the Student
+     * @param cod Code of the student that will be edited
+     * @param name New name of the Student
+     */
     void setNameBST(string cod, string name);
-
+    /**
+     * @brief Changes the course of the Student
+     * @param cod Code of the student that will be edited
+     * @param cs New Student's Course
+     */
     void setCourse(string cod, Course* cs);
-
+    /**
+     * @brief Transforms the BST in a vector
+     * @return A vector with pointers for Students
+     */
 	vector<Student*> BSTtoVEC();
 };
 
