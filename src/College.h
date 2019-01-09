@@ -136,7 +136,9 @@ class College{
     vector<Teacher *> teachers;
     /** @brief Vector of Vectors of pointers to each Staff of the College */
     vector<Staff *> staff;
+    /** @brief Hash Table that holds every college employee */
     HashTabEmployeetPtr employeeTable;
+    /** @brief BST that holds all the students of the college */
     BST<Student_Ptr> studentsTree;
     /** @brief Priority_Queue that holds the students in order of eligibility for a scholarship */
     priority_queue<Student *, std::vector<Student *>, Compare_St_Queue> students_queue;
@@ -197,8 +199,8 @@ public:
      * @return Returns top student
      */
     Student* Get_Top_Student();
-
     /**
+     * @brief Gets Teacher vector by reference
      * @return returns teachers vector
      */
     vector<Teacher *>& getTeachers();
@@ -527,9 +529,11 @@ public:
      * @param type New type of the Course
      */
     void setType(string type);
-
+    /**
+     * @brief Gets the director of the course
+     * @return Returns the director of the course
+     */
 	Teacher* getDirector() { return courseDirector;}
-
     /**
      * @brief Gets the Portuguese name of a given Course
      * @return String containing the Portuguese name of the Course
@@ -707,7 +711,6 @@ public:
      * @return Vector of pointers to each Student of the UC
      */
     vector<Student*>& getStudents();
-    //void addTeacher();
     /**
      * @brief Removes a Teacher from the vector of Teachers (ucTeachers)
      */
