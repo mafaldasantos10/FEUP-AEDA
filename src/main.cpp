@@ -97,6 +97,9 @@ void readFile(College &c, string file)
 				next.erase(0, next.find("|") + 1);
 
 				s->setYear(stoi(next.substr(0, next.find("|"))));
+                next.erase(0, next.find("|") + 1);
+
+                s->setBolsa(stoi(next.substr(0, next.find("|"))));
 				next.clear();
 
 				c.getStudents().push_back(s);

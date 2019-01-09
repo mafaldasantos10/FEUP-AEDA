@@ -357,6 +357,11 @@ public:
      * @param newCod count to be updated
      */
     void setCode(string newCod);
+    /**
+     * @brief used to create student when reading from file
+     * @param value value of students scholarship
+     */
+    void setBolsa(unsigned int value) { bolsa = value; };
 };
 
 

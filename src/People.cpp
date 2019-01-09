@@ -437,7 +437,7 @@ void Student::showAllGrades()
 
 void Student::write(ostream &os) {
     People::write(os);
-    os << course->getName() << "|" << year << "|" << endl;
+    os << course->getName() << "|" << year << "|" << bolsa << "|" << endl;
 }
 
 bool Student::Queue_Compare(const Student & st){
