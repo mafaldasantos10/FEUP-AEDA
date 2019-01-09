@@ -153,7 +153,7 @@ public:
      * @brief Changes the code of a given Person
      * @param newCod New code of the Person
      */
-    void setCode(string newCod);
+    virtual void setCode(string newCod);
     /**
      * @brief Gets the birthday of a given Person
      * @return Struct containing the birthday of the person
@@ -214,6 +214,10 @@ public:
 	 */
 	Student(string name, string address, date birthday, unsigned int phone, string cod, string course);
 	//Student(string name, string address, unsigned int phone, string cod, string course);
+    /**
+	 * @brief counter used to know how many students have been created
+	 */
+    static int student_count;
 	/**
 	 * @brief Default Student constructor
 	 */
@@ -221,7 +225,7 @@ public:
 	/**
 	 * @brief People destructor
 	 */
-    ~Student(){/*delete course;*/}
+    ~Student();
 	/**
 	* @brief Adds Student to college
 	* @param college
@@ -283,10 +287,6 @@ public:
 	 * @brief Shows the map with the UCs and grades of a given Student
 	 */
 	void showAllGrades();
-	/**
-	 * @brief counter used to know how many students have been created
-	 */
-    static int student_count;
 	/**
 	* @brief Edits Student info menu
 	*/
@@ -352,8 +352,11 @@ public:
      * @brief This function calculates de average grade of each student
      */
     void Pay_Semester(unsigned int value);
-
-    bool operator<(const Student &student) const;
+    /**
+     * @brief Updates student count
+     * @param newCod count to be updated
+     */
+    void setCode(string newCod);
 };
 
 
@@ -533,6 +536,11 @@ public:
 	* @param n Position of UC in vector
 	*/
     void RemoveTeacherUc(int n);
+    /**
+     * @brief Updates teacher count
+     * @param newCod count to be updated
+     */
+    void setCode(string newCod);
 };
 
 
@@ -601,6 +609,11 @@ public:
 	* @brief Inserts work area from user input
 	*/
     void InsertWorkArea();
+    /**
+     * @brief Updates staff count
+     * @param newCod count to be updated
+     */
+    void setCode(string newCod);
 };
 
 

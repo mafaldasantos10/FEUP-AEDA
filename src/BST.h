@@ -183,14 +183,15 @@ template <class Comparable>
 void BST<Comparable>::
 insert( const Comparable & x, BinaryNode<Comparable> * & t ) const
 {
-  if( t == NULL )
-    t = new BinaryNode<Comparable>( x, NULL, NULL );
-  else if( *x < *t->element )
-    insert( x, t->left );
-  else if( *t->element < *x )
-    insert( x, t->right );
-  else
-    ;  // Duplicate; do nothing
+  if( t == NULL ) {
+      t = new BinaryNode<Comparable>( x, NULL, NULL );
+  }
+  else if( x < t->element ){
+      insert( x, t->left );
+  }
+  else if( t->element < x )
+     insert( x, t->right );
+  else ;  // Duplicate; do nothing
 }
 
 template <class Comparable>
@@ -199,9 +200,9 @@ remove( const Comparable & x, BinaryNode<Comparable> * & t ) const
 {
   if( t == NULL )
     return;   // Item not found; do nothing
-  if( *x < *t->element )
+  if( x < t->element )
     remove( x, t->left );
-  else if( *t->element < *x )
+  else if( t->element < x )
     remove( x, t->right );
   else if( t->left != NULL && t->right != NULL ) // Two children
     {
@@ -245,9 +246,9 @@ find( const Comparable & x, BinaryNode<Comparable> *t ) const
 {
   if( t == NULL )
     return NULL;
-  else if( *x < *t->element )
+  else if( x < t->element )
     return find( x, t->left );
-  else if( *t->element < *x )
+  else if( t->element < x )
     return find( x, t->right );
   else
     return t;    // Match

@@ -786,7 +786,7 @@ void Grades_Menu(People &person, College &college) {
 				cout << "Insert the Uc you would like to remove(! - cancel): " << flush;
 				getline(cin, uc_name);
 				if (uc_name == "!") break;
-			} while (!college.removeFromMapBST(uc_name, st));
+			} while (!st->removeFromMap(uc_name));
             st->Calculate_Average();
             college.Rearrange_Queue(st);
 		}
@@ -816,7 +816,7 @@ void Grades_Menu(People &person, College &college) {
                     cin.ignore(100, '\n');
                     auto it = st->getGrades()->begin();
                     advance(it,i);
-                    if(!college.changeGradeBST(it->first,grade, st)) cout << "\n Unexpected Error! grade not changed..." << endl;
+                    if(!st->changeGrade(it->first,grade)) cout << "\n Unexpected Error! grade not changed..." << endl;
                 }
             }
             st->Calculate_Average();

@@ -63,6 +63,23 @@ public:
     }
 };
 
+class Student_Ptr
+{
+    Student* student_ptr;
+public:
+    Student_Ptr(Student* st) : student_ptr(st) {}
+
+    bool operator<(const Student_Ptr & student) const
+    {
+        if (student_ptr->getCourseName() == student.student_ptr->getCourseName()) {
+            return (student_ptr->getName() < student.student_ptr->getName());
+        }
+        else return   (student_ptr->getCourseName() < student.student_ptr->getCourseName());
+    }
+
+    Student* getST() const { return student_ptr; }
+};
+
 
 /**
  * @brief Tests for valid input keys and returns the inputed char
@@ -97,7 +114,7 @@ class College{
     /** @brief Vector of Vectors of pointers to each Staff of the College */
     vector<Staff *> staff;
     HashTabEmployeetPtr employeeTable;
-    BST<Student*> studentsTree;
+    BST<Student_Ptr> studentsTree;
     priority_queue<Student *, std::vector<Student *>, Compare_St_Queue> students_queue;
 public:
     /**
@@ -240,9 +257,7 @@ public:
 	*/
     friend ostream& operator<< (ostream& os, const College &college);
 
-    BST<Student*> getStudentsTree();
-
-    void showStudentAndCourse();
+    BST<Student_Ptr> getStudentsTree();
 
     void showStudents();
 
@@ -256,19 +271,7 @@ public:
 
     void setNameBST(string cod, string name);
 
-    void setAddressBST(string cod, string newAddress);
-
-    void setPhone(string cod, int phone);
-
-    void setBirthday(string cod, date* date);
-
     void setCourse(string cod, Course* cs);
-
-    void setYear(string cod, int year);
-
-	bool removeFromMapBST(string ucname, Student* st);
-
-	bool changeGradeBST(Uc* uc, float grade, Student* st);
 
 	vector<Student*> BSTtoVEC();
 };

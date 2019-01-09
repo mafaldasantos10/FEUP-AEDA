@@ -79,7 +79,7 @@ string People::getCode()
 
 void People::setCode(string newCod)
 {
-	code=newCod;
+	code = newCod;
 }
 
 date* People::getDate() const
@@ -194,6 +194,15 @@ void Student::addPerson(College &college)
 	college.addNewStudent(this);
 }
 
+void Student::setCode(string newCod){
+    string number = newCod.substr(5);
+    if(stoi(number) > student_count) {
+        student_count = stoi(number);
+        student_count++;
+    }
+    People::setCode(newCod);
+}
+
 void Student::InsertUC()
 {
 	//Uc* uc = nullptr;
@@ -263,16 +272,13 @@ void Student::editInfo(College &college) {
 		case 1:
 			cout << "Insert new Address: " << flush;
 			InsertAddress();
-			college.setAddressBST(getCode(), getAddress());
 			break;
 		case 2:
 			cout << "Insert new Phone Number: " << flush;
 			InsertPhone();
-			college.setPhone(getCode(),getPhone());
 			break;
 		case 3:
 			setDate(readDate());
-			college.setBirthday(getCode(), getDate());
 			break;
 		default:
 			break;
@@ -292,7 +298,6 @@ void Student::editInfo(College &college) {
 		else if (i == 5) {
 			cout << "Insert new Student Year: " << flush;
 			InsertYear();
-			college.setYear(getCode(), getYear());
 		}
 	}
 }
@@ -442,24 +447,11 @@ bool Student::Queue_Compare(const Student & st){
     else return (getDate() > st.getDate());
 }
 
-bool Student::operator<(const Student &student) const
-{
-	if (course->getName() <= student.getCourseName())
-	{
-		if (course->getName() == student.getCourseName())
-		{
-			if (getName() >student.getName())
-			{
-				return true;
-			}
-		}
-		else
-		{
-			return true;
-		}
-	}
-
-	return false;
+Student::~Student() {
+    for(auto it = subjects.begin(); it != subjects.end(); it++)
+    {
+        remove(it->first->getStudents(), getName());
+    }
 }
 
 //////EMPLOYEE//////
@@ -734,6 +726,15 @@ void Teacher::write(ostream &os) {
     os << category << "|" << endl;
 }
 
+void Teacher::setCode(string newCod){
+    string number = newCod.substr(5);
+    if(stoi(number) > teacher_count){
+        teacher_count = stoi(number);
+        teacher_count++;
+    }
+    People::setCode(newCod);
+}
+
 //////STAFF//////
 
 Staff::Staff(string name, string address, date birthday, unsigned int phone, string cod, float salary, unsigned int nif, bool working, string work_area)
@@ -824,6 +825,15 @@ void Staff::editInfo(College &college) {
 			break;
 		}
 	}
+}
+
+void Staff::setCode(string newCod) {
+    string number = newCod.substr(5);
+    if(stoi(number) > staff_count){
+        staff_count = stoi(number);
+        staff_count++;
+    }
+    People::setCode(newCod);
 }
 
 
