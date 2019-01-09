@@ -31,9 +31,10 @@ class Teacher;
 class Staff;
 //////////////////////
 
-
+/** @brief Hash Function for the placement of an Employee on the hash table */
 struct EmployeePtrHash
 {
+	/** @brief Hash Function for the placement of an Employee on the hash table */
 	int operator() (const EmployeePtr& employee) const
 	{
 		int v = 0;
@@ -46,30 +47,48 @@ struct EmployeePtrHash
 		return v;
 	}
 
+	/** @brief Equality Function */
 	bool operator() (const EmployeePtr& employee1, const EmployeePtr& employee2) const
 	{
 		return employee1.getCode() == employee2.getCode();
 	}
 };
 
+/** @brief Hash Table */
 typedef unordered_set<EmployeePtr, EmployeePtrHash, EmployeePtrHash> HashTabEmployeetPtr;
 
+/** @brief Compare_St_Queue class */
 class Compare_St_Queue
 {
 public:
+	/**
+	 * @brief Compares to students to be placed on the priority queue
+	 * @param st1 Student 1
+	 * @param st2 Student 2
+	 * @return Return true if it should be placed in a lower position
+	 */
     bool operator() (Student* st1, Student* st2)
     {
         return (*st1).Queue_Compare(*st2);
     }
 };
 
+/** @brief Student_Ptr class, with pointers to Student*/
 class Student_Ptr
 {
-
+	/** @brief Pointer to Student*/
     Student* student_ptr;
 public:
+    /**
+     * @brief Student_Ptr constructor
+     * @param st Pointer to a Student
+     */
     Student_Ptr(Student* st) : student_ptr(st) {}
-
+    /**
+     * @brief Organizes the BST
+     * @param student To be added to the BST
+     * @return Return true if it should be placed in a lower position
+     */
     bool operator<(const Student_Ptr & student) const
     {
         if (student_ptr->getCourseName() == student.student_ptr->getCourseName()) {
@@ -77,7 +96,10 @@ public:
         }
         else return   (student_ptr->getCourseName() < student.student_ptr->getCourseName());
     }
-
+	/**
+	 * @brief Gets the private member Student*
+	 * @return Private member Student*
+	 */
     Student* getST() const { return student_ptr; }
 };
 
@@ -191,8 +213,8 @@ public:
      */
 	void deleteTeachers(string name);
 	/**
-	 * @brief Gets Student vector by reference
-     * @return Returns the vector of Students by reference
+	 * @brief Gets a vector of pointers to a Student from the students read from the text file
+     * @return Returns the vector of pointers to a Student from the students read from the text file by reference
      */
     vector<Student *>& getStudents();
 	/**
@@ -211,8 +233,8 @@ public:
      */
     void addTeacher(Teacher* teacher);
 	/**
-	* @brief Adds student to College
-	* @param student Pointer to Student
+	* @brief Adds staff to College
+	* @param staff Pointer to Staff
 	*/
     void addStaff(Staff* staff);
     /**

@@ -853,12 +853,12 @@ EmployeePtr::EmployeePtr(Staff* staff_table)
 	type = 1;
 }
 
-Teacher* EmployeePtr::getEmployee()
+Teacher* EmployeePtr::getTeacher()
 {
 	return this->teacher_table;
 }
 
-Staff* EmployeePtr::getEmployee(int i)
+Staff* EmployeePtr::getStaff()
 {
 	return this->staff_table;
 }

@@ -210,10 +210,8 @@ public:
 	 * @param phone Phone Number of the Student
 	 * @param cod Code of the Student
 	 * @param course Course the Student is in
-	 * @param subjects Subjects the Student is taking
 	 */
 	Student(string name, string address, date birthday, unsigned int phone, string cod, string course);
-	//Student(string name, string address, unsigned int phone, string cod, string course);
     /**
 	 * @brief counter used to know how many students have been created
 	 */
@@ -274,12 +272,12 @@ public:
 	bool removeFromMap(string name);
 	/**
 	 * @brief Changes the grade of a UC in the map
-	 * @param name Name of the UC with the new grade
+	 * @param uc UC whose grade is going to be changed
 	 * @param grade New grade for the UC
 	 */
 	bool changeGrade(Uc* uc, float grade);
 	/**
-	 * Shows a UC and its grade
+	 * @brief Shows a UC and its grade
 	 * @param name Name of the UC meant to show
 	 */
 	void showUCGrade(string name);
@@ -384,18 +382,21 @@ public:
 	 * @param cod Code of the Employee
 	 * @param salary Salary of the Employee
 	 * @param nif NIF of a Employee
+	 * @param working Employment status of the Employee
 	 */
 	Employee(string name, string address, date birthday, unsigned int phone, string cod, float salary, unsigned int nif, bool working);
 	/**
 	 * @brief Employee default constructor
 	 */
     Employee() = default;
+    /**
+     * @brief Friend class of employee
+     */
+    friend class EmployeePtr;
 	/**
 	* @brief  adds employee to college
 	* @param college
 	*/
-    friend class EmployeePtr;
-
     void addPerson(College &college);
 	/**
 	* @brief Prints special info on screen
@@ -422,10 +423,16 @@ public:
 	 * @param nif New NIF of a given Employee
 	 */
 	void setNIF(unsigned int nif);
-
+	/**
+	 * @brief Gets the Working state of the Employee
+	 * @return Working state of the Employee
+	 */
 	bool getWorking();
+	/**
+	 * @brief Changes the Working state of the Employee
+	 * @param working New Working state of the Employee
+	 */
 	void setWorking(bool working);
-
 	/**
 	* @brief writes employee info to os
 	* @param os
@@ -464,6 +471,7 @@ public:
 	 * @param nif NIF of the teacher
 	 * @param category Category of the Teacher
 	 * @param subjects Subjects taught by the Teacher
+	 * @param working Employment status of the Teacher
 	 */
 	Teacher(string name, string address, date birthday, unsigned int phone, string cod, float salary, unsigned int nif, bool working, Cat category, vector <Uc *> subjects);
 	 /**
@@ -474,11 +482,14 @@ public:
      * @brief Teacher destructor
      */
     ~Teacher();
+    /**
+     * @brief Friend class of EmployeePtr
+     */
+	friend class EmployeePtr;
 	/**
 	* @brief Adds Person to college
 	* @param college
 	*/
-	friend class EmployeePtr;
     void addPerson(College &college);
 	/**
 	 * @brief shows all information of a given Teacher
@@ -566,17 +577,21 @@ public:
 	 * @param salary Salary of the Staff member
 	 * @param nif NIF of the Staff member
 	 * @param work_area Work area of the Staff member
+	 * @param working Employment status of the Staff member
 	 */
 	Staff(string name, string adress, date birthday, unsigned int phone, string cod, float salary, unsigned int nif, bool working, string work_area);
 	/**
 	 * @brief Staff default constructor
 	 */
     Staff() = default;
+    /**
+     * @brief Friend class of EmployeePtr
+     */
+    friend class EmployeePtr;
 	/**
 	* @brief Adds person to college
 	* @param college
 	*/
-	friend class EmployeePtr;
     void addPerson(College &college);
 	/**
 	 * @brief shows all the informations of a given Staff member
@@ -623,11 +638,14 @@ public:
     void setCode(string newCod);
 };
 
-
+/** @brief EmployeePtr class, with pointers to Staff and Teacher*/
 class EmployeePtr
 {
+	/** @brief Pointer to a Staff member*/
 	Staff* staff_table;
+	/** @brief Pointer to a Teacher*/
 	Teacher* teacher_table;
+	/** @brief 0 for teacher, 1 for staff member*/
 	int type; /* 0 for teacher, 1 for staff */
 public:
 	/**
@@ -644,13 +662,12 @@ public:
 	 * @brief Gets the private member Teacher*
 	 * @return Private member Teacher*
 	 */
-	Teacher* getEmployee(); /* for teachers */
+	Teacher* getTeacher();
 	/**
 	 * @brief Gets the private member Staff*
-	 * @param i To enable overload
 	 * @return Private member Staff*
 	 */
-	Staff* getEmployee(int i); /* for staff */
+	Staff* getStaff();
 	/**
 	 * @brief Gets the Code of the Employee
 	 * @return Code of the Employee

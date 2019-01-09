@@ -1166,7 +1166,7 @@ void Save_College(College &college) {
 		if (!college.getEmployees().at(j).getWorkingState() &&
 			college.getEmployees().at(j).getCode().at(0) == '1')
 		{
-			save_file << *(college.getEmployees().at(j).getEmployee());
+			save_file << *(college.getEmployees().at(j).getTeacher());
 		}
 	}
 	save_file << endl;
@@ -1177,7 +1177,7 @@ void Save_College(College &college) {
 		if (!college.getEmployees().at(j).getWorkingState() &&
 			college.getEmployees().at(j).getCode().at(0) == '2')
 		{
-			save_file << *(college.getEmployees().at(j).getEmployee(0));
+			save_file << *(college.getEmployees().at(j).getStaff());
 		}
 	}
 	
@@ -1268,17 +1268,17 @@ void List_Current_Employees(College &college)
 			if (j.first != -1)
 			{
 				if (j.second == '2')
-					Person_Menu(*(temp.at(j.first).getEmployee(0)), college);
+					Person_Menu(*(temp.at(j.first).getStaff()), college);
 				else
-					Person_Menu(*(temp.at(j.first).getEmployee()), college);
+					Person_Menu(*(temp.at(j.first).getTeacher()), college);
 			}
 		}
 		else
 		{
 			if (temp.at(i).getCode().at(0) == '2')
-				Person_Menu(*(temp.at(i).getEmployee(0)), college);
+				Person_Menu(*(temp.at(i).getStaff()), college);
 			else
-				Person_Menu(*(temp.at(i).getEmployee()), college);
+				Person_Menu(*(temp.at(i).getTeacher()), college);
 		}
 
 		s = 0; /* not sure why i have to reset this*/
@@ -1287,7 +1287,7 @@ void List_Current_Employees(College &college)
 
 void List_Former_Employees(College &college)
 {
-	int s = 0, i;
+	int s = 0, i, salary;
 	vector<EmployeePtr> temp;
 
 	while (1)
@@ -1315,9 +1315,9 @@ void List_Former_Employees(College &college)
 			if (j.first != -1)
 			{
 				if (j.second == '2')
-					Person_Menu(*(temp.at(j.first).getEmployee(0)), college);
+					Person_Menu(*(temp.at(j.first).getStaff()), college);
 				else
-					Person_Menu(*(temp.at(j.first).getEmployee()), college);
+					Person_Menu(*(temp.at(j.first).getTeacher()), college);
 			}
 		}
 
@@ -1328,19 +1328,51 @@ void List_Former_Employees(College &college)
 			{
 				if (j.second == '2')
 				{
-					Staff* sf = temp.at(j.first).getEmployee(0);
+					Staff* sf = temp.at(j.first).getStaff();
 					sf->setWorking(true);
 					college.addStaff(sf);
 
-					cout << endl << "- " << sf->getName() << " - hired successfuly!" << endl << endl;
+					cout << endl << "-" << sf->getName() << "- used to earn" << " -" << sf->getSalary() << "- Euros!" << endl;
+					cout << "If you wish to change it, insert a new salary (0 - keep salary): " << flush;
+
+					cin >> salary;
+
+					while(cin.fail())
+					{
+						cout << "Invalid number, try again: " << endl;
+						cin.clear();
+						cin.ignore(100, '\n');
+						cin >> salary;
+					}
+
+					if (salary != 0)
+						sf->setSalary(salary);
+
+					cout << endl << "-" << sf->getName() << "- hired successfully with a salary of" << " -" << sf->getSalary() << "- Euros!" << endl << endl;
 				}
 				else
 				{
-					Teacher* t = temp.at(j.first).getEmployee();
+					Teacher* t = temp.at(j.first).getTeacher();
 					t->setWorking(true);
-					college.addTeacher(temp.at(j.first).getEmployee());
+					college.addTeacher(temp.at(j.first).getTeacher());
 
-					cout << endl << "- " << t->getName() << " - hired successfuly!" << endl << endl;
+					cout << endl << "-" << t->getName() << "- used to earn" << " -" << t->getSalary() << "- Euros!" << endl;
+					cout << "If you wish to change it, insert a new salary (0 - keep salary): " << flush;
+
+					cin >> salary;
+
+					while(cin.fail())
+					{
+						cout << "Invalid number, try again: " << endl;
+						cin.clear();
+						cin.ignore(100, '\n');
+						cin >> salary;
+					}
+
+					if (salary != 0)
+						t->setSalary(salary);
+
+					cout << endl << "-" << t->getName() << "- hired successfully with a salary of" << " -" << t->getSalary() << "- Euros!" << endl << endl;
 				}
 			}
 		}
@@ -1348,9 +1380,9 @@ void List_Former_Employees(College &college)
 		else
 		{
 			if (temp.at(i).getCode().at(0) == '2')
-				Person_Menu(*(temp.at(i).getEmployee(0)), college);
+				Person_Menu(*(temp.at(i).getStaff()), college);
 			else
-				Person_Menu(*(temp.at(i).getEmployee()), college);
+				Person_Menu(*(temp.at(i).getTeacher()), college);
 		}
 
 		s = 0;
@@ -1360,15 +1392,6 @@ void List_Former_Employees(College &college)
 
 //////////////////////
 
-/* MENU INSTRUCTIONS:
- * Para acrescentarem opções no vosso menu a unica coisa que têm de fazer é:
- * -acrescentar o cout com o numero da opção
- * -no switch (Nav(0,0)) Mudar o ultimo 0 para o novo ultimo numero de opções
- * -fazer um case para essa opção e enviar para a função de lá
- * (Não façam o codigo da cena que querem fazer msm dentro do switch q fica uma jabardice,
- * criem uma função nova)
- * Qualquer cena é só ligar 915 813 945
- */
 void Hash_Table_Menu(College &college){
     while(1){
         cout << "0:   CURRENT EMPLOYEES" << endl;
