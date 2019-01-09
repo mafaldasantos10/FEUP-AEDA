@@ -2,12 +2,12 @@ COLLEGE:
 FLUP|123qwerty
 
 STUDENTS:
-Maria Josefa|Rua de Braga n.1134|921367811|020181|5/12/1993|Historia da Lingua|3|
-Joao Leitao|Rua dos Borregos n.12|923511789|020182|5/11/1999|Historia da Lingua|1|
-Miguel Monsao|Avenida de Monsao n.1|911234671|020183|8/3/1998|Historia da Lingua|2|
-Joaquim Fernandes|Rua da Areosa|993123478|020184|7/7/1999|Historia|2|
-Maria Alvim|Rua dos Esquilos|993878666|020185|7/7/1999|Historia|1|
-Ines Macedo|Rua dos Samaritanos n.2|915657784|020186|6/12/1998|Economia|4|
+Ines Macedo|Rua dos Samaritanos n.2|919556419|020186|6/12/1998|Economia|4|0|
+Joaquim Fernandes|Rua da Areosa|993123478|020184|7/7/1999|Historia|2|0|
+Maria Alvim|Rua dos Esquilos|914443334|020185|7/7/1999|Historia|1|0|
+Joao Leitao|Rua dos Borregos n.12|923511789|020182|5/11/1999|Historia da Lingua|1|200|
+Maria Josefa|Rua de Braga n.1134|921367811|020181|5/12/1993|Historia da Lingua|3|0|
+Miguel Monsao|Avenida de Monsao n.1|911234671|020183|8/3/1998|Historia da Lingua|2|0|
 
 TEACHER:
 Mario Centeno|Rua das Financas n.123|911311411|120181|21/10/1965|5000.000000|123456789|0|
@@ -17,8 +17,8 @@ Fernando Alves|Rua do Aviario n.74|912345614|120184|19/4/1970|1500.000000|123987
 Catarina Salgado|Rua do Mar n.9|92477980|120185|4/4/1975|1100.000000|123782123|0|
 
 STAFF:
-Joao Souto|Rua do Campo Alegre n.12|921765891|220181|24/9/1980|700.000000|456321789|Papelaria|
 Joaquina Simoes|Rua dos Simoes n.78|921378654|220182|3/12/1981|600.000000|123123456|Cantina|
+Joao Souto|Rua do Campo Alegre n.12|921765891|220181|24/9/1980|700.000000|456321789|Papelaria|
 
 DEP:
 Linguas|Rua dos falabaratos n.123|1234|912345671|!|
@@ -39,11 +39,11 @@ Economia|Rua|1234|999222333|Roberto Manuel Simoes|
 COURSE:
 Economia|Economy|1232|MI|Catarina Salgado|
 UC:
-Contabilidade|2|5|6|!|[Ines Macedo,10]|[Catarina Salgado]|
+Contabilidade|2|5|6|!|[Ines Macedo,12]|[Catarina Salgado]|
 
 FORMER TEACHER:
-Fernando Luis|Rua dos Marretes n.664|918645614|120186|19/4/1970|1400.000000|123996623|0|
 Isabel Sande|Rua do Gatos n.32|918643314|120187|13/4/1970|1000.000000|123223423|0|
+Fernando Luis|Rua dos Marretes n.664|918645614|120186|19/4/1970|1400.000000|123996623|0|
 
 FORMER STAFF:
 Luis Maria|Rua de Serralves n.11|921232391|220183|24/10/1982|800.000000|456113389|PBX|
